@@ -1,0 +1,9 @@
+node_modules
+.idea
+.DS_Store
+dist
+es6
+build
+debug.log
+.docker
+.cache
