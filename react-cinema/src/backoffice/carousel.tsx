@@ -24,7 +24,7 @@ export default function LocationCarousel({ edit, location }: Props) {
   }, [location, carousel]);
   const locationService = getLocations();
   const handleFetch = async () => {
-    if (!carousel || files) { return; }
+    // if (!carousel || files) { return; }
     let res;
     try {
       res = await locationService.fetchImageUploaded(location.id);

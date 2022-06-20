@@ -16,7 +16,7 @@ interface Props {
 
 export default function CinemaCarousel({ edit, cinema }: Props) {
   const [carousel, setCarousel] = useState(false);
-  const [files, setFiles] = useState<FileInfo[]>() || undefined;
+  const [files, setFiles] = useState<FileInfo[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,26 +26,22 @@ export default function CinemaCarousel({ edit, cinema }: Props) {
 
   const locationService = getLocations();
 
-  let gallery = cinema.gallery || undefined;
+  let gallery = cinema.gallery || [];
 
-  console.log(gallery);
-  let arr: any = []
+  // console.log(gallery);
+  // let arr: any = []
 
-  gallery && gallery.forEach(img => {
-    //console.log(img.url);
-    arr.push(img.url);
-  })
-
-  //console.log(arr);
-
+  // gallery && gallery.forEach(img => {
+  //   arr.push(img.url);
+  // })
 
   const handleFetch = async () => {
-    if (!carousel || files) { return; }
+    // if (!carousel || files) { return; }
     let res;
     try {
       res = await locationService.fetchImageUploaded(cinema.id);
     } catch (error) { }
-    console.log(res);
+    //console.log(res);
     if (res && res.length > 0) {
       for (const item of res) {
         if (item.type === 'youtube') {
@@ -61,44 +57,48 @@ export default function CinemaCarousel({ edit, cinema }: Props) {
       }
       setFiles(res);
     } else {
-
-      gallery && gallery.length > 0 && gallery.map((i: any) => {
-
-        const info: FileInfo[] = [
-          {
-            source: '',
-            type: 'image',
-            url: `${i.url}` || '',
-          },
-        ];
-        setFiles(info);
-      }) 
+      const info: FileInfo[] = [...gallery];
+      setFiles(info);
     }
   };
 
+  console.log(files);
 
-  const toggleCarousel = (e: OnClick, enable: boolean) => {
+  // console.log('not fetch thumbnail');
+  // const info: FileInfo[] = [...files];      
+  // gallery && gallery.length > 0 && gallery.forEach((i: any) => {
+  //   info.push({
+  //     source: '',
+  //     type: 'image',
+  //     url: `${i.url}` || '',
+  //   });
+  // });
+  // setFiles(info);     
+
+
+  const toggleCarousel = (e: OnClick, enable: boolean, files: FileInfo[] ) => {
     e.preventDefault();
+    
     setCarousel(enable);
+
+    let len = files.length;
+    console.log(len);
+
   };
 
+  
   const navigateEdit = (e: OnClick) => {
     e.preventDefault();
     navigate(`edit/${cinema.id}`);
   };
 
-  //console.log(cinema.gallery);
-
-  // useEffect(()=>{
-  //   setGallery(cinema.gallery);
-  // }, [])
   return (
     <>
       {carousel ? (
         <div className='col s12 m6 l4 xl3 '>
           <div
             className='user-carousel-container '
-            onClick={(e) => toggleCarousel(e, false)}
+            onClick={(e) => toggleCarousel(e, false, files)}
           >
             {files && files.length > 0 ? (
               <Carousel infiniteLoop={true}>
@@ -113,18 +113,9 @@ export default function CinemaCarousel({ edit, cinema }: Props) {
                         />
                       );
                     case 'image':
-
                       return (
                         <>
                           <CarouselImageItem key={index} src={itemData.url} />
-                          {/* {
-                            arr.map((i: any, idx: any) => {
-                              <>
-                              <h1>{i}</h1>
-                              
-                              </>
-                            })
-                          } */}
                         </>
                       );
                     case 'youtube':
@@ -150,15 +141,14 @@ export default function CinemaCarousel({ edit, cinema }: Props) {
         <li
           className='col s12 m6 l4 xl3 card '
         >
-
           <section>
-            <div onClick={(e) => toggleCarousel(e, true)}
+            <div onClick={(e) => toggleCarousel(e, true, files)}
               className='cover'
               style={{
                 backgroundImage: `url('${cinema.imageURL}')`,
               }}
             ></div>
-
+           
             <h3 className='title-location' onClick={(e) => navigateEdit(e)}>{cinema.name}</h3>
           </section>
         </li>

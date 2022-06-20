@@ -48,8 +48,6 @@ export const CinemasForm = () => {
       useCinema(),
       inputSearch());
 
-  console.log(state.list);
-
   component.viewable = true;
   component.editable = true;
 
@@ -86,7 +84,7 @@ export const CinemasForm = () => {
     if (state.filter) { setFilter(state.filter); }
   }, [state]);
 
-  console.log(list);
+  // console.log(list);
 
   return (
     <div className='view-container'>
