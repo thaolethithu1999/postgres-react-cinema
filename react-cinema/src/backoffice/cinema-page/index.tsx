@@ -11,7 +11,7 @@ import { Location } from '../../backoffice/service/location/location';
 import { config } from '../../config';
 import { UploadContainer } from '../../core/upload';
 import { ModalSelectCover } from '../../my-profile/modal-select-cover';
-import { useLocationsService } from '../service';
+import { useLocationsService } from '../../location/service';
 import { Overview } from './overview';
 import { LocationPhoto } from './photo';
 import { Review } from './review';
@@ -19,9 +19,12 @@ import { Review } from './review';
 // import { getFileExtension, removeFileExtension } from '../../uploads/components/UploadHook';
 const httpRequest = new HttpRequest(Axios, options);
 
-export const LocationPage = () => {
+export const CinemaPage = () => {
   const resource = useResource();
   const { id = '' } = useParams();
+
+
+  
   const [location, setLocation] = useState<Location>();
   const locationService = useLocationsService();
   const [modalUpload, setModalUpload] = useState(false);

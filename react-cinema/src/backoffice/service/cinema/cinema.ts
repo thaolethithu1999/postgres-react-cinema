@@ -35,6 +35,7 @@ export interface Cinema extends Tracking {
   updatedby?: string;
   updatedat?: Date;
   imageURL?: string;
+  coverURL?: string;
   gallery?: Gallery[];
 }
 

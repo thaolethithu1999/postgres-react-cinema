@@ -76,17 +76,17 @@ export default function CinemaCarousel({ edit, cinema }: Props) {
   // setFiles(info);     
 
 
-  const toggleCarousel = (e: OnClick, enable: boolean, files: FileInfo[] ) => {
+  const toggleCarousel = (e: OnClick, enable: boolean, files: FileInfo[]) => {
     e.preventDefault();
-    
     setCarousel(enable);
-
     let len = files.length;
     console.log(len);
-
   };
 
-  
+  // const handleChange = () =>{
+  //   setCarousel()
+  // }
+
   const navigateEdit = (e: OnClick) => {
     e.preventDefault();
     navigate(`edit/${cinema.id}`);
@@ -98,10 +98,13 @@ export default function CinemaCarousel({ edit, cinema }: Props) {
         <div className='col s12 m6 l4 xl3 '>
           <div
             className='user-carousel-container '
-            onClick={(e) => toggleCarousel(e, false, files)}
+            //onClick={(e) => toggleCarousel(e, false, files)}
+            onClick={() => setCarousel(false)}
           >
             {files && files.length > 0 ? (
-              <Carousel infiniteLoop={true}>
+              <Carousel
+                infiniteLoop={true}
+              >
                 {files.map((itemData, index) => {
                   switch (itemData.type) {
                     case 'video':
@@ -142,13 +145,15 @@ export default function CinemaCarousel({ edit, cinema }: Props) {
           className='col s12 m6 l4 xl3 card '
         >
           <section>
-            <div onClick={(e) => toggleCarousel(e, true, files)}
+            <div
+              //onClick={(e) => toggleCarousel(e, true, files)}
+              onClick={() => setCarousel(true)}
               className='cover'
               style={{
                 backgroundImage: `url('${cinema.imageURL}')`,
               }}
             ></div>
-           
+
             <h3 className='title-location' onClick={(e) => navigateEdit(e)}>{cinema.name}</h3>
           </section>
         </li>
