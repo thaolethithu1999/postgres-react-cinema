@@ -146,32 +146,7 @@ export const CinemasForm = () => {
         </form>
         <form className='list-result'>
           {component.view === 'table' && <div className='table-responsive'>
-
-            {/* <table> 
-              <thead>
-                <tr>
-                  <th>{resource.sequence}</th>
-                  <th data-field='id'><button type='button' id='sortCinemaId' onClick={sort}>{resource.id}</button></th>
-                  <th data-field='name'><button type='button' id='sortCinemaName' onClick={sort}>{resource.name}</button></th>
-                  <th data-field='status'><button type='button' id='sortStatus' onClick={sort}>{resource.status}</button></th>
-                </tr>
-              </thead>
-              {list && list.length > 0 && list.map((cinema, i) => {
-                return (
-                  <tr key={i} onClick={e => edit(e, cinema.id)}>
-                    <td className='text-right'>{(cinema as any).sequenceNo}</td>
-                    <td>{cinema.name}</td>
-                    <td>{cinema.status}</td>
-                  </tr>
-                );
-              })}
-            </table> */}
-
             <div style={{ height: '600px', width: '800px' }}>
-              {/* {list && list.length > 0 &&
-                list.map((cinema, idx) => (
-                  <p>{cinema.id},{cinema.name}, [{cinema.longitude}, {cinema.latitude}]</p>
-                ))} */}
               <MapContainer
                 center={{ lat: 10.854886268472459, lng: 106.63051128387453 }}
                 zoom={16}
@@ -208,23 +183,10 @@ export const CinemasForm = () => {
                   ))}
               </MapContainer>
             </div>
-
-
           </div>}
-          {/* old */}
           {component.view !== 'table' && <ul className='row list-view'>
             {list && list.length > 0 && list.map((cinema, i) => {
               return (
-                // <li key={i} className='col s12 m6 l4 xl3' onClick={e => edit(e, cinema.id)}>
-                //   <section>
-                //     <div>
-                //       <h3 className={cinema.status === 'I' ? 'inactive' : ''}>{cinema.name}</h3>
-                //       <p>{cinema.id}</p>
-                //     </div>
-                //     <button className='btn-detail' />
-                //   </section>
-                // </li>
-
                 <CinemaCarousel cinema={cinema} edit={edit} />
               );
             })}

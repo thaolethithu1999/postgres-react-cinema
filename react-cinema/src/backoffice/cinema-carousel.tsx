@@ -28,13 +28,6 @@ export default function CinemaCarousel({ edit, cinema }: Props) {
 
   let gallery = cinema.gallery || [];
 
-  // console.log(gallery);
-  // let arr: any = []
-
-  // gallery && gallery.forEach(img => {
-  //   arr.push(img.url);
-  // })
-
   const handleFetch = async () => {
     // if (!carousel || files) { return; }
     let res;
@@ -63,7 +56,6 @@ export default function CinemaCarousel({ edit, cinema }: Props) {
   };
 
   console.log(files);
-
   // console.log('not fetch thumbnail');
   // const info: FileInfo[] = [...files];      
   // gallery && gallery.length > 0 && gallery.forEach((i: any) => {
@@ -82,10 +74,6 @@ export default function CinemaCarousel({ edit, cinema }: Props) {
     let len = files.length;
     console.log(len);
   };
-
-  // const handleChange = () =>{
-  //   setCarousel()
-  // }
 
   const navigateEdit = (e: OnClick) => {
     e.preventDefault();
@@ -117,9 +105,7 @@ export default function CinemaCarousel({ edit, cinema }: Props) {
                       );
                     case 'image':
                       return (
-                        <>
-                          <CarouselImageItem key={index} src={itemData.url} />
-                        </>
+                        <CarouselImageItem key={index} src={itemData.url} />
                       );
                     case 'youtube':
                       return (

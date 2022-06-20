@@ -46,7 +46,7 @@ export const LocationPage = () => {
       setUploadedAvatar(currentLocation?.imageURL);
     }
   };
-  if (!location) {
+  if (!location) {  
     return (<div></div>);
   }
 
@@ -107,7 +107,7 @@ export const LocationPage = () => {
         <header className='border-bottom-highlight'>
           <div className='cover-image'>
             {
-              ((uploadedCover) && <img alt='' src={uploadedCover} />)
+              ((uploadedCover)  && <img alt='' src={uploadedCover} />)
               || (<img alt='' src='https://pre00.deviantart.net/6ecb/th/pre/f/2013/086/3/d/facebook_cover_1_by_alphacid-d5zfrww.jpg' />)
             }
             <div className='contact-group'>

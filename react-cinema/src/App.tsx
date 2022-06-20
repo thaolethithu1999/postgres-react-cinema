@@ -37,6 +37,7 @@ import { LocationPage } from './location/location-page';
 import { Review } from './location/location-page/review';
 import { LocationPhoto } from './location/location-page/photo';
 import { LocationsPage } from './location/locations-page';
+import { CinemaPage} from './backoffice/cinema-page';
 import { MyProfileForm } from './my-profile/my-profile-form';
 import { MySettingsForm } from './my-profile/my-settings-form';
 import { UserPage } from './profile/user-page';
@@ -139,6 +140,9 @@ function App() {
           <Route path='backoffice/cinema/edit/:id' element={<CinemaForm />} />
           <Route path='backoffice/cinema/add' element={<CinemaForm />} />
           <Route path='backoffice/cinema' element={<CinemasForm />} />
+
+          <Route path='backoffice/cinema/:id' element={<CinemaPage />} />
+
           <Route path='backoffice/categories' element={<CategoriesForm />} />
           <Route path='backoffice/categories/edit/:id' element={<CategoryForm />} />
           <Route path='backoffice/categories/add' element={<CategoryForm />} />
