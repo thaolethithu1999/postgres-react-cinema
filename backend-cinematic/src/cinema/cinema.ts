@@ -16,6 +16,7 @@ export interface Cinema {
   cinemaId: string;
   cinemaName: string;
   imageURL?: string;
+  coverURL?: string;
   latitude?: string;
   longitude?: string;
   status?: string;
@@ -64,6 +65,7 @@ export const cinemaModel: Attributes = {
     length: 1
   },
   imageURL:{},
+  coverURL:{},
   createdBy: {},
   createdAt: {
     column: 'createdat',
