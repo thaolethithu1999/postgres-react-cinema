@@ -21,7 +21,6 @@ export default function CinemaCarousel({ edit, cinema }: Props) {
 
   useEffect(() => {
     handleFetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cinema, carousel]);
 
   const locationService = getLocations();
@@ -55,7 +54,8 @@ export default function CinemaCarousel({ edit, cinema }: Props) {
     }
   };
 
-  console.log(files);
+  //console.log(files);
+  
   // console.log('not fetch thumbnail');
   // const info: FileInfo[] = [...files];      
   // gallery && gallery.length > 0 && gallery.forEach((i: any) => {
@@ -82,6 +82,7 @@ export default function CinemaCarousel({ edit, cinema }: Props) {
 
   return (
     <>
+      
       {carousel ? (
         <div className='col s12 m6 l4 xl3 '>
           <div
@@ -105,7 +106,9 @@ export default function CinemaCarousel({ edit, cinema }: Props) {
                       );
                     case 'image':
                       return (
-                        <CarouselImageItem key={index} src={itemData.url} />
+                        <>
+                          <CarouselImageItem key={index} src={itemData.url} />
+                        </>
                       );
                     case 'youtube':
                       return (

@@ -8,11 +8,11 @@ export const config = {
   role_url: 'http://localhost:8083/roles',
   privilege_url: 'http://localhost:8080/privileges',
   audit_log_url: 'http://localhost:8080/audit-logs',
-  cinema_url: 'http://localhost:8080/cinema',
+  cinema_url: 'http://localhost:8080/cinema', //8080
   category_url: 'http://localhost:8080/categories',
   film_url: 'http://localhost:8080/films',
-  location_backoffice_url: 'http://localhost:8085/locations',
-  location_url: 'http://localhost:8085/locations',
+  location_backoffice_url: 'http://localhost:8082/locations',//change port 8085
+  location_url: 'http://localhost:8082/locations', //change port 8085
   location_rate_url: 'http://localhost:8082/location-rates',
   myprofile_url: 'http://localhost:8082/my-profile',
   appreciation_url: 'http://localhost:8082/appreciation',

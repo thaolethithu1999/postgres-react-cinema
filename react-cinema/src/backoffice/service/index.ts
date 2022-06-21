@@ -97,6 +97,7 @@ export function useFilm(): FilmService {
 export function useMasterData(): MasterDataService {
   return context.getMasterDataService();
 }
+
 export function getLocations(): LocationService {
   return context.getLocationService();
 }

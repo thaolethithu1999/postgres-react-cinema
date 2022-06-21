@@ -9,6 +9,7 @@ export interface CinemaFilter extends Filter {
   longitude: number;
   latitude: number;
 }
+
 export const galleryModel: Attributes = {
   url: {
     required: true,
@@ -17,6 +18,7 @@ export const galleryModel: Attributes = {
     required: true,
   },
 };
+
 export interface Gallery {
   url: string;
   type: string;
@@ -39,12 +41,9 @@ export interface Cinema extends Tracking {
   gallery?: Gallery[];
 }
 
-
-
 export interface CinemaService extends Service<Cinema, string, CinemaFilter> {
   getCinemasByRole(id: string): Promise<Cinema[]>;
 }
-
 
 export const cinemaModel: Attributes = {
   id: {

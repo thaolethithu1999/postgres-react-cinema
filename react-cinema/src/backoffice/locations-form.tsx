@@ -50,8 +50,6 @@ export const LocationsForm = () => {
     getLocations(),
     inputSearch()
   );
-  console.log(state);
-  
   component.viewable = true;
   component.editable = true;
   React.useEffect(() => {
@@ -75,7 +73,6 @@ export const LocationsForm = () => {
   const [filter, setFilter] = React.useState<LocationFilter>(
     value(state.filter)
   );
-  
   React.useEffect(() => {
     if (state.list) { setList(state.list); }
     if (state.filter) { setFilter(state.filter); }

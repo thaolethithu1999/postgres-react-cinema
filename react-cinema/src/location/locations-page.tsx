@@ -50,10 +50,8 @@ export const LocationsPage = () => {
     useLocationsService(),
     inputSearch()
   );
-
   component.viewable = true;
   component.editable = true;
-
   React.useEffect(() => {
     const L = require('leaflet');
 
@@ -70,16 +68,11 @@ export const LocationsPage = () => {
     e.preventDefault();
     navigate(`edit/${id}`);
   };
-  
   const [viewList, setViewList] = React.useState(true);
   const [list, setList] = React.useState<Location[]>([]);
   const [filter, setFilter] = React.useState<LocationFilter>(
     value(state.filter)
   );
-
-  console.log(list);
-  
-
   React.useEffect(() => {
     if (state.list) { setList(state.list); }
     if (state.filter) { setFilter(state.filter); }

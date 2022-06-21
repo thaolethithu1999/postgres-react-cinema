@@ -11,7 +11,7 @@ import {
   useMyProfileService
 } from '../../my-profile/my-profile';
 
-export const LocationPhoto = () => {
+export const CinemaPhoto = () => {
   // const params = useParams();
   // const [location, setLocation] = useState<Location>();
   // const locationRateService = getLocationRates();

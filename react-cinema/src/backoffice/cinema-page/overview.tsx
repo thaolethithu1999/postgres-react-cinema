@@ -3,29 +3,33 @@ import { useEffect, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { useLocation } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { Location } from '../../backoffice/service/location/location';
-import { useLocationsService } from '../../location/service';
-export const Overview = () => {
+import { Cinema, useCinema } from '../service';
+
+export const CinemaOverview = () => {
   const locationPath = useLocation();
   const params = useParams();
-  const [location, setLocation] = useState<Location>();
-  const locationService = useLocationsService();
+  const [cinema, setCinema] = useState<Cinema>();
+  const cinemaService = useCinema();
+
   useEffect(() => {
     load();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  const load = async () => {
+  }, []); 
 
+  const load = async () => {
     const { id } = params;
-    const locationObj = await locationService.load(id || '');
-    if (locationObj) {
-      setLocation(locationObj);
+    const currentCinema = await cinemaService.load(id || '');
+    if (currentCinema) {
+      setCinema(currentCinema);
     }
   };
 
+  console.log(locationPath);
+  
   if (locationPath.pathname.split('/').length === 3) {
     return (
       <div>
-        <form className='list-result'>
+        <p>Overview</p>
+        {/* <form className='list-result'>
           <div style={{ height: '600px', width: '800px' }}>
             <MapContainer
               center={{ lat: 10.854886268472459, lng: 106.63051128387453 }}
@@ -35,30 +39,25 @@ export const Overview = () => {
               zoomControl={true}
               scrollWheelZoom={true}
               dragging={true}
-              // animate={true}
               easeLinearity={0.35}
               style={{ height: '100%' }}
-            // onclick={addMarker}
             >
               <TileLayer
                 attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
               />
-              {location && location.id &&
-
+              {cinema && cinema.id &&
                 <Marker
-                  // key={`marker-1`}
-                  position={[location.longitude, location.latitude]}
-
+                  position={[cinema.longitude, cinema.latitude]}
                 >
                   <Popup>
-                    <span>{location.name}</span>
+                    <span>{cinema.name}</span>
                   </Popup>
                 </Marker>
               }
             </MapContainer>
           </div>
-        </form>
+        </form> */}
       </div>
     );
   }

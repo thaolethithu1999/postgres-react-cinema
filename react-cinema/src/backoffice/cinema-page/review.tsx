@@ -11,7 +11,8 @@ import { getLocationRates, Location, LocationRate, LocationRateFilter, useLocati
 import './rate.css';
 
 ReactModal.setAppElement('#root');
-export const Review = () => {
+
+export const CinemaReview = () => {
   const params = useParams();
   const [voteStar, setVoteStar] = useState<number>();
   const [isOpenRateModal, setIsOpenRateModal] = useState(false);

@@ -6,13 +6,11 @@ import { useNavigate } from 'react-router-dom';
 import { FileInfo } from 'reactx-upload';
 import { getLocations } from '../backoffice/service';
 import { Location } from '../backoffice/service/location/location';
-import { Cinema } from '../backoffice/service/cinema/cinema';
 import './carousel.css';
 
 interface Props {
   edit: (e: any, id: string) => void;
   location: Location;
-  
 }
 export default function LocationCarousel({ edit, location }: Props) {
   const [carousel, setCarousel] = useState(false);
@@ -24,7 +22,7 @@ export default function LocationCarousel({ edit, location }: Props) {
   }, [location, carousel]);
   const locationService = getLocations();
   const handleFetch = async () => {
-    // if (!carousel || files) { return; }
+    if (!carousel || files) { return; }
     let res;
     try {
       res = await locationService.fetchImageUploaded(location.id);

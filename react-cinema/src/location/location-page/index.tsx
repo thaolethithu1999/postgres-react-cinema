@@ -18,7 +18,6 @@ import { Review } from './review';
 
 // import { getFileExtension, removeFileExtension } from '../../uploads/components/UploadHook';
 const httpRequest = new HttpRequest(Axios, options);
-
 export const LocationPage = () => {
   const resource = useResource();
   const { id = '' } = useParams();
@@ -32,7 +31,6 @@ export const LocationPage = () => {
   const [sizes, setSizes] = useState<number[]>([]);
   const [dropdownCover, setDropdownCover] = useState<boolean>(false);
   const [modalSelectGalleryOpen, setModalSelectGalleryOpen] = useState(false);
-  
   useEffect(() => {
     getLocation(id ?? '');
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -46,7 +44,7 @@ export const LocationPage = () => {
       setUploadedAvatar(currentLocation?.imageURL);
     }
   };
-  if (!location) {  
+  if (!location) {
     return (<div></div>);
   }
 
@@ -107,7 +105,7 @@ export const LocationPage = () => {
         <header className='border-bottom-highlight'>
           <div className='cover-image'>
             {
-              ((uploadedCover)  && <img alt='' src={uploadedCover} />)
+              ((uploadedCover) && <img alt='' src={uploadedCover} />)
               || (<img alt='' src='https://pre00.deviantart.net/6ecb/th/pre/f/2013/086/3/d/facebook_cover_1_by_alphacid-d5zfrww.jpg' />)
             }
             <div className='contact-group'>
@@ -170,7 +168,6 @@ export const LocationPage = () => {
         isOpen={modalUpload}
         onRequestClose={closeModalUpload}
         contentLabel='Modal'
-        // portalClassName='modal-portal'
         className='modal-portal-content'
         bodyOpenClassName='modal-portal-open'
         overlayClassName='modal-portal-backdrop'
