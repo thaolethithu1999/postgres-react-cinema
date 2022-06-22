@@ -9,15 +9,15 @@ import { LocationRateService } from './location-rate/location-rate';
 import { LocationService } from './location/location';
 import { MasterDataClient, MasterDataService } from './master-data';
 
-import { CinemaClient, CinemaService } from './cinema';
-import { CinemaRateFilter, CinemaRateService } from './cinema-rate/cinema-rate';
+import { CinemaClient} from './cinema';
+import { CinemaRateService } from './cinema-rate/cinema-rate';
 import { CinemaRateClient } from './cinema-rate';
+import { CinemaService} from '../service/cinema/cinema';
 
 
 export * from './cinema';
 export * from './category';
 export * from './cinema-rate';
-// axios.defaults.withCredentials = true;
 
 const httpRequest = new HttpRequest(axios, options);
 export interface Config {

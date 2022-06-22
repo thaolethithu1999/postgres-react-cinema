@@ -1,6 +1,6 @@
 import { Attributes, Filter, Service } from 'onecore';
 
-export interface CinemaRate  {
+export interface CinemaRate {
   cinemaId?: string;
   id?: string;
   userId?: string;
