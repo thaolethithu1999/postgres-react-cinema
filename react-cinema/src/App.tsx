@@ -140,16 +140,17 @@ function App() {
           <Route path='admin/roles/add' element={<RoleForm />} />
           <Route path='admin/roles/edit/:id' element={<RoleForm />} />
           <Route path='admin/roles/assign/:id' element={<RoleAssignmentForm />} />
-          <Route path='backoffice/cinema/edit/:id' element={<CinemaForm />} />
-          <Route path='backoffice/cinema/add' element={<CinemaForm />} />
-          <Route path='backoffice/cinema' element={<CinemasForm />} />
 
-          <Route path='backoffice/cinema/:id' element={<CinemaOverview />} />
-          <Route path='backoffice/cinema/:id/bookable' element={<CinemaPage />} />
-          <Route path='backoffice/cinema/:id/review' element={<CinemaPage />} />
-          <Route path='backoffice/cinema/:id/photo' element={<CinemaPage />} />
-          <Route path='backoffice/cinema/:id/about' element={<CinemaPage />} />
-          <Route path='backoffice/cinemas/:id/review' element={<CinemaReview/>}/>
+          <Route path='cinema/edit/:id' element={<CinemaForm />} />
+          <Route path='cinema/add' element={<CinemaForm />} />
+          <Route path='cinema' element={<CinemasForm />} />
+
+          <Route path='cinema/:id' element={<CinemaPage />} />
+          <Route path='cinema/:id/bookable' element={<CinemaPage />} />
+          <Route path='cinema/:id/review' element={<CinemaPage />} />
+          <Route path='cinema/:id/photo' element={<CinemaPage />} />
+          <Route path='cinema/:id/about' element={<CinemaPage />} />
+          <Route path='cinemas/:id/review' element={<CinemaReview/>}/>
 
           <Route path='backoffice/categories' element={<CategoriesForm />} />
           <Route path='backoffice/categories/edit/:id' element={<CategoryForm />} />

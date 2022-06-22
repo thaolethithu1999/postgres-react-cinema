@@ -1,7 +1,7 @@
 import { Attributes, Filter, Service, Tracking } from 'onecore';
 
 export interface CinemaFilter extends Filter {
-  id: string;
+  id?: string;
   name?: string;
   address?: string;
   status?: string;
@@ -29,6 +29,7 @@ export interface Cinema extends Tracking {
   name: string;
   latitude: number;
   longitude: number;
+  imageURL?: string;
   status?: string;
   address?: string;
   parent?: string;
@@ -36,14 +37,13 @@ export interface Cinema extends Tracking {
   createdat?: Date;
   updatedby?: string;
   updatedat?: Date;
-  imageURL?: string;
   coverURL?: string;
   gallery?: Gallery[];
 }
-
 export interface CinemaService extends Service<Cinema, string, CinemaFilter> {
   getCinemasByRole(id: string): Promise<Cinema[]>;
 }
+
 
 export const cinemaModel: Attributes = {
   id: {
@@ -69,6 +69,7 @@ export const cinemaModel: Attributes = {
   status: {
     length: 1
   },
+  imageURL: {},
   createdBy: {},
   createdAt: {
     column: 'createdat',
@@ -86,3 +87,14 @@ export const cinemaModel: Attributes = {
   }
 };
 
+export interface CinemaInfo {
+  locationInfoId?: string; // It's is id
+  viewCount: number;
+  rateCinema: number;
+  rate: number;
+  rate1: number;
+  rate2: number;
+  rate3: number;
+  rate4: number;
+  rate5: number;
+}

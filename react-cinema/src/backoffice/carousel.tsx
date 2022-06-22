@@ -6,11 +6,12 @@ import { useNavigate } from 'react-router-dom';
 import { FileInfo } from 'reactx-upload';
 import { getLocations } from '../backoffice/service';
 import { Location } from '../backoffice/service/location/location';
+import { Cinema } from './service';
 import './carousel.css';
 
 interface Props {
   edit: (e: any, id: string) => void;
-  location: Location;
+  location: Location | Cinema;
 }
 export default function LocationCarousel({ edit, location }: Props) {
   const [carousel, setCarousel] = useState(false);
@@ -102,21 +103,30 @@ export default function LocationCarousel({ edit, location }: Props) {
             ) : (
               ''
             )}
+            <div className='user-carousel-content'>
+              <h3
+                onClick={(e) => edit(e, location.id)}
+                className={location.status === 'I' ? 'inactive' : ''}
+              >
+                {location.name}
+              </h3>
+            </div>
           </div>
         </div>
       ) : (
         <li
           className='col s12 m6 l4 xl3 card '
-
+          
         >
           <section>
-            <div onClick={(e) => toggleCarousel(e, true)}
+            <div
               className='cover'
               style={{
                 backgroundImage: `url('${location.imageURL}')`,
               }}
-            ></div>
-            <h3 className='title-location' onClick={(e) => navigateEdit(e)}>{location.name}</h3>
+              onClick={(e) => toggleCarousel(e, true)}
+             ></div>
+            <h3 onClick={(e) => edit(e, location.id)}>{location.name}</h3>
           </section>
         </li>
       )}

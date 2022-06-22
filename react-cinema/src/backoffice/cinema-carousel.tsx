@@ -28,7 +28,6 @@ export default function CinemaCarousel({ edit, cinema }: Props) {
   let gallery = cinema.gallery || [];
 
   const handleFetch = async () => {
-    // if (!carousel || files) { return; }
     let res;
     try {
       res = await locationService.fetchImageUploaded(cinema.id);
@@ -82,7 +81,6 @@ export default function CinemaCarousel({ edit, cinema }: Props) {
 
   return (
     <>
-      
       {carousel ? (
         <div className='col s12 m6 l4 xl3 '>
           <div

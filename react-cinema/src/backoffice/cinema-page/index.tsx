@@ -117,7 +117,6 @@ export const CinemaPage = () => {
 
   console.log(currentPath.pathname);
 
-
   return (
     <>
       <div className="profile view-container">
@@ -163,11 +162,11 @@ export const CinemaPage = () => {
 
             <nav className='menu'>
               <ul>
-                <li><Link to={`/backoffice/cinema/${id}`}  > Overview </Link></li>
-                <li><Link to={`/backoffice/cinema/${id}/bookable`}  > Bookable </Link></li>
-                <li><Link to={`/backoffice/cinema/${id}/review`}  > Review </Link></li>
-                <li><Link to={`/backoffice/cinema/${id}/photo`}  > Photo </Link></li>
-                <li><Link to={`/backoffice/cinema/${id}/about`}  > About </Link></li>
+                <li><Link to={`/cinema/${id}`}  > Overview </Link></li>
+                <li><Link to={`/cinema/${id}/bookable`}  > Bookable </Link></li>
+                <li><Link to={`/cinema/${id}/review`}  > Review </Link></li>
+                <li><Link to={`/cinema/${id}/photo`}  > Photo </Link></li>
+                <li><Link to={`/cinema/${id}/about`}  > About </Link></li>
               </ul>
             </nav>
           </header>

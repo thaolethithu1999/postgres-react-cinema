@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 import { useLocation } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { Cinema, useCinema } from '../service';
@@ -13,7 +14,19 @@ export const CinemaOverview = () => {
 
   useEffect(() => {
     load();
-  }, []); 
+  }, []);
+
+
+  useEffect(() => {
+    const L = require('leaflet');
+    delete L.Icon.Default.prototype._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+      iconUrl: require('leaflet/dist/images/marker-icon.png'),
+      shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+    });
+  }, []);
+
 
   const load = async () => {
     const { id } = params;
@@ -24,12 +37,12 @@ export const CinemaOverview = () => {
   };
 
   console.log(locationPath);
-  
+
   if (locationPath.pathname.split('/').length === 3) {
     return (
       <div>
-        <p>Overview</p>
-        {/* <form className='list-result'>
+
+        <form className='list-result'>
           <div style={{ height: '600px', width: '800px' }}>
             <MapContainer
               center={{ lat: 10.854886268472459, lng: 106.63051128387453 }}
@@ -57,7 +70,7 @@ export const CinemaOverview = () => {
               }
             </MapContainer>
           </div>
-        </form> */}
+        </form>
       </div>
     );
   }

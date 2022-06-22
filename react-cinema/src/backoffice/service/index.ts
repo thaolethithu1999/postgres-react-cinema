@@ -2,7 +2,6 @@ import axios from 'axios';
 import { HttpRequest } from 'axios-core';
 import { options, storage } from 'uione';
 import { CategoryClient, CategoryService } from './category';
-import { CinemaClient, CinemaService } from './cinema';
 import { FilmClient, FilmService } from './film';
 import { LocationClient } from './location';
 import { LocationRateClient } from './location-rate';
@@ -10,8 +9,14 @@ import { LocationRateService } from './location-rate/location-rate';
 import { LocationService } from './location/location';
 import { MasterDataClient, MasterDataService } from './master-data';
 
+import { CinemaClient, CinemaService } from './cinema';
+import { CinemaRateFilter, CinemaRateService } from './cinema-rate/cinema-rate';
+import { CinemaRateClient } from './cinema-rate';
+
+
 export * from './cinema';
 export * from './category';
+export * from './cinema-rate';
 // axios.defaults.withCredentials = true;
 
 const httpRequest = new HttpRequest(axios, options);
@@ -24,6 +29,8 @@ export interface Config {
   audit_log_url: string;
   location_backoffice_url: string;
   location_rate_url: string;
+  //
+  cinema_rate_url: string;
 }
 class ApplicationContext {
   cinemaService?: CinemaService;
@@ -32,6 +39,9 @@ class ApplicationContext {
   masterDataService?: MasterDataService;
   locationService?: LocationService;
   locationRateService?: LocationRateService;
+  //add
+  cinemaRateService?: CinemaRateService;
+
   constructor() {
     this.getConfig = this.getConfig.bind(this);
     this.getCinemaService = this.getCinemaService.bind(this);
@@ -39,6 +49,8 @@ class ApplicationContext {
     this.getCategoryService = this.getCategoryService.bind(this);
     this.getFilmService = this.getFilmService.bind(this);
     this.getLocationService = this.getLocationService.bind(this);
+    //add
+    this.getCinemaService = this.getCinemaService.bind(this);
   }
   getConfig(): Config {
     return storage.config();
@@ -51,6 +63,15 @@ class ApplicationContext {
     }
     return this.cinemaService;
   }
+  //add
+  getCinemaRateService(): CinemaRateService {
+    if(!this.cinemaRateService) {
+      const c = this.getConfig();
+      this.cinemaRateService = new CinemaRateClient(httpRequest, c.cinema_rate_url, c.cinema_url)
+    }
+    return this.cinemaRateService;
+  }
+
   getFilmService(): FilmService {
     if (!this.filmService) {
       const c = this.getConfig();
@@ -88,6 +109,11 @@ export const context = new ApplicationContext();
 export function useCinema(): CinemaService {
   return context.getCinemaService();
 }
+//add
+export function getCinemaRates(): CinemaRateService {
+  return context.getCinemaRateService();
+}
+
 export function useCategory(): CategoryService {
   return context.getCategoryService();
 }
