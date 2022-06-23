@@ -10,6 +10,7 @@ import { SqlCinemaRepository } from './sql-cinema-repository';
 import { query } from "pg-extension";
 import { SqlCinemaInfoRepository } from './sql-cinema-info-repository';
 import { SqlCinemaRateRepository } from './sql-cinema-rate-repository';
+import { CinemaRateController } from './cinema-rate-controller';
 
 export class CinemaManager extends Manager<Cinema, string, CinemaFilter> implements CinemaService {
   constructor(search: Search<Cinema, CinemaFilter>,
@@ -28,7 +29,8 @@ export class CinemaManager extends Manager<Cinema, string, CinemaFilter> impleme
         return this.repository.load(id).then(info => {
           if(info){
             delete (info as any)['id'];
-            cinema.info = info;
+            //cinema.info = info;
+            (cinema.info as any) = info;
           }
           return cinema;
         })
@@ -53,4 +55,22 @@ export function useCinemaService(db: DB, mapper?: TemplateMap): CinemaService {
 }
 export function useCinemaController(log: Log, db: DB, mapper?: TemplateMap): CinemaController {
   return new CinemaController(log, useCinemaService(db, mapper));
+}
+
+export class CinemaRateManager extends Manager<CinemaRate, string, CinemaRateFilter> implements CinemaRateService{
+  constructor(search: Search<CinemaRate, CinemaRateFilter>, repository: CinemaRateRepository ){
+    super(search, repository);
+  }
+}
+
+export function useCinemaRateService(db: DB, mapper?: TemplateMap): CinemaRateService{
+  const query = useQuery('cinemarate', mapper, cinemaRateModel, true);
+  const builder = new SearchBuilder<CinemaRate, CinemaRateFilter>(db.query, 'cinemarate', cinemaRateModel, db.driver, query);
+  const repository = new SqlCinemaRateRepository(db);
+
+  return new CinemaRateManager(builder.search, repository);
+}
+
+export function useCinemaRateController(log: Log, db: DB, mapper?: TemplateMap): CinemaRateController{
+  return new CinemaRateController(log, useCinemaRateService(db, mapper));
 }

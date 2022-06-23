@@ -12,11 +12,20 @@ export interface CinemaFilter extends Filter {
   updatedby?: string;
   updatedat?: Date | DateRange;
 }
-
+export interface CinemaInfo {
+  id: string;
+  rate: number;
+  rate1: number;
+  rate2: number;
+  rate3: number;
+  rate4: number;
+  rate5: number;
+  viewCount: number;
+}
 export interface Cinema {
   cinemaId: string;
   cinemaName: string;
-  imageURL?: string;
+  imageURL?: string;  
   coverURL?: string;
   latitude?: string;
   longitude?: string;
@@ -38,16 +47,7 @@ export interface RateFilter extends Filter {
   rateTime: Date;
 }
 
-export interface CinemaInfo {
-  id: string;
-  rate: number;
-  rate1: number;
-  rate2: number;
-  rate3: number;
-  rate4: number;
-  rate5: number;
-  viewCount: number;
-}
+
 
 export interface CinemaRate {
   id?: string;
