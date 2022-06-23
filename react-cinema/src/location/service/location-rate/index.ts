@@ -11,6 +11,8 @@ export class LocationRateClient extends Client<LocationRate, string, LocationRat
   }
   getLocationByLocationId(locationId: string): Promise<LocationRate[]> {
     const url = this.locationUrl + '/' + locationId;
+    console.log(url);
+    
     return this.http.get(url);
   }
 }

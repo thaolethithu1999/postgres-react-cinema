@@ -14,6 +14,7 @@ export interface Location {
   status: string;
   coverURL?: string;
   gallery?: FileInfo[];
+  upload?: FileInfo[];
 }
 // filter
 export interface LocationFilter extends Filter {

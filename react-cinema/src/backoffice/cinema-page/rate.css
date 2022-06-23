@@ -119,17 +119,23 @@ section.user-input {
   font-size: 18px;
 }
 
-
-/* test */
+/* test cinema-page*/
 .img-border {
   width: 98.3%;
   margin-left: 0.9rem;
 }
+
 .div-overview {
   height: 100vh;
   width: 86vw;
   margin-left: 0.9rem;
 }
-.leaflet-container {
+
+.div-overview > .leaflet-container {
   width: 100% !important;
+}
+
+.img-border > .slider > .btn-prev, .img-border > .slider > .btn-next{
+  top: 50%;
+  opacity: 1;
 }

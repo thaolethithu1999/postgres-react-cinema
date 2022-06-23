@@ -36,6 +36,7 @@
     "react-modal": "^3.15.1",
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
+    "react-uuid": "^1.0.2",
     "reactx-carousel": "0.0.0",
     "reactx-nav": "^0.1.4",
     "reactx-pagination": "0.0.1",
@@ -51,6 +52,7 @@
     "ui-plus": "0.0.10",
     "ui-toast": "^0.0.5",
     "uione": "0.0.21",
+    "uuid": "^8.3.2",
     "validation-core": "^0.0.3",
     "web-clients": "^0.1.24",
     "web-vitals": "^2.1.4"
@@ -59,7 +61,8 @@
     "@types/leaflet": "^1.7.9",
     "@types/react-beautiful-dnd": "^13.1.2",
     "@types/react-google-recaptcha": "^2.1.5",
-    "@types/react-modal": "^3.13.1"
+    "@types/react-modal": "^3.13.1",
+    "@types/uuid": "^8.3.4"
   },
   "scripts": {
     "start": "react-scripts start",

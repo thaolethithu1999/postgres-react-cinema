@@ -6,6 +6,7 @@ import Pagination from 'reactx-pagination';
 import { inputSearch } from 'uione';
 import { useFilm } from './service';
 import { Film, FilmFilter } from './service/film';
+import LocationCarousel from './carousel-film';
 
 interface FilmSearch extends SearchComponentState<Film, FilmFilter> {
   statusList: ValueText[];
@@ -126,7 +127,7 @@ export const FilmsForm = () => {
               })}
             </table>
           </div>}
-          {component.view !== 'table' && <ul className='row list-view'>
+          {/* {component.view !== 'table' && <ul className='row list-view'>
             {list && list.length > 0 && list.map((film, i) => {
               return (
                 <li key={i} className='col s12 m6 l4 xl3' onClick={e => edit(e, film.filmId)}>
@@ -138,6 +139,14 @@ export const FilmsForm = () => {
                     <button className='btn-detail' />
                   </section>
                 </li>
+              );
+            })}
+          </ul>} */}
+          {component.view !== 'table' && <ul className='row list-view'>
+            {list && list.length > 0 && list.map((film, i) => {
+              return (
+                <LocationCarousel location={film} edit={edit} />
+              
               );
             })}
           </ul>}

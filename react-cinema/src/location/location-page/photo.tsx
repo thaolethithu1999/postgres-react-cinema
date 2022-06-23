@@ -1,15 +1,14 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { getLocationRates, useLocationsService } from '../service';
-import { LocationRate, LocationRateFilter } from '../../backoffice/service/location-rate/location-rate';
+import { getLocationRates, Location,  useLocationsService, LocationRate, LocationRateFilter } from '../service';
 import { useParams } from 'react-router-dom';
-import { Location } from '../../backoffice/service/location/location';
 import { alert, handleError, message, useResource, storage } from 'uione';
 import { Carousel, CarouselImageItem, CarouselVideoItem } from 'reactx-carousel';
 import {
   User,
   useMyProfileService
 } from '../../my-profile/my-profile';
+import './carousel.css';
 
 export const LocationPhoto = () => {
   const params = useParams();
@@ -42,37 +41,25 @@ export const LocationPhoto = () => {
     if (locationObj) {
       setLocation(locationObj);
     }
+    service.getMyProfile('77c35c38c3554ea6906730dbcfeca0f2').then((profile) => {
+      if (profile) {
+        setUser(profile);
+        // setBio(profile.bio || '');
+        // setUploadedCover(profile.coverURL);
+        // setUploadedAvatar(profile.imageURL);
+      }
+    });
   };
 
-  const userId = storage.getUserId();
-    if (userId && userId.length > 0) {
-      service.getMyProfile(userId).then((profile) => {
-        if (profile) {
-          setUser(profile);
-          // setBio(profile.bio || '');
-          // setUploadedCover(profile.coverURL);
-          // setUploadedAvatar(profile.imageURL);
-        }
-      });
-    }
 
   if (location && window.location.pathname.includes('photo')) {
     return (
-      <div className='card border-bottom-highlight'>
-              {/* <header>
-                <i className='material-icons highlight btn-camera'></i>
-                {resource.title_modal_gallery}
-                <button
-                  type='button'
-                  id='btnGallery'
-                  name='btnGallery'
-                  className={'btn-edit'}
-                  // onClick={openModalUploadGallery}
-                />
-              </header> */}
-              <section className='row'>
+      <div className='col s12 m12 l12'>
+        <section className='row'>
                 <div className='user-carousel-container'>
                   <Carousel infiniteLoop={true}>
+                    {/* {location.upload
+                      ? location.upload.map((itemData, index) => { */}
                     {user.gallery
                       ? user.gallery.map((itemData, index) => {
                         switch (itemData.type) {
@@ -112,7 +99,7 @@ export const LocationPhoto = () => {
                   </Carousel>
                 </div>
               </section>
-            </div>
+      </div>
     );
   }
   return null;

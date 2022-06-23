@@ -5,6 +5,7 @@ import { FileInfo } from 'reactx-upload';
 import { getLocations } from '../backoffice/service';
 import { Location } from '../backoffice/service/location/location';
 import './carousel.css';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   edit: (e: any, id: string) => void;
@@ -13,6 +14,7 @@ interface Props {
 export default function LocationCarousel({ edit, location }: Props) {
   const [carousel, setCarousel] = useState(false);
   const [files, setFiles] = useState<FileInfo[]>();
+  const navigate = useNavigate();
   useEffect(() => {
     handleFetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -54,10 +56,12 @@ export default function LocationCarousel({ edit, location }: Props) {
     e.preventDefault();
     setCarousel(enable);
   };
+
   return (
     <>
       {carousel ? (
-        <div className='col s12 m6 l4 xl3 '>
+        
+        <div className='col s12 m6 l4 xl3 card'>
           <div
             className='user-carousel-container '
             onClick={(e) => toggleCarousel(e, false)}
@@ -95,21 +99,20 @@ export default function LocationCarousel({ edit, location }: Props) {
             ) : (
               ''
             )}
-            {/* <div className='user-carousel-content'>
+            <div className='user-carousel-content'>
               <h3
                 onClick={(e) => edit(e, location.id)}
                 className={location.status === 'I' ? 'inactive' : ''}
               >
                 {location.name}
               </h3>
-              <p>{location.description}</p>
-            </div> */}
+            </div>
           </div>
         </div>
       ) : (
         <li
           className='col s12 m6 l4 xl3 card '
-          onClick={(e) => toggleCarousel(e, true)}
+          
         >
           <section>
             <div
@@ -117,8 +120,9 @@ export default function LocationCarousel({ edit, location }: Props) {
               style={{
                 backgroundImage: `url('${location.imageURL}')`,
               }}
-            ></div>
-            <h3>{location.name}</h3>
+              onClick={(e) => toggleCarousel(e, true)}
+             ></div>
+            <h3 onClick={(e) => edit(e, location.id)}>{location.name}</h3>
           </section>
         </li>
       )}

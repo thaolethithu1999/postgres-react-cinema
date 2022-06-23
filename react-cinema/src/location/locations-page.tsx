@@ -66,7 +66,7 @@ export const LocationsPage = () => {
 
   const edit = (e: React.MouseEvent<HTMLElement, MouseEvent>, id: string) => {
     e.preventDefault();
-    navigate(`edit/${id}`);
+    navigate(`${id}`);
   };
   const [viewList, setViewList] = React.useState(true);
   const [list, setList] = React.useState<Location[]>([]);

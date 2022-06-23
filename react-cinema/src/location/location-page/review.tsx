@@ -15,7 +15,7 @@ export const Review = () => {
   const params = useParams();
   const [voteStar, setVoteStar] = useState<number>();
   const [isOpenRateModal, setIsOpenRateModal] = useState(false);
-  const [location, setLocation] = useState<Location>();
+  const [location, setLocation] = useState<Location>()  ;
   const [rates, setRates] = useState<LocationRate[]>([]);
   const [pageSize, setPageSize] = useState(3);
   const [maxLengthReviewText] = useState(100);
@@ -23,9 +23,11 @@ export const Review = () => {
 
   const locationRateService = getLocationRates();
   const locationService = useLocationsService();
+  
   useEffect(() => {
     load();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const load = async () => {
     const locationRateSM = new LocationRateFilter();
     const { id } = params;
@@ -39,6 +41,9 @@ export const Review = () => {
       setLocation(locationObj);
     }
   };
+
+  console.log(location);
+  
 
   const moreReview = async (e: any) => {
     e.preventDefault();

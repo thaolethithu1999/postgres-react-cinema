@@ -6,6 +6,10 @@ import {
   filmModel,
   FilmSearch,
   FilmService,
+  FilmRateService,
+  FilmRate,
+  FilmRateFilter,
+  filmRateModel
 } from './film';
 
 export * from './film';
@@ -20,5 +24,19 @@ export class FilmClient extends Client<Film, string, FilmFilter> implements Film
   getFilmsByCategoryId(id: string): Promise<FilmSearch> {
     const url = `${this.serviceUrl}/search?categories[]={${id}}`;
     return this.http.get<FilmSearch>(url);
+  }
+  rateFilm(obj: FilmRate): Promise<any>{
+    const url = `${this.serviceUrl}/rate`;
+    return this.http.post(url, obj);
+  }
+}
+
+export class FilmRateClient extends Client<FilmRate, string, FilmRateFilter> implements FilmRateService {
+  constructor(http: HttpRequest, url: string) {
+    super(http, url, filmRateModel);
+    // this.searchGet = true;
+  }
+  protected postOnly(s: FilmRate): boolean {
+    return true;
   }
 }

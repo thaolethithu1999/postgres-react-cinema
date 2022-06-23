@@ -1,6 +1,12 @@
 .slider-items{
     height:100%;
 }
+.slider{
+  width: 100%;
+  height: 80%;
+  overflow: hidden;
+  cursor: pointer;
+}
 
 .image-carousel {
     height: 200px;
@@ -21,7 +27,7 @@
     cursor: pointer;
     line-height: 1.5;
     font-size: 18px;
-    color: #4db6ac;
+    color: #4db6ac !important;
 }
 
 .user-carousel-content .inactive{

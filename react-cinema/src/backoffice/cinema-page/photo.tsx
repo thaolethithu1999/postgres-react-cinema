@@ -10,7 +10,6 @@ import './rate.css';
 export const CinemaPhoto = () => {
   const { id = '' } = useParams();
   const [cinema, setCinema] = useState<Cinema>() || undefined;
-  const [files, setFiles] = useState<FileInfo[]>([]);
   const cinemaService = useCinema();
 
   useEffect(() => {

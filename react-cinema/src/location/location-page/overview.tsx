@@ -3,8 +3,7 @@ import { useEffect, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { useLocation } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { Location } from '../../backoffice/service/location/location';
-import { useLocationsService } from '../service';
+import { useLocationsService, Location } from '../service';
 
 export const Overview = () => {
   const locationPath = useLocation();

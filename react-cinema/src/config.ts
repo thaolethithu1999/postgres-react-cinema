@@ -8,11 +8,12 @@ export const config = {
   role_url: 'http://localhost:8083/roles',
   privilege_url: 'http://localhost:8080/privileges',
   audit_log_url: 'http://localhost:8080/audit-logs',
-  cinema_url: 'http://localhost:8080/cinema', //8080
+  cinema_url: 'http://localhost:8080/cinema',
   category_url: 'http://localhost:8080/categories',
   film_url: 'http://localhost:8080/films',
-  location_backoffice_url: 'http://localhost:8082/locations',//change port 8085
-  location_url: 'http://localhost:8082/locations', //change port 8085
+  film_rate_url: 'http://localhost:8080/film-rate',
+  location_backoffice_url: 'http://localhost:8085/locations',
+  location_url: 'http://localhost:8082/locations',
   location_rate_url: 'http://localhost:8082/location-rates',
   myprofile_url: 'http://localhost:8082/my-profile',
   appreciation_url: 'http://localhost:8082/appreciation',
@@ -20,9 +21,9 @@ export const config = {
   skill_url: 'http://localhost:8082/skills',
   interest_url: 'http://localhost:8082/interests',
   looking_for_url: 'http://localhost:8082/looking-for',
-  article_url: 'http://localhost:8085/articles',
+  article_url: 'http://localhost:8082/articles',
   my_article_url: 'http://localhost:8082/my-articles',
-  item_url: 'http://localhost:8085/articles',
+  item_url: 'http://localhost:8082/items',
   appreciation_reply_url:'http://localhost:8082/appreciation-reply'
 };
 

@@ -140,6 +140,21 @@
 .star-5 i:nth-child(5){
     color: #A043D7;
 }
+.star-6 i:nth-child(6){
+    color: #A043D7;
+}
+.star-7 i:nth-child(7){
+    color: #A043D7;
+}
+.star-8 i:nth-child(8){
+    color: #A043D7;
+}
+.star-9 i:nth-child(9){
+    color: #A043D7;
+}
+.star-10 i:nth-child(10){
+    color: #A043D7;
+}
 
 .average {
   position: relative;
@@ -161,6 +176,20 @@
 .empty-stars:before, .full-stars:before {
   content:"\2605\2605\2605\2605\2605";
   font-size: 17pt;
+}
+
+.empty-stars-film:before, .full-stars-film:before {
+  content:"\2605\2605\2605\2605\2605\2605\2605\2605\2605\2605";
+  font-size: 17pt;
+}
+
+.full-stars-film {
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  color: #B453E5;
 }
 
 .rateReview {

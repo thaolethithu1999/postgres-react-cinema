@@ -7,11 +7,10 @@ import { Link, useParams } from 'react-router-dom';
 import { getFileExtension, removeFileExtension, TypeFile } from 'reactx-upload';
 import { alert, message, options, useResource } from 'uione';
 import imageOnline from '../../assets/images/online.svg';
-import { Location } from '../../backoffice/service/location/location';
+import { Location, useLocationsService } from '../service';
 import { config } from '../../config';
 import { UploadContainer } from '../../core/upload';
 import { ModalSelectCover } from '../../my-profile/modal-select-cover';
-import { useLocationsService } from '../service';
 import { Overview } from './overview';
 import { LocationPhoto } from './photo';
 import { Review } from './review';
@@ -168,6 +167,7 @@ export const LocationPage = () => {
         isOpen={modalUpload}
         onRequestClose={closeModalUpload}
         contentLabel='Modal'
+        // portalClassName='modal-portal'
         className='modal-portal-content'
         bodyOpenClassName='modal-portal-open'
         overlayClassName='modal-portal-backdrop'
