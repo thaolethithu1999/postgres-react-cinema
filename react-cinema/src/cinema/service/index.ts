@@ -19,7 +19,6 @@ import { useState } from 'react';
 
 export * from './cinema';
 export * from './category';
-export * from './cinema-rate';
 
 const httpRequest = new HttpRequest(axios, options);
 export interface Config {

@@ -119,7 +119,6 @@ export function useFilmController(log: Log, db: DB, mapper?: TemplateMap): FilmC
   return new FilmController(log, useFilmService(db, mapper));
 }
 
-
 export class FilmRateManager extends Manager<FilmRate, string, FilmRateFilter> implements FilmRateService {
   constructor(search: Search<FilmRate, FilmRateFilter>, repository: FilmRateRepository) {
       super(search, repository);

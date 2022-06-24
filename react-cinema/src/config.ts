@@ -24,7 +24,8 @@ export const config = {
   article_url: 'http://localhost:8082/articles',
   my_article_url: 'http://localhost:8082/my-articles',
   item_url: 'http://localhost:8082/items',
-  appreciation_reply_url:'http://localhost:8082/appreciation-reply'
+  appreciation_reply_url:'http://localhost:8082/appreciation-reply',
+  cinema_rate_url:'http://localhost:8080/cinema-rate'
 };
 
 export const env = {

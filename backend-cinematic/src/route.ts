@@ -6,6 +6,7 @@ import { del, get, patch, post, put, read, write } from 'security-express';
 import { Context } from './context';
 import { filmModel, filmRateModel } from './film/film';
 import { L } from 'logger-core';
+import { cinemaModel, cinemaRateModel } from './cinema/cinema';
 
 export function route(app: Application, ctx: Context, secure: boolean): void {
   const parser = multer();
@@ -44,61 +45,66 @@ export function route(app: Application, ctx: Context, secure: boolean): void {
   get(app, '/audit-logs/search', readAuditLog, ctx.auditLog.search, secure);
   post(app, '/audit-logs/search', readAuditLog, ctx.auditLog.search, secure);
 
-  
-const checkCategory = check(categoryModel);
-const checkFilm = check(filmModel);
-const checkFilmRate = check(filmRateModel);
-app.get('/categories', ctx.category.all);
-app.post('/categories',checkCategory,ctx.category.create);
-app.get('/categories/search',checkCategory,ctx.category.search);
-app.get('/categories/:id',ctx.category.load);
-app.put('/categories/:id',checkCategory,ctx.category.update);
-app.patch('/categories/:id',checkCategory,ctx.category.patch);
 
-app.delete('/categories/:id',checkCategory,ctx.category.delete);
+  const checkCategory = check(categoryModel);
+  const checkFilm = check(filmModel);
+  const checkFilmRate = check(filmRateModel);
+  const checkCinemaRate = check(cinemaRateModel);
+  const checkCinema = check(cinemaModel);
 
-
-app.get('/films', ctx.film.all);
-app.post('/films',checkFilm,ctx.film.create);
-app.get('/films/search',checkFilm,ctx.film.search);
-app.post('/films/search',checkFilm,ctx.film.search);
-app.get('/films/:id',ctx.film.load);
-app.put('/films/:id',checkFilm,ctx.film.update);
-app.patch('/films/:id',checkFilm,ctx.film.patch );
-app.delete('/films/:id',checkFilm,ctx.film.delete);
-app.post('/films/rate',checkFilmRate,ctx.film.rate);
-
-app.post('/film-rate/search',ctx.filmRate.search);
-app.get('/film-rate/search',ctx.filmRate.search);
-
-const readCinemaParent = ctx.authorize('cinemaParent', read);
-const writeCinemaParent = ctx.authorize('cinemaParent', write);
-
-// get(app, '/cinemaParent', readCinemaParent, ctx.cinemaParent.all, secure);
-post(app, '/cinemaParent/search', readCinemaParent, ctx.cinemaParent.search, secure);
-get(app, '/cinemaParent/search', readCinemaParent, ctx.cinemaParent.search, secure);
-get(app, '/cinemaParent/:id', readCinemaParent, ctx.cinemaParent.load, secure);
-post(app, '/cinemaParent', writeCinemaParent, ctx.cinemaParent.create, secure);
-put(app, '/cinemaParent/:id', writeCinemaParent, ctx.cinemaParent.update, secure);
-patch(app, '/cinemaParent/:id', writeCinemaParent, ctx.cinemaParent.patch, secure);
-del(app, '/cinemaParent/:id', writeCinemaParent, ctx.cinemaParent.delete, secure);
-
-const readCinema = ctx.authorize('cinema', read);
-const writeCinema = ctx.authorize('cinema', write);
-// get(app, '/cinemaParent', readCinemaParent, ctx.cinemaParent.all, secure); 
-post(app, '/cinema/search', readCinema, ctx.cinema.search, secure);
-get(app, '/cinema/search', readCinema, ctx.cinema.search, secure);
-get(app, '/cinema/:id', readCinema, ctx.cinema.load, secure);
-post(app, '/cinema', writeCinema, ctx.cinema.create, secure);
-put(app, '/cinema/:id', writeCinema, ctx.cinema.update, secure);
-patch(app, '/cinema/:id', writeCinema, ctx.cinema.patch, secure);
-del(app, '/cinema/:id', writeCinema, ctx.cinema.delete, secure);
+  app.get('/categories', ctx.category.all);
+  app.post('/categories', checkCategory, ctx.category.create);
+  app.get('/categories/search', checkCategory, ctx.category.search);
+  app.get('/categories/:id', ctx.category.load);
+  app.put('/categories/:id', checkCategory, ctx.category.update);
+  app.patch('/categories/:id', checkCategory, ctx.category.patch);
+  app.delete('/categories/:id', checkCategory, ctx.category.delete);
 
 
-app.get('/uploads', ctx.uploads.all);
-app.get('/uploads/:id', ctx.uploads.load);
-app.post('/uploads', parser.single('file'), ctx.uploads.upload);
-app.post('/uploads/youtube', ctx.uploads.insertData);
-app.delete('/uploads', ctx.uploads.remove);
-app.delete('/uploads/youtube', ctx.uploads.deleteData);
+  app.get('/films', ctx.film.all);
+  app.post('/films', checkFilm, ctx.film.create);
+  app.get('/films/search', checkFilm, ctx.film.search);
+  app.post('/films/search', checkFilm, ctx.film.search);
+  app.get('/films/:id', ctx.film.load);
+  app.put('/films/:id', checkFilm, ctx.film.update);
+  app.patch('/films/:id', checkFilm, ctx.film.patch);
+  app.delete('/films/:id', checkFilm, ctx.film.delete);
+  app.post('/films/rate', checkFilmRate, ctx.film.rate);
+  app.post('/film-rate/search', ctx.filmRate.search);
+  app.get('/film-rate/search', ctx.filmRate.search);
+
+  const readCinemaParent = ctx.authorize('cinemaParent', read);
+  const writeCinemaParent = ctx.authorize('cinemaParent', write);
+
+  // get(app, '/cinemaParent', readCinemaParent, ctx.cinemaParent.all, secure);
+  post(app, '/cinemaParent/search', readCinemaParent, ctx.cinemaParent.search, secure);
+  get(app, '/cinemaParent/search', readCinemaParent, ctx.cinemaParent.search, secure);
+  get(app, '/cinemaParent/:id', readCinemaParent, ctx.cinemaParent.load, secure);
+  post(app, '/cinemaParent', writeCinemaParent, ctx.cinemaParent.create, secure);
+  put(app, '/cinemaParent/:id', writeCinemaParent, ctx.cinemaParent.update, secure);
+  patch(app, '/cinemaParent/:id', writeCinemaParent, ctx.cinemaParent.patch, secure);
+  del(app, '/cinemaParent/:id', writeCinemaParent, ctx.cinemaParent.delete, secure);
+
+  // const readCinema = ctx.authorize('cinema', read);
+  // const writeCinema = ctx.authorize('cinema', write);
+  // get(app, '/cinemaParent', readCinemaParent, ctx.cinemaParent.all, secure); 
+  app.get('/cinema', ctx.cinema.all);
+  app.post('/cinema', checkCinema, ctx.cinema.create);
+  app.get('/cinema/search', checkCinema, ctx.cinema.search);
+  app.post('/cinema/search', checkCinema, ctx.cinema.search);
+  app.get('/cinema/:id', ctx.cinema.load);
+  app.put('/cinema/:id', checkCinema, ctx.cinema.update);
+  app.patch('/cinema/:id', checkCinema, ctx.cinema.patch);
+  app.delete('/cinema/:id', checkCinema, ctx.cinema.delete);
+  app.post('/cinema/rate', checkCinemaRate, ctx.cinema.rate);
+  app.post('/cinema-rate/search', ctx.cinemaRate.search);
+  app.get('/cinema-rate/search', ctx.cinemaRate.search);
+  // app.post('/cinema-rate', ctx.cinemaRate.create);
+
+  app.get('/uploads', ctx.uploads.all);
+  app.get('/uploads/:id', ctx.uploads.load);
+  app.post('/uploads', parser.single('file'), ctx.uploads.upload);
+  app.post('/uploads/youtube', ctx.uploads.insertData);
+  app.delete('/uploads', ctx.uploads.remove);
+  app.delete('/uploads/youtube', ctx.uploads.deleteData);
 }

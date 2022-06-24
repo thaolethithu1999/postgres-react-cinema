@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Pagination } from 'reactx-pagination';
 import { inputSearch } from 'uione';
 import LocationCarousel from './carousel';
+import CinemaCarousel from './cinema-carousel';
 import { useCinema } from './service';
 import { Cinema, CinemaFilter } from './service/cinema/cinema';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
@@ -29,7 +30,7 @@ const initialState: CinemaSearch = {
   filter: cimemasFilter
 };
 
-export const BCinemasForm = () => {
+export const CinemasForm = () => {
   const refForm = React.useRef();
   const navigate = useNavigate();
   const { state,
@@ -144,28 +145,7 @@ export const BCinemasForm = () => {
           </section>
         </form>
         <form className='list-result'>
-
-        {component.view === 'table' && <div className='table-responsive'>
-            <table>
-              <thead>
-                <tr>
-                  <th data-field='Id'><button type='button' id='sortCinemaId' onClick={sort}>{resource.id}</button></th>
-                  <th data-field='Name'><button type='button' id='sortName' onClick={sort}>{resource.name}</button></th>
-                  <th data-field='Address'><button type='button' id='sortAddress' onClick={sort}>{resource.address}</button></th>
-                </tr>
-              </thead>
-              {list && list.length > 0 && list.map((cinema, i) => {
-                return (
-                  <tr key={i} onClick={e => edit(e, cinema.id)}>
-                    <td className='text-right'>{(cinema as any).id}</td>
-                    <td>{cinema.name}</td>
-                    <td>{cinema.address}</td>
-                  </tr>
-                );
-              })}
-            </table>
-          </div>}
-          {/* {component.view === 'table' && <div className='table-responsive'>
+          {component.view === 'table' && <div className='table-responsive'>
             <div style={{ height: '600px', width: '800px' }}>
               <MapContainer
                 center={{ lat: 10.854886268472459, lng: 106.63051128387453 }}
@@ -203,30 +183,14 @@ export const BCinemasForm = () => {
                   ))}
               </MapContainer>
             </div>
-          </div>} */}
-
+          </div>}
           {component.view !== 'table' && <ul className='row list-view'>
-            {list && list.length > 0 && list.map((cinema, i) => {
-              return (
-                <li key={i} className='col s12 m6 l4 xl3' onClick={e => edit(e, cinema.id)}>
-                  <section>
-                    <img src={cinema.imageURL && cinema.imageURL.length > 0 ? cinema.imageURL : ''} className='round-border' alt='film' />
-                    <div>
-                      <h3 className={cinema.status === 'I' ? 'inactive' : ''}>{cinema.name}</h3>
-                    </div>
-                    <button className='btn-detail' />
-                  </section>
-                </li>
-              );
-            })}
-          </ul>}
-          {/* {component.view !== 'table' && <ul className='row list-view'>
             {list && list.length > 0 && list.map((cinema, i) => {
               return (
                 <CinemaCarousel cinema={cinema} edit={edit} />
               );
             })}
-          </ul>} */}
+          </ul>}
         </form>
       </div>
     </div>

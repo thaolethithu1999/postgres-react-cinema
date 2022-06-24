@@ -25,7 +25,7 @@ const param: EditComponentParam<Cinema, string, InternalState> = {
   createModel: createCinema,
   initialize
 };
-export const BCinemaForm = () => {
+export const CinemaForm = () => {
   const refForm = React.useRef();
   const { resource, updateState, flag, save, back, state } = useEdit<Cinema, string, InternalState>(refForm, initialState, useCinema(), inputEdit(), param);
   const cinema = state.cinema;

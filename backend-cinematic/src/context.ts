@@ -17,13 +17,15 @@ import { UserController, useUserController } from './user';
 import { CategoryController } from 'category/category-controller';
 import { useCategoryController } from './category';
 import { CinemaParentController, useCinemaParentController } from './cinemaparent';
-import { CinemaController, useCinemaController } from './cinema';
+import { useCinemaController, useCinemaRateController } from './cinema';
 import { UploadController } from './uploads/UploadController';
 import { SqlUploadSerive } from './uploads/SqlUploadsService';
-import { GoogleStorageService, StorageConfig ,map} from 'google-storage';
+import { GoogleStorageService, StorageConfig, map } from 'google-storage';
 import { Pool } from 'pg';
 import { Storage } from '@google-cloud/storage';
 import { param, PoolManager } from 'pg-extension';
+import { CinemaRateController } from 'cinema/cinema-rate-controller';
+import { CinemaController } from './cinema/cinema-controller';
 
 resources.createValidator = createValidator;
 resources.check = check;
@@ -53,6 +55,7 @@ export interface Context {
   category: CategoryController;
   cinemaParent: CinemaParentController;
   cinema: CinemaController;
+  cinemaRate: CinemaRateController;
   uploads: UploadController;
 }
 
@@ -70,7 +73,7 @@ const credentials = {
   client_x509_cert_url: 'https://www.googleapis.com/robot/v1/metadata/x509/go-firestore-rest-api%40appspot.gserviceaccount.com',
 };
 
-export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: Config,pool: Pool, mapper?: TemplateMap): Context {
+export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: Config, pool: Pool, mapper?: TemplateMap): Context {
   const auth = conf.auth;
   const log = new LogController(logger);
   const middleware = new MiddlewareController(midLogger);
@@ -94,12 +97,14 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: 
 
   const auditLog = useAuditLogController(logger.error, db);
 
-  const film = useFilmController(logger.error,db,mapper);
-  const filmRate = useFilmRateController(logger.error,db,mapper);
+  const film = useFilmController(logger.error, db, mapper);
+  const filmRate = useFilmRateController(logger.error, db, mapper);
   const category = useCategoryController(logger.error, db, mapper);
 
   const cinemaParent = useCinemaParentController(logger.error, db, mapper)
-  const cinema = useCinemaController(logger.error, db, mapper)
+  const cinema = useCinemaController(logger.error, db, mapper);
+  const cinemaRate = useCinemaRateController(logger.error, db, mapper);
+
   // const healthChecker2  =new Checker2('mongo',"https://localhost:443/health",5000);
   // const health2 = new HealthController2([healthChecker2])
   const manager = new PoolManager(pool);
@@ -109,5 +114,5 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: 
   const storageService = new GoogleStorageService(bucket, storageConfig, map);
   const uploadService = new SqlUploadSerive(pool, 'media', storageService.upload, storageService.delete, param, manager.query, manager.exec, manager.execBatch);
   const uploads = new UploadController(logger.error, uploadService);
-  return { health, log, middleware, authorize: authorizer.authorize, authentication, privilege, role, user, auditLog, film, category ,cinema,cinemaParent,uploads, filmRate};
+  return { health, log, middleware, authorize: authorizer.authorize, authentication, privilege, role, user, auditLog, film, category, cinema, cinemaParent, uploads, filmRate, cinemaRate };
 }

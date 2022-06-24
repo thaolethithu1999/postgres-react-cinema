@@ -15,27 +15,34 @@ export const Review = () => {
   const params = useParams();
   const [voteStar, setVoteStar] = useState<number>();
   const [isOpenRateModal, setIsOpenRateModal] = useState(false);
-  const [location, setLocation] = useState<Location>()  ;
+  const [location, setLocation] = useState<Location>();
   const [rates, setRates] = useState<LocationRate[]>([]);
   const [pageSize, setPageSize] = useState(3);
   const [maxLengthReviewText] = useState(100);
+
   const [resource] = useState(storage.resource().resource());
 
   const locationRateService = getLocationRates();
   const locationService = useLocationsService();
-  
+
   useEffect(() => {
     load();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
+  console.log("resource");
+  console.log(resource);
+  
   const load = async () => {
     const locationRateSM = new LocationRateFilter();
+    console.log(locationRateSM);
+    
     const { id } = params;
     locationRateSM.locationId = id;
     locationRateSM.limit = pageSize;
     locationRateSM.sort = '-rateTime';
     const locationObj = await locationService.load(id || '');
     const searchResult = await locationRateService.search(locationRateSM);
+    console.log(searchResult);
+    
     setRates(searchResult.list);
     if (locationObj) {
       setLocation(locationObj);
@@ -43,7 +50,7 @@ export const Review = () => {
   };
 
   console.log(location);
-  
+
 
   const moreReview = async (e: any) => {
     e.preventDefault();
@@ -70,6 +77,9 @@ export const Review = () => {
       locationRate.userId = id;
       locationRate.rate = data.rate;
       locationRate.review = data.review;
+
+      console.log(location);
+      
       await locationService.rateLocation(locationRate);
       storage.message('Your review is submited');
       setIsOpenRateModal(false);
@@ -78,6 +88,7 @@ export const Review = () => {
       storage.alert('error');
     }
   };
+  console.log(rates);
 
   if (location && window.location.pathname.includes('review')) {
     return (
@@ -89,7 +100,10 @@ export const Review = () => {
           </div>
         </div>
         <div className='row mid-content row-rate'>
-          <RatingStar ratingText={resource.rating_text} setIsOpenRateModal={setIsOpenRateModal} setVoteStar={(setVoteStar)} />
+          <RatingStar
+            ratingText={resource.rating_text}
+            setIsOpenRateModal={setIsOpenRateModal}
+            setVoteStar={(setVoteStar)} />
         </div>
         <div className='title'>
           <span><b>{resource.reviews}</b></span>
@@ -99,7 +113,12 @@ export const Review = () => {
             (
               rates && rates.length > 0 &&
               (rates.map((value: LocationRate, index: number) => {
-                return <RateItem review={value.review ?? ''} maxLengthReviewText={maxLengthReviewText} rateTime={value.rateTime} rate={value.rate || 1} resource={resource}></RateItem>;
+                return <RateItem
+                  review={value.review ?? ''}
+                  maxLengthReviewText={maxLengthReviewText}
+                  rateTime={value.rateTime}
+                  rate={value.rate || 1}
+                  resource={resource}></RateItem>;
               }) || '')
             )}
         </ul>

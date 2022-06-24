@@ -1,4 +1,5 @@
-import { Attributes, DateRange, Filter, Repository, Service, ViewRepository, ViewService } from 'onecore';
+import { Attributes, DateRange, Filter, Service, Search } from 'onecore';
+import { Repository } from 'query-core';
 
 export interface CinemaFilter extends Filter {
   cinemaId?: string;
@@ -12,20 +13,11 @@ export interface CinemaFilter extends Filter {
   updatedby?: string;
   updatedat?: Date | DateRange;
 }
-export interface CinemaInfo {
-  id: string;
-  rate: number;
-  rate1: number;
-  rate2: number;
-  rate3: number;
-  rate4: number;
-  rate5: number;
-  viewCount: number;
-}
+
 export interface Cinema {
   cinemaId: string;
   cinemaName: string;
-  imageURL?: string;  
+  imageURL?: string;
   coverURL?: string;
   latitude?: string;
   longitude?: string;
@@ -39,6 +31,17 @@ export interface Cinema {
   info?: CinemaInfo;
 }
 
+export interface CinemaInfo {
+  id: string;
+  rate: number;
+  rate1: number;
+  rate2: number;
+  rate3: number;
+  rate4: number;
+  rate5: number;
+  viewCount: number;
+}
+
 export interface RateFilter extends Filter {
   id: string;
   review?: string;
@@ -46,8 +49,6 @@ export interface RateFilter extends Filter {
   userId?: string;
   rateTime: Date;
 }
-
-
 
 export interface CinemaRate {
   id?: string;

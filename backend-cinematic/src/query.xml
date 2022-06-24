@@ -133,4 +133,17 @@
       order by {sort}
     </if>
   </select>
+
+  <select id="cinemaRate">
+    select *
+    from cinemarate
+    where
+    <if test="cinemaId != null">
+      cinemaId = (#{cinemaId}) and
+    </if>
+    1 = 1
+    <if test="sort != null">
+      order by {sort}
+    </if>
+  </select>
 </mapper>

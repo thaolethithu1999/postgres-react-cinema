@@ -27,8 +27,7 @@ import { SigninForm } from './authentication/signin-form';
 import { SignupForm } from './authentication/signup-form';
 import { CategoriesForm } from './backoffice/categories-form';
 import { CategoryForm } from './backoffice/category-form';
-import { CinemaForm } from './backoffice/cinema-form';
-import { CinemasForm } from './backoffice/cinemas-form';
+
 import { FilmForm } from './backoffice/film-form';
 import { FilmsForm } from './backoffice/films-form';
 import { LocationForm } from './backoffice/location-form';
@@ -41,9 +40,14 @@ import { MyProfileForm } from './my-profile/my-profile-form';
 import { MySettingsForm } from './my-profile/my-settings-form';
 import { UserPage } from './profile/user-page';
 import { UsersPage } from './profile/users-page';
-import { CinemaPage } from './backoffice/cinema-page';
-import { CinemaOverview} from './backoffice/cinema-page/overview';
-import { CinemaReview } from './backoffice/cinema-page/review';
+
+import { CinemaForm } from './cinema/cinema-form';
+import { CinemasForm } from './cinema/cinemas-form';
+import { CinemaPage } from './cinema/cinema-page';
+import { CinemaOverview } from './cinema/cinema-page/overview';
+
+import { BCinemasForm } from './backoffice/cinemas-form';
+import { BCinemaForm } from './backoffice/cinema-form';
 
 // tslint:disable:ordered-imports
 import './assets/css/reset.css';
@@ -133,9 +137,9 @@ function App() {
           <Route path=':number' element={<AboutPage />} />
           <Route path='my-profile' element={<MyProfileForm />} />
           <Route path='my-profile/settings' element={<MySettingsForm />} />
-          <Route path='profile' element={<UsersPage/>} />
-          <Route path='profile/:id' element={<UserPage/>} />
-          <Route path='profile/:id/appreciation' element={<UserPage/>} />
+          <Route path='profile' element={<UsersPage />} />
+          <Route path='profile/:id' element={<UserPage />} />
+          <Route path='profile/:id/appreciation' element={<UserPage />} />
           <Route path='admin/users' element={<UsersForm />} />
           <Route path='admin/users/add' element={<UserForm />} />
           <Route path='admin/users/edit/:id' element={<UserForm />} />
@@ -143,17 +147,17 @@ function App() {
           <Route path='admin/roles/add' element={<RoleForm />} />
           <Route path='admin/roles/edit/:id' element={<RoleForm />} />
           <Route path='admin/roles/assign/:id' element={<RoleAssignmentForm />} />
-          <Route path='cinema/edit/:id' element={<CinemaForm />} />
-          <Route path='cinema/add' element={<CinemaForm />} />
-          <Route path='cinema' element={<CinemasForm />} />
 
+          <Route path='backoffice/cinema/edit/:id' element={<BCinemaForm />} />
+          <Route path='backoffice/cinema/add' element={<BCinemaForm />} />
+          <Route path='backoffice/cinema' element={<BCinemasForm />} />
+
+          <Route path='cinema' element={<CinemasForm />} />
           <Route path='cinema/:id' element={<CinemaPage />} />
           <Route path='cinema/:id/bookable' element={<CinemaPage />} />
           <Route path='cinema/:id/review' element={<CinemaPage />} />
           <Route path='cinema/:id/photo' element={<CinemaPage />} />
           <Route path='cinema/:id/about' element={<CinemaPage />} />
-          <Route path='cinemas/:id/review' element={<CinemaReview/>}/>
-
 
           <Route path='backoffice/categories' element={<CategoriesForm />} />
           <Route path='backoffice/categories/edit/:id' element={<CategoryForm />} />
@@ -175,7 +179,7 @@ function App() {
           {/* <Route path='locations/:id/photo' element={< LocationPhoto />} /> */}
           <Route path="backoffice/article" element={<ArticlesForm />} />
           <Route path='my-article' element={<MyArticles />} />
-          <Route path="my-article/add" element={<MyArticle/>} />
+          <Route path="my-article/add" element={<MyArticle />} />
           <Route path="my-article/edit/:id" element={<MyArticle />} />
 
           <Route path='article' element={<Articles />} />

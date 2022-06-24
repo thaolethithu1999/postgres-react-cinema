@@ -31,7 +31,11 @@ export const DetailStart = (rateInfo?: Rate) => {
     return;
   }
   const list = [];
-  const totalRate = rateInfo.rate1 + rateInfo.rate2 + rateInfo.rate3 + rateInfo.rate4 + rateInfo.rate5;
+  const totalRate = rateInfo.rate1
+    + rateInfo.rate2
+    + rateInfo.rate3
+    + rateInfo.rate4
+    + rateInfo.rate5;
   for (let i = 5; i > 0; i--) {
     const rate = `rate${i}`;
     const value = rateInfo[rate as keyof Rate];
@@ -55,16 +59,16 @@ export const DetailStartFilm = (rateInfo?: RateFilm) => {
     return;
   }
   const list = [];
-  const totalRate = rateInfo.rate1 + 
-                    rateInfo.rate2 + 
-                    rateInfo.rate3 + 
-                    rateInfo.rate4 + 
-                    rateInfo.rate5 + 
-                    rateInfo.rate6 + 
-                    rateInfo.rate7 + 
-                    rateInfo.rate8 + 
-                    rateInfo.rate9 + 
-                    rateInfo.rate10;
+  const totalRate = rateInfo.rate1 +
+    rateInfo.rate2 +
+    rateInfo.rate3 +
+    rateInfo.rate4 +
+    rateInfo.rate5 +
+    rateInfo.rate6 +
+    rateInfo.rate7 +
+    rateInfo.rate8 +
+    rateInfo.rate9 +
+    rateInfo.rate10;
   for (let i = 10; i > 0; i--) {
     const rate = `rate${i}`;
     const value = rateInfo[rate as keyof RateFilm];

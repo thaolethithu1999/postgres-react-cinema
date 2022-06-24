@@ -1,16 +1,15 @@
-import { Attributes, Filter, Search, Service } from 'onecore';
-import { Repository } from 'query-core';
+import { Attributes, Filter, Service, Tracking } from 'onecore';
 
 export interface FilmFilter extends Filter {
-  id?: string;
-  title?: string;
+  filmId: string;
+  title: string;
   description?: string;
   imageUrl?: string;
   trailerUrl?: string;
-  status?: string;
+  status?: string[] | string;
 }
 
-export interface Film {
+export interface Film extends Tracking {
   filmId: string;
   title: string;
   status: string;
@@ -20,9 +19,8 @@ export interface Film {
   categories?: string[];
   info?: FilmInfo
 }
-
-export interface FilmInfo {
-  id: string;
+export interface FilmInfo{
+  viewCount: number;
   rate: number;
   rate1: number;
   rate2: number;
@@ -34,8 +32,8 @@ export interface FilmInfo {
   rate8: number;
   rate9: number;
   rate10: number;
-  viewCount: number;
 }
+
 export interface FilmRate {
   id?: string;
   filmId: string;
@@ -53,30 +51,26 @@ export interface FilmRateFilter extends Filter {
   rateTime?: Date;
 }
 
-export interface FilmRepository extends Repository<Film, string> {
+export interface FilmSearch {
+  list: Film[];
+  total: number;
 }
 export interface FilmService extends Service<Film, string, FilmFilter> {
-  rate(rate: FilmRate): Promise<boolean>;
-}
-
-export interface FilmInfoRepository extends Repository<FilmInfo, string> {
-}
-
-export interface FilmRateRepository extends Repository<FilmRate, string> {
+  getFilmsByCategoryId(id: string): Promise<FilmSearch>;
+  rateFilm(obj: FilmRate): Promise<any>;
 }
 export interface FilmRateService extends Service<FilmRate, string, FilmRateFilter> {
 }
 
 export const filmModel: Attributes = {
   filmId: {
+    length: 40,
     key: true,
-    length: 40
+    required: true,
   },
   title: {
-    required: true,
     length: 300,
-    q: true
-
+    required: true,
   },
   description: {
     length: 300,
@@ -91,59 +85,20 @@ export const filmModel: Attributes = {
     type: 'primitives',
   },
   status: {
-    match: "equal",
+    match: 'equal',
     length: 1
   },
-  createdBy: {},
+  createdBy: {
+    length: 40
+  },
   createdAt: {
     type: 'datetime'
   },
-  updatedBy: {},
+  updatedBy: {
+    length: 40
+  },
   updatedAt: {
     type: 'datetime'
-  },
-
-};
-
-export const filmInfoModel: Attributes = {
-  id: {
-    key: true,
-  },
-  viewCount: {
-    type: 'number',
-  },
-  rate: {
-    type: 'number',
-  },
-  rate1: {
-    type: 'number',
-  },
-  rate2: {
-    type: 'number',
-  },
-  rate3: {
-    type: 'number',
-  },
-  rate4: {
-    type: 'number',
-  },
-  rate5: {
-    type: 'number',
-  },
-  rate6: {
-    type: 'number',
-  },
-  rate7: {
-    type: 'number',
-  },
-  rate8: {
-    type: 'number',
-  },
-  rate9: {
-    type: 'number',
-  },
-  rate10: {
-    type: 'number',
   },
 };
 
@@ -169,4 +124,3 @@ export const filmRateModel: Attributes = {
     q: true,
   },
 };
-

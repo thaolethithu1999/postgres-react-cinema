@@ -9,6 +9,7 @@ const nodemailer = require("nodemailer");
 export class CinemaController extends Controller<Cinema, string, CinemaFilter> {
 
   validator: Validator<CinemaRate>;
+  
   constructor(log: Log, private cinemaService: CinemaService) {
     super(log, cinemaService);
     this.array = ["status"];
@@ -16,6 +17,7 @@ export class CinemaController extends Controller<Cinema, string, CinemaFilter> {
     this.rate = this.rate.bind(this);
     this.validator = createValidator<CinemaRate>(cinemaRateModel);
   }
+
   all(req: Request, res: Response) {
     if (this.cinemaService.all) {
       this.cinemaService.all()
@@ -23,7 +25,7 @@ export class CinemaController extends Controller<Cinema, string, CinemaFilter> {
         .catch(err => handleError(err, res, this.log));
     }
   }
-
+  
   rate(req: Request, res: Response) {
     const rate: CinemaRate = req.body;
     rate.rateTime = new Date();

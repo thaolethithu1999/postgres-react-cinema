@@ -12,11 +12,9 @@ export interface Location {
   thumbnail?: string;
   imageURL?: string;
   status: string;
-  coverURL?: string;
   gallery?: FileInfo[];
-  upload?: FileInfo[];
+  coverURL?: string;
 }
-
 // filter
 export interface LocationFilter extends Filter {
   id: string;
@@ -32,7 +30,6 @@ export interface LocationService
   rateLocation(obj: LocationRate): Promise<any>;
   fetchImageUploaded(id: string): Promise<FileInfo[]> | FileInfo[];
   fetchThumbnailVideo(videoId: string): Promise<Thumbnail>;
-  // saveLocation(obj:Location):Promise<number>;
 }
 
 export const locationModel: Attributes = {
