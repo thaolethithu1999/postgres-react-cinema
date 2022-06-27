@@ -69,6 +69,8 @@ export class FilmManager extends Manager<Film, string, FilmFilter> implements Fi
       }
       (info as any)['rate' + dbRate.rate.toString()] -= 1;
       dbRate.rate = rate.rate;
+      console.log("rate.rate" + rate.rate);
+      
       const res = await this.rateRepository.update(dbRate);
       if (res < 1) {
         return false;

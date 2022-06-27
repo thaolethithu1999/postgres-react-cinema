@@ -42,17 +42,8 @@ export interface CinemaInfo {
   viewCount: number;
 }
 
-export interface RateFilter extends Filter {
-  id: string;
-  review?: string;
-  cinemaId?: string;
-  userId?: string;
-  rateTime: Date;
-}
-
 export interface CinemaRate {
-  id?: string;
-  cinemaId: string;
+  id: string;
   userId: string;
   rate: number;
   rateTime?: Date;
@@ -61,8 +52,8 @@ export interface CinemaRate {
 
 export interface CinemaRateFilter extends Filter {
   id?: string;
-  cinemaId?: string;
   userId?: string;
+  rate?: number;
   rateTime?: Date;
   review?: string;
 }
@@ -71,6 +62,8 @@ export interface CinemaRepository extends Repository<Cinema, string> { }
 
 export interface CinemaService extends Service<Cinema, string, CinemaFilter> {
   rate(rate: CinemaRate): Promise<boolean>;
+  //update
+  //updateRate(rate: CinemaRate): Promise<boolean>;
 }
 
 export interface CinemaInfoRepository extends Repository<CinemaInfo, string> { };
@@ -133,12 +126,11 @@ export const cinemaModel: Attributes = {
 
 export const cinemaRateModel: Attributes = {
   id: {
-    key: true
-  },
-  cinemaId: {
+    key: true,
     required: true
   },
   userId: {
+    key: true,
     required: true
   },
   rate: {

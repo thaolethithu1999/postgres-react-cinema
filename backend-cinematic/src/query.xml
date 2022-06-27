@@ -138,9 +138,12 @@
     select *
     from cinemarate
     where
-    <if test="cinemaId != null">
-      cinemaId = (#{cinemaId}) and
-    </if>
+    <if test="id != null">
+      id = (#{id}) and
+    </if> 
+    <if test="userId != null">
+      userId = (#{userId}) and
+    </if>  
     1 = 1
     <if test="sort != null">
       order by {sort}

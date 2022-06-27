@@ -99,7 +99,6 @@ export function route(app: Application, ctx: Context, secure: boolean): void {
   app.post('/cinema/rate', checkCinemaRate, ctx.cinema.rate);
   app.post('/cinema-rate/search', ctx.cinemaRate.search);
   app.get('/cinema-rate/search', ctx.cinemaRate.search);
-  // app.post('/cinema-rate', ctx.cinemaRate.create);
 
   app.get('/uploads', ctx.uploads.all);
   app.get('/uploads/:id', ctx.uploads.load);

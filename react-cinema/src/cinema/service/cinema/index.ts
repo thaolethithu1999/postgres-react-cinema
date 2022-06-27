@@ -26,12 +26,14 @@ export class CinemaClient extends Client<Cinema, string, CinemaFilter> implement
 
   rateCinema(obj: CinemaRate): Promise<any> {
     const url = `${this.serviceUrl}/rate`;
+    console.log(url);
+    
     return this.http.post(url, obj);
   }
 }
 
 export class CinemaRateClient extends Client<CinemaRate, string, CinemaRateFilter>{
-  constructor(http: HttpRequest, url: string){
+  constructor(http: HttpRequest, url: string) {
     super(http, url, cinemaRateModel);
   }
 

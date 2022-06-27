@@ -1,8 +1,7 @@
 import { Attributes, Filter, Service } from 'onecore';
 
 export interface CinemaRate {
-  id?: string;
-  cinemaId: string;
+  id: string;
   userId: string;
   rate: number;
   rateTime?: Date;
@@ -10,7 +9,7 @@ export interface CinemaRate {
 }
 
 export interface CinemaRateService extends Service<CinemaRate, string, CinemaRateFilter>{
-  getCinemaByCinemaId(cinemaId: string): Promise<CinemaRate[]>;
+  getCinemaByCinemaId(id: string): Promise<CinemaRate[]>;
 }
 
 export class CinemaRateFilter implements Filter {
@@ -21,7 +20,7 @@ export class CinemaRateFilter implements Filter {
   keyword?: string;
   refId?: string | number;
   rateId?: string;
-  cinemaId?: string;
+  id?: string;
   userId?: string;
   rate?: number;
   rateTime?: Date;
@@ -30,19 +29,13 @@ export class CinemaRateFilter implements Filter {
 }
 
 export const cinemaRateModel: Attributes = {
-  id: {
+  id: { 
     key: true,
-    required: true,
-    q: true
-  },
-  cinemaId: {
-    required: true,
-    key: true,
-    q: true
+    required: true
   },
   userId: {
-    required: true,
-    q: true
+    key: true,
+    required: true
   },
   rate: {
     required: true,

@@ -54,7 +54,6 @@ export interface CinemaInfo {
 }
 
 export interface CinemaRate {
-  cinemaId?: string;
   id?: string;
   userId?: string;
   rate?: number;
@@ -64,7 +63,6 @@ export interface CinemaRate {
 
 export interface CinemaRateFilter extends Filter {
   id?: string;
-  cinemaId?: string;
   userId?: string;
   rateTime?: Date;
   review?: string;
@@ -78,9 +76,10 @@ export interface CinemaSearch {
 export interface CinemaService extends Service<Cinema, string, CinemaFilter> {
   getCinemasByRole(id: string): Promise<Cinema[]>;
   rateCinema(obj: CinemaRate): Promise<any>;
+  //updateRate(obj: CinemaRate): Promise<any>;
 }
 
-export interface CinemaRateService extends Service<CinemaRate, string, CinemaRateFilter> {}
+export interface CinemaRateService extends Service<CinemaRate, string, CinemaRateFilter> { }
 
 export const cinemaModel: Attributes = {
   id: {
@@ -126,13 +125,12 @@ export const cinemaModel: Attributes = {
 
 export const cinemaRateModel: Attributes = {
   id: {
-    key: true
-  },
-  cinemaId: {
+    key: true,
     required: true
   },
   userId: {
-    //required: true
+    key: true,
+    required: true
   },
   rate: {
     type: 'integer',

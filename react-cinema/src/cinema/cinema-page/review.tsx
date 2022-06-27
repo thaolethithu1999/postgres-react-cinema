@@ -32,9 +32,9 @@ export const CinemaReview = () => {
   const load = async () => {
     const cinemaRateSM = new CinemaRateFilter();
     console.log(cinemaRateSM);
-    
+
     const { id } = params;
-    cinemaRateSM.cinemaId = id;
+    cinemaRateSM.id = id;
     cinemaRateSM.limit = pageSize;
     cinemaRateSM.sort = '-rateTime';
 
@@ -44,7 +44,7 @@ export const CinemaReview = () => {
       setCinema(currentCinema);
     }
 
-    const searchResult = await cinemaRateService.search(cinemaRateSM);
+    const searchResult = await cinemaRateService.search(cinemaRateSM, pageSize);
     console.log(searchResult);
     const list = searchResult.list;
     setRates(list);
@@ -53,26 +53,34 @@ export const CinemaReview = () => {
   console.log(cinema?.info);
   console.log(rates);
 
-  const postReview = async (data: DataPostRate): Promise<void> =>{
+  const postReview = async (data: DataPostRate): Promise<void> => {
     try {
       const id: string | undefined = storage.getUserId();
-      if(!id || !cinema){
-        return ;
+      if (!id || !cinema) {
+        return;
       }
       const cinemaRate: CinemaRate = {};
-      cinemaRate.cinemaId = cinema.id;
+      cinemaRate.id = cinema.id;
       cinemaRate.userId = id;
       cinemaRate.rate = data.rate;
       cinemaRate.review = data.review;
-      
-      await cinemaService.rateCinema(cinemaRate);
-      storage.message('Your review is submited');
 
-      setIsOpenRateModal(false);
-      await load();
+      console.log(cinemaRate);
 
-    } catch (err){
+      let handle = await cinemaService.rateCinema(cinemaRate);
+      console.log(handle);
+      if (handle === false) {
+        storage.alert(`You reviewed ${cinema.name}`);
+      } else {
+        storage.message('Your review is submited');
+        setIsOpenRateModal(false);
+        await load();
+      }
+
+    } catch (err) {
       storage.alert('error');
+      console.log(err);
+
     }
   }
 
@@ -80,14 +88,12 @@ export const CinemaReview = () => {
     e.preventDefault();
     const cinemaRateSM = new CinemaRateFilter();
     const { id } = params;
-    cinemaRateSM.cinemaId = id;
+    cinemaRateSM.id = id;
     cinemaRateSM.limit = pageSize + 3;
     cinemaRateSM.sort = '-rateTime';
-    const searchRates = await cinemaRateService.search(cinemaRateSM);
-
+    const searchRates = await cinemaRateService.search(cinemaRateSM, pageSize + 3);
     setRates(searchRates.list);
     setPageSize(pageSize + 3);
-
   };
 
   if (cinema && window.location.pathname.includes('review')) {
