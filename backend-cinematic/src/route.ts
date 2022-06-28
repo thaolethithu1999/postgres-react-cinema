@@ -92,6 +92,7 @@ export function route(app: Application, ctx: Context, secure: boolean): void {
   app.post('/cinema', checkCinema, ctx.cinema.create);
   app.get('/cinema/search', checkCinema, ctx.cinema.search);
   app.post('/cinema/search', checkCinema, ctx.cinema.search);
+  // app.get('/cinema/:id', ctx.cinema.load);
   app.get('/cinema/:id', ctx.cinema.load);
   app.put('/cinema/:id', checkCinema, ctx.cinema.update);
   app.patch('/cinema/:id', checkCinema, ctx.cinema.patch);

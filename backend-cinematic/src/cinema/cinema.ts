@@ -12,6 +12,7 @@ export interface CinemaFilter extends Filter {
   parentCinema?: string;
   updatedby?: string;
   updatedat?: Date | DateRange;
+  info?: CinemaInfo;
 }
 
 export interface Cinema {
@@ -62,13 +63,13 @@ export interface CinemaRepository extends Repository<Cinema, string> { }
 
 export interface CinemaService extends Service<Cinema, string, CinemaFilter> {
   rate(rate: CinemaRate): Promise<boolean>;
-  //update
-  //updateRate(rate: CinemaRate): Promise<boolean>;
 }
 
 export interface CinemaInfoRepository extends Repository<CinemaInfo, string> { };
 
-export interface CinemaRateRepository extends Repository<CinemaRate, string> { };
+export interface CinemaRateRepository extends Repository<CinemaRate, string> { 
+  search(rate: CinemaRateFilter): Promise<number>;
+};
 
 export interface CinemaRateService extends Service<CinemaRate, string, CinemaRateFilter> { };
 

@@ -110,9 +110,11 @@ class ApplicationContext {
   skillService?: QueryService<string>;
   interestService?: QueryService<string>;
   lookingForService?: QueryService<string>;
+  
   getConfig(): Config {
     return storage.config();
   }
+
   getMyProfileService(): MyProfileService {
     if (!this.userService) {
       const c = this.getConfig();
@@ -120,6 +122,7 @@ class ApplicationContext {
     }
     return this.userService;
   }
+
   getSkillService(): QueryService<string> {
     if (!this.skillService) {
       const c = this.getConfig();
@@ -127,6 +130,7 @@ class ApplicationContext {
     }
     return this.skillService;
   }
+
   getInterestService(): QueryService<string> {
     if (!this.interestService) {
       const c = this.getConfig();

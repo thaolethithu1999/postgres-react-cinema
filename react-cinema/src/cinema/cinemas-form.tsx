@@ -15,7 +15,6 @@ interface CinemaSearch extends SearchComponentState<Cinema, CinemaFilter> {
   statusList: ValueText[];
 }
 
-
 const cimemasFilter: CinemaFilter = {
   id: '',
   name: '',
@@ -51,15 +50,15 @@ export const CinemasForm = () => {
   component.viewable = true;
   component.editable = true;
 
-  const add = (e: OnClick) => {
-    e.preventDefault();
-    navigate(`add`);
-  };
+  // const add = (e: OnClick) => {
+  //   e.preventDefault();
+  //   navigate(`add`);
+  // };
 
-  const edit = (e: React.MouseEvent<HTMLElement, MouseEvent>, id: string) => {
-    e.preventDefault();
-    navigate(`edit/${id}`);
-  };
+  // const edit = (e: React.MouseEvent<HTMLElement, MouseEvent>, id: string) => {
+  //   e.preventDefault();
+  //   navigate(`edit/${id}`);
+  // };  
 
   React.useEffect(() => {
     const L = require('leaflet');
@@ -93,7 +92,7 @@ export const CinemasForm = () => {
         <div className='btn-group'>
           {component.view !== 'table' && <button type='button' id='btnTable' name='btnTable' className='btn-table' data-view='table' onClick={changeView} />}
           {component.view === 'table' && <button type='button' id='btnListView' name='btnListView' className='btn-list-view' data-view='listview' onClick={changeView} />}
-          {component.addable && <button type='button' id='btnNew' name='btnNew' className='btn-new' onClick={add} />}
+          {/* {component.addable && <button type='button' id='btnNew' name='btnNew' className='btn-new' onClick={add} />} */}
         </div>
       </header>
       <div>
@@ -187,7 +186,7 @@ export const CinemasForm = () => {
           {component.view !== 'table' && <ul className='row list-view'>
             {list && list.length > 0 && list.map((cinema, i) => {
               return (
-                <CinemaCarousel cinema={cinema} edit={edit} />
+                <CinemaCarousel cinema={cinema} />
               );
             })}
           </ul>}

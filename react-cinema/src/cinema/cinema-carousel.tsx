@@ -10,11 +10,11 @@ import { Cinema, Gallery } from '../backoffice/service/cinema/cinema';
 import '../location/carousel.css';
 
 interface Props {
-  edit: (e: any, id: string) => void;
+  //edit: (e: any, id: string) => void;
   cinema: Cinema;
 }
 
-export default function CinemaCarousel({ edit, cinema }: Props) {
+export default function CinemaCarousel({ cinema }: Props) {
   const [carousel, setCarousel] = useState(false);
   const [files, setFiles] = useState<FileInfo[]>([]);
   const navigate = useNavigate();
@@ -74,10 +74,10 @@ export default function CinemaCarousel({ edit, cinema }: Props) {
     console.log(len);
   };
 
-  const navigateEdit = (e: OnClick) => {
-    e.preventDefault();
-    navigate(`edit/${cinema.id}`);
-  };
+  // const navigateEdit = (e: OnClick) => {
+  //   e.preventDefault();
+  //   navigate(`edit/${cinema.id}`);
+  // };
 
   return (
     <>
@@ -141,7 +141,7 @@ export default function CinemaCarousel({ edit, cinema }: Props) {
               }}
             ></div>
 
-            <h3 className='title-location' onClick={(e) => navigateEdit(e)}>{cinema.name}</h3>
+            <h3 className='title-location'>{cinema.name}</h3>
           </section>
         </li>
       )}

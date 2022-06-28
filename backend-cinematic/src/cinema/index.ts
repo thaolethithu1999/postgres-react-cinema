@@ -19,13 +19,15 @@ export class CinemaManager extends Manager<Cinema, string, CinemaFilter> impleme
     private infoRepository: CinemaInfoRepository,
     private rateRepository: CinemaRateRepository) {
     super(search, repository);
+    this.search = this.search.bind(this);
   };
+
 
   load(id: string): Promise<Cinema | null> {
     return this.repository.load(id).then(cinema => {
       if (!cinema) {
         return null;
-      } else {     
+      } else {
         return this.infoRepository.load(id).then(info => {
           if (info) {
             delete (info as any)['id']; // not take info_id
@@ -61,20 +63,22 @@ export class CinemaManager extends Manager<Cinema, string, CinemaFilter> impleme
       await this.infoRepository.insert(dbInfo);
       info = await this.infoRepository.load(rate.id);
     }
-
     if (!info || typeof info[('rate' + rate.rate.toString()) as keyof CinemaInfo] === 'undefined') {
       return false;
     }
-    
-    const handle = await this.rateRepository.exist(rate.id)
-    console.log("handle: " + handle);
-   
-    // const query = `select count(*) from cinemarate c where c.id = ${rate.id} and c.userid = ${rate.userId}` ;
-    
-    if (handle === true) {
+    // const handle = await this.rateRepository.exist(rate.id)
+    // console.log("handle: " + handle);
+
+    const exist = await this.rateRepository.search(rate);
+    console.log("exist");
+    console.log(exist);
+
+    if (exist > 0) {
+      
       return false;
     } else {
       const res = await this.rateRepository.insert(rate);
+
       if (res < 1) {
         return false;
       }
@@ -128,20 +132,6 @@ export function useCinemaRateService(db: DB, mapper?: TemplateMap): CinemaRateSe
 
 export function useCinemaRateController(log: Log, db: DB, mapper?: TemplateMap): CinemaRateController {
   return new CinemaRateController(log, useCinemaRateService(db, mapper));
-}
-
-
-export class SqlCinemaRateService extends Service<CinemaRate, string, CinemaRateFilter> implements CinemaRateService {
-  constructor(
-    protected find: Search<CinemaRate, CinemaRateFilter>, db: DB
-  ) {
-    super(find, db, 'cinemarate', cinemaRateModel);
-    this.checkExist = this.checkExist.bind(this);
-  }
-
-  checkExist(id: string, userId: string): Promise<CinemaRate[]> {
-    return this.query(`select * from cinemarate c where c.id = ${id} and c.userid = ${userId}`, undefined, this.map);
-  }
 }
 
 

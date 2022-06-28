@@ -76,11 +76,9 @@ export const CinemaReview = () => {
         setIsOpenRateModal(false);
         await load();
       }
-
     } catch (err) {
       storage.alert('error');
       console.log(err);
-
     }
   }
 

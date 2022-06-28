@@ -76,7 +76,6 @@ export interface CinemaSearch {
 export interface CinemaService extends Service<Cinema, string, CinemaFilter> {
   getCinemasByRole(id: string): Promise<Cinema[]>;
   rateCinema(obj: CinemaRate): Promise<any>;
-  //updateRate(obj: CinemaRate): Promise<any>;
 }
 
 export interface CinemaRateService extends Service<CinemaRate, string, CinemaRateFilter> { }
