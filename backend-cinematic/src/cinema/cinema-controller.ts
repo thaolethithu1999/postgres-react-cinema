@@ -3,6 +3,7 @@ import { Cinema, CinemaFilter, CinemaService, CinemaRate, cinemaRateModel } from
 import { Request, Response } from 'express';
 import { Search, Validator } from 'onecore';
 import { createValidator } from 'xvalidators';
+import { Rate, RateFilter, RateService, RateController, RateRepository } from '../rate';
 
 export class CinemaController extends Controller<Cinema, string, CinemaFilter> {
 
@@ -29,7 +30,7 @@ export class CinemaController extends Controller<Cinema, string, CinemaFilter> {
     console.log("add rate req: ");
     console.log(rate);
 
-    rate.rateTime = new Date();
+    rate.ratetime = new Date();
     this.validator.validate(rate).then(errors => {
       if (errors && errors.length > 0) {
         res.status(getStatusCode(errors)).json(errors).end();

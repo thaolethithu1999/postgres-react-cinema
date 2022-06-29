@@ -1,6 +1,7 @@
 import { Log, Manager, Search, Mapper } from 'onecore';
 import { buildCountQuery, buildToInsert, buildToInsertBatch, DB, postgres, Repository, SearchBuilder, Service, Statement } from 'query-core';
-import { Cinema, CinemaFilter, cinemaModel, CinemaRepository, CinemaService, CinemaRate, CinemaInfoRepository, CinemaRateRepository, CinemaInfo, CinemaRateService, cinemaRateModel, CinemaRateFilter } from './cinema';
+import { Cinema, CinemaFilter, cinemaModel, CinemaRepository, CinemaService, CinemaRate, CinemaInfoRepository, CinemaRateRepository, CinemaInfo, CinemaRateService, cinemaRateModel, CinemaRateFilter } from './cinema'; // rate
+import {Rate, RateFilter, RateService, RateRepository } from '../rate';
 import { CinemaController } from './cinema-controller';
 import { TemplateMap, useQuery } from 'query-mappers';
 export * from './cinema-controller';
@@ -66,24 +67,32 @@ export class CinemaManager extends Manager<Cinema, string, CinemaFilter> impleme
     if (!info || typeof info[('rate' + rate.rate.toString()) as keyof CinemaInfo] === 'undefined') {
       return false;
     }
-    // const handle = await this.rateRepository.exist(rate.id)
-    // console.log("handle: " + handle);
 
-    const exist = await this.rateRepository.search(rate);
-    console.log("exist");
-    console.log(exist);
+    const reviewed = await this.rateRepository.search(rate);
+    console.log("reviewed");
+    console.log(reviewed);
 
-    if (exist > 0) {
-      
-      return false;
+    if (reviewed) {
+      (info as any)['rate' + reviewed.rate.toString()] -= 1;
+      reviewed.rate = rate.rate;
+      reviewed.review = rate.review;
+      console.log("new review");
+
+      console.log(reviewed);
+
+      const res = await this.rateRepository.updateCinemaRate(reviewed);
+      console.log("res::::" + res);
+
+      if (res === false) {
+        return false;
+      }
+      return true;
     } else {
       const res = await this.rateRepository.insert(rate);
-
       if (res < 1) {
         return false;
       }
       (info as any)['rate' + rate.rate.toString()] += 1;
-
       const sumRate = info.rate1 +
         info.rate2 * 2 +
         info.rate3 * 3 +

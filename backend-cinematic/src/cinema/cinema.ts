@@ -45,17 +45,17 @@ export interface CinemaInfo {
 
 export interface CinemaRate {
   id: string;
-  userId: string;
+  userid: string;
   rate: number;
-  rateTime?: Date;
+  ratetime?: Date;
   review?: string;
 }
 
 export interface CinemaRateFilter extends Filter {
   id?: string;
-  userId?: string;
+  userid?: string;
   rate?: number;
-  rateTime?: Date;
+  ratetime?: Date;
   review?: string;
 }
 
@@ -68,7 +68,8 @@ export interface CinemaService extends Service<Cinema, string, CinemaFilter> {
 export interface CinemaInfoRepository extends Repository<CinemaInfo, string> { };
 
 export interface CinemaRateRepository extends Repository<CinemaRate, string> { 
-  search(rate: CinemaRateFilter): Promise<number>;
+  search(rate: CinemaRateFilter): Promise<CinemaRate | null>;
+  updateCinemaRate(rate: CinemaRateFilter): Promise<boolean>;
 };
 
 export interface CinemaRateService extends Service<CinemaRate, string, CinemaRateFilter> { };
@@ -130,7 +131,7 @@ export const cinemaRateModel: Attributes = {
     key: true,
     required: true
   },
-  userId: {
+  userid: {
     key: true,
     required: true
   },
@@ -139,7 +140,7 @@ export const cinemaRateModel: Attributes = {
     min: 1,
     max: 5
   },
-  rateTime: {
+  ratetime: {
     type: 'datetime',
   },
   review: {

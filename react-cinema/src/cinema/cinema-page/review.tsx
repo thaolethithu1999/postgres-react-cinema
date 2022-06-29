@@ -61,7 +61,7 @@ export const CinemaReview = () => {
       }
       const cinemaRate: CinemaRate = {};
       cinemaRate.id = cinema.id;
-      cinemaRate.userId = id;
+      cinemaRate.userid = id;
       cinemaRate.rate = data.rate;
       cinemaRate.review = data.review;
 
@@ -117,7 +117,7 @@ export const CinemaReview = () => {
                 return <RateItem
                   review={value.review ?? ''}
                   maxLengthReviewText={maxLengthReviewText}
-                  rateTime={value.rateTime}
+                  rateTime={value.ratetime}
                   rate={value.rate || 1}
                   resource={resource}></RateItem>;
               }) || '')

@@ -2,9 +2,9 @@ import { Attributes, Filter, Service } from 'onecore';
 
 export interface CinemaRate {
   id: string;
-  userId: string;
+  userid: string;
   rate: number;
-  rateTime?: Date;
+  ratetime?: Date;
   review?: string;
 }
 
@@ -21,9 +21,9 @@ export class CinemaRateFilter implements Filter {
   refId?: string | number;
   rateId?: string;
   id?: string;
-  userId?: string;
+  userid?: string;
   rate?: number;
-  rateTime?: Date;
+  ratetime?: Date;
   review?: string;
   limit?: number;
 }
@@ -33,7 +33,7 @@ export const cinemaRateModel: Attributes = {
     key: true,
     required: true
   },
-  userId: {
+  userid: {
     key: true,
     required: true
   },
@@ -42,7 +42,7 @@ export const cinemaRateModel: Attributes = {
     q: true,
     type: 'number'
   },
-  rateTime: {
+  ratetime: {
     type: 'datetime'
   },
   review: {
