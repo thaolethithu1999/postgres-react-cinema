@@ -21,7 +21,7 @@ export class CinemaRateFilter implements Filter {
   refId?: string | number;
   rateId?: string;
   id?: string;
-  userid?: string;
+  userId?: string;
   rate?: number;
   ratetime?: Date;
   review?: string;

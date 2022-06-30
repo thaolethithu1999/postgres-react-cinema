@@ -1,16 +1,17 @@
 import { Controller, handleError, Log, getStatusCode } from "express-ext";
-import { Rate, RateFilter, rateModel, RateRepository, RateService } from './rate';
+import { Rate, RateFilter, RateId, rateModel, RateRepository, RateService } from './rate';
 import { Request, Response } from 'express';
 import { Search, Validator } from 'onecore';
 import { createValidator } from 'xvalidators';
 
-export class RateController extends Controller<Rate, string, RateFilter>{
-    validator: Validator<Rate>;
+export class RateController extends Controller<Rate, RateId, RateFilter>{
+
     constructor(log: Log, public rateService: RateService) {
         super(log, rateService);
         this.all = this.all.bind(this);
         this.load = this.load.bind(this);
-        this.validator = createValidator<Rate>(rateModel);
+        this.update = this.update.bind(this);
+        //console.log(JSON.stringify(this.keys))
     }
 
     all(req: Request, res: Response) {
@@ -22,31 +23,40 @@ export class RateController extends Controller<Rate, string, RateFilter>{
     }
 
     load(req: Request, res: Response) {
-        const rate: Rate = req.body;
-        console.log(JSON.stringify(rate));
-        this.validator.validate(rate).then(errors => {
-            if (errors && errors.length > 0) {
-                res.status(getStatusCode(errors)).json(errors).end();
+        console.log(req.params);
+
+        const id = req.params.id;
+        const userId = req.params.userId;
+
+        const rateId: RateId = { id, userId };
+        this.rateService.load(rateId).then(rates => {
+            if (rates) {
+                return res.status(200).json(rates).end();
             } else {
-                this.rateService.searchRate(rate).then(rs => {
-                    res.json(rs).end();
-                }).catch(err => handleError(err, res, this.log));
+                return res.status(200).json({}).end();
             }
-        }).catch(err => handleError(err, res, this.log))
+        }).catch(err => handleError(err, res, this.log));
     }
 
     update(req: Request, res: Response) {
         const rate: Rate = req.body;
-        console.log(JSON.stringify(rate));
-        this.validator.validate(rate).then(errors => {
-            if (errors && errors.length > 0) {
-                res.status(getStatusCode(errors)).json(errors).end();
-            } else {
-                this.rateService.updateRate(rate).then(rs => {
-                    res.json(rs).end();
-                }).catch(err => handleError(err, res, this.log));
-            }
-        }).catch(err => handleError(err, res, this.log))
+        console.log(req.body);
+
+        rate.id = req.params.id;
+        rate.userId = req.params.userId;
+
+        this.rateService.update(rate).then(row => {
+            console.log(row);
+            return res.status(200).json(row).end();
+        }).catch(err => handleError(err, res, this.log));
+
     }
 
+    rate(req: Request, res: Response) {
+        const rate: Rate = req.body;
+        rate.rateTime = new Date()
+        this.rateService.rate(rate).then(rs => {
+            res.json(rs).end();
+        }).catch(err => handleError(err, res, this.log));
+    }
 }

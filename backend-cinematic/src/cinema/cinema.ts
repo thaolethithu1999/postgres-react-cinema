@@ -72,7 +72,9 @@ export interface CinemaRateRepository extends Repository<CinemaRate, string> {
   updateCinemaRate(rate: CinemaRateFilter): Promise<boolean>;
 };
 
-export interface CinemaRateService extends Service<CinemaRate, string, CinemaRateFilter> { };
+export interface CinemaRateService extends Service<CinemaRate, string, CinemaRateFilter> { 
+
+};
 
 export const galleryModel: Attributes = {
   url: {
@@ -131,7 +133,7 @@ export const cinemaRateModel: Attributes = {
     key: true,
     required: true
   },
-  userid: {
+  userId: {
     key: true,
     required: true
   },
@@ -140,7 +142,7 @@ export const cinemaRateModel: Attributes = {
     min: 1,
     max: 5
   },
-  ratetime: {
+  rateTime: {
     type: 'datetime',
   },
   review: {

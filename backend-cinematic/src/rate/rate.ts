@@ -1,30 +1,35 @@
 import { Attributes, Filter, Search, Service } from 'onecore';
 import { Repository } from 'query-core';
 
+export interface RateId {
+  id: string;
+  userId: string;
+}
 export interface Rate {
   id: string;
-  userid: string;
-  rate: number;
-  ratetime?: Date;
+  userId: string;
+  rate?: number;
+  rateTime?: Date;
   review?: string;
 }
 
 export interface RateFilter extends Filter {
   id?: string;
-  userid?: string;
+  userId?: string;
   rate?: number;
-  ratetime?: Date;
+  rateTime?: Date;
   review?: string;
 }
 
-export interface RateRepository extends Repository<Rate, string> {
-  searchRate(rate: RateFilter): Promise<Rate | null>;
-  updateRate(rate: RateFilter): Promise<boolean>;
+export interface RateRepository extends Repository<Rate, RateId> {
+  // searchRate(rate: RateFilter): Promise<Rate | null>;
+  // updateRate(rate: RateFilter): Promise<boolean>;
 };
 
-export interface RateService extends Service<Rate, string, RateFilter> {
-  searchRate(rate: RateFilter): Promise<Rate | null>;
-  updateRate(rate: RateFilter): Promise<boolean>;
+export interface RateService extends Service<Rate, RateId, RateFilter> {
+  // searchRate(rate: RateFilter): Promise<Rate | null>;
+  // updateRate(rate: RateFilter): Promise<boolean>;
+  rate(rate: Rate): Promise<boolean>;
 }
 
 export const rateModel: Attributes = {
@@ -32,7 +37,7 @@ export const rateModel: Attributes = {
     key: true,
     required: true
   },
-  userid: {
+  userId: {
     key: true,
     required: true
   },
@@ -41,7 +46,7 @@ export const rateModel: Attributes = {
     min: 1,
     max: 5
   },
-  ratetime: {
+  rateTime: {
     type: 'datetime',
   },
   review: {

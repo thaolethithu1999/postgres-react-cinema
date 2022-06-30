@@ -25,6 +25,8 @@ class ApplicationContext {
     getRateService(): RateService {
         if (!this.rateService) {
             const c = this.getConfig();
+            console.log(c);
+            
             this.rateService = new RateClient(httpRequest, c.rate_url);
         }
         return this.rateService;
@@ -36,4 +38,3 @@ export const context = new ApplicationContext();
 export function useRate(): RateService {
     return context.getRateService();
 }
-

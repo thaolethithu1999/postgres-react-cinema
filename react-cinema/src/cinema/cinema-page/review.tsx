@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import ReactModal from 'react-modal';
 import { useParams } from 'react-router-dom';
 import { storage } from 'uione';
@@ -9,6 +9,10 @@ import { RatingStar } from '../../rate/rateting-star';
 import { ReviewScore } from '../../rate/review-score';
 import { getCinemaRates, Cinema, CinemaRate, useCinema } from '../service';
 import { CinemaRateFilter } from '../service/cinema-rate/cinema-rate';
+
+import { useRate } from '../../rate/service';
+import { Rate } from '../../rate/service/rate';
+import { RateFilter } from '../../rate/service/rate/rate';
 import './rate.css';
 
 ReactModal.setAppElement('#root');
@@ -16,7 +20,7 @@ ReactModal.setAppElement('#root');
 export const CinemaReview = () => {
   const params = useParams();
   const [cinema, setCinema] = useState<Cinema>();
-  const [rates, setRates] = useState<CinemaRate[]>([]);
+  const [rates, setRates] = useState<Rate[]>([]);
   const [resource] = useState(storage.resource().resource());
   const [maxLengthReviewText] = useState(100);
   const [isOpenRateModal, setIsOpenRateModal] = useState(false);
@@ -24,17 +28,23 @@ export const CinemaReview = () => {
   const [pageSize, setPageSize] = useState(3);
   const cinemaService = useCinema();
   const cinemaRateService = getCinemaRates();
+  const rateService = useRate();
+
 
   useEffect(() => {
     load();
   }, [])
 
   const load = async () => {
-    const cinemaRateSM = new CinemaRateFilter();
+    const cinemaRateSM = new RateFilter();
     console.log(cinemaRateSM);
-
+    const userId: string | undefined = storage.getUserId();
+    console.log(userId);
+    
     const { id } = params;
-    cinemaRateSM.id = id;
+
+    cinemaRateSM.id = id || '';
+    cinemaRateSM.userId = userId || '';
     cinemaRateSM.limit = pageSize;
     cinemaRateSM.sort = '-rateTime';
 
@@ -44,9 +54,10 @@ export const CinemaReview = () => {
       setCinema(currentCinema);
     }
 
-    const searchResult = await cinemaRateService.search(cinemaRateSM, pageSize);
+    //const searchResult = await rateService.search(cinemaRateSM, pageSize);
+    const searchResult = await rateService.getRateByRateId(cinemaRateSM.id, cinemaRateSM.userId);
     console.log(searchResult);
-    const list = searchResult.list;
+    const list = searchResult;
     setRates(list);
   }
 
@@ -59,17 +70,17 @@ export const CinemaReview = () => {
       if (!id || !cinema) {
         return;
       }
-      const cinemaRate: CinemaRate = {};
-      cinemaRate.id = cinema.id;
-      cinemaRate.userid = id;
-      cinemaRate.rate = data.rate;
-      cinemaRate.review = data.review;
+      const rate: Rate = {};
+      rate.id = cinema.id;
+      rate.userId = id;
+      rate.rate = data.rate;
+      rate.review = data.review;
 
-      console.log(cinemaRate);
+      console.log(rate);
 
-      let handle = await cinemaService.rateCinema(cinemaRate);
+      let handle = await rateService.getRateByRateId(rate.id, rate.userId);
       console.log(handle);
-      if (handle === false) {
+      if (handle) {
         storage.alert(`You reviewed ${cinema.name}`);
       } else {
         storage.message('Your review is submited');
@@ -89,7 +100,7 @@ export const CinemaReview = () => {
     cinemaRateSM.id = id;
     cinemaRateSM.limit = pageSize + 3;
     cinemaRateSM.sort = '-rateTime';
-    const searchRates = await cinemaRateService.search(cinemaRateSM, pageSize + 3);
+    const searchRates = await rateService.search(cinemaRateSM, pageSize + 3);
     setRates(searchRates.list);
     setPageSize(pageSize + 3);
   };
@@ -113,11 +124,11 @@ export const CinemaReview = () => {
           {
             (
               rates && rates.length > 0 &&
-              (rates.map((value: CinemaRate, index: number) => {
+              (rates.map((value: Rate, index: number) => {
                 return <RateItem
                   review={value.review ?? ''}
                   maxLengthReviewText={maxLengthReviewText}
-                  rateTime={value.ratetime}
+                  rateTime={value.rateTime}
                   rate={value.rate || 1}
                   resource={resource}></RateItem>;
               }) || '')

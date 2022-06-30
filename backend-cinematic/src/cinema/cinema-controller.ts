@@ -30,7 +30,7 @@ export class CinemaController extends Controller<Cinema, string, CinemaFilter> {
     console.log("add rate req: ");
     console.log(rate);
 
-    rate.ratetime = new Date();
+    rate.rateTime = new Date();
     this.validator.validate(rate).then(errors => {
       if (errors && errors.length > 0) {
         res.status(getStatusCode(errors)).json(errors).end();

@@ -55,16 +55,16 @@ export interface CinemaInfo {
 
 export interface CinemaRate {
   id?: string;
-  userid?: string;
+  userId?: string;
   rate?: number;
-  ratetime?: Date;
+  rateTime?: Date;
   review?: string;
 }
 
 export interface CinemaRateFilter extends Filter {
   id?: string;
-  userid?: string;
-  ratetime?: Date;
+  userId?: string;
+  rateTime?: Date;
   review?: string;
 }
 
@@ -127,7 +127,7 @@ export const cinemaRateModel: Attributes = {
     key: true,
     required: true
   },
-  userid: {
+  userId: {
     key: true,
     required: true
   },

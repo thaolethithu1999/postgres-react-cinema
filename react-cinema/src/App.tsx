@@ -85,6 +85,7 @@ import { Articles } from './article/articles';
 import { ArticleForm } from './article/article';
 import { MyItems } from './my-items/items-form';
 import { MyItem } from './my-items/item-form';
+import { Test } from './rate/test-rate';
 let isInit = false;
 export function init() {
   if (isInit) {
@@ -158,6 +159,7 @@ function App() {
           <Route path='cinema/:id/review' element={<CinemaPage />} />
           <Route path='cinema/:id/photo' element={<CinemaPage />} />
           <Route path='cinema/:id/about' element={<CinemaPage />} />
+          <Route path='test' element={<Test />} />
 
           <Route path='backoffice/categories' element={<CategoriesForm />} />
           <Route path='backoffice/categories/edit/:id' element={<CategoryForm />} />

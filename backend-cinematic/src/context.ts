@@ -47,9 +47,9 @@ export interface Context {
   health: HealthController;
   log: LogController;
   middleware: MiddlewareController;
-  authorize: Authorize;
-  authentication: AuthenticationController<User>;
-  privilege: PrivilegeController;
+  // authorize: Authorize;
+  // authentication: AuthenticationController<User>;
+  // privilege: PrivilegeController;
   role: RoleController;
   user: UserController;
   auditLog: AuditLogController;
@@ -90,11 +90,11 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: 
   const status = initializeStatus(auth.status);
   const privilegeRepository = new PrivilegeRepository(db.query, conf.sql.privileges);
   const userRepository = useUserRepository(db, auth);
-  const authenticate = useLDAP(conf.ldap, status);
-  const authenticator = useAuthenticator(status, authenticate, generate, auth.token, auth.payload, auth.account, userRepository, privilegeRepository.privileges, auth.lockedMinutes, auth.maxPasswordFailed);
-  const authentication = new AuthenticationController(logger.error, authenticator.authenticate, conf.cookie);
-  const privilegesLoader = new PrivilegesReader(db.query, conf.sql.allPrivileges);
-  const privilege = new PrivilegeController(logger.error, privilegesLoader.privileges);
+  // const authenticate = useLDAP(conf.ldap, status);
+  // const authenticator = useAuthenticator(status, authenticate, generate, auth.token, auth.payload, auth.account, userRepository, privilegeRepository.privileges, auth.lockedMinutes, auth.maxPasswordFailed);
+  // const authentication = new AuthenticationController(logger.error, authenticator.authenticate, conf.cookie);
+  // const privilegesLoader = new PrivilegesReader(db.query, conf.sql.allPrivileges);
+  // const privilege = new PrivilegeController(logger.error, privilegesLoader.privileges);
 
   const role = useRoleController(logger.error, db, mapper);
   const user = useUserController(logger.error, db, mapper);
@@ -120,5 +120,5 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: 
   const storageService = new GoogleStorageService(bucket, storageConfig, map);
   const uploadService = new SqlUploadSerive(pool, 'media', storageService.upload, storageService.delete, param, manager.query, manager.exec, manager.execBatch);
   const uploads = new UploadController(logger.error, uploadService);
-  return { health, log, middleware, authorize: authorizer.authorize, authentication, privilege, role, user, auditLog, film, category, cinema, cinemaParent, uploads, filmRate, cinemaRate, rate };
+  return { health, log, middleware, role, user, auditLog, film, category, cinema, cinemaParent, uploads, filmRate, cinemaRate, rate };
 }
