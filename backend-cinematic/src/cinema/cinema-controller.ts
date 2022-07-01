@@ -13,7 +13,7 @@ export class CinemaController extends Controller<Cinema, string, CinemaFilter> {
     super(log, cinemaService);
     this.array = ["status"];
     this.all = this.all.bind(this);
-    this.rate = this.rate.bind(this);
+    //this.rate = this.rate.bind(this);
     this.validator = createValidator<CinemaRate>(cinemaRateModel);
   }
 

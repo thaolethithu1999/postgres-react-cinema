@@ -6,11 +6,15 @@ import { createValidator } from 'xvalidators';
 
 export class RateController extends Controller<Rate, RateId, RateFilter>{
 
+    validator: Validator<Rate>;
+
     constructor(log: Log, public rateService: RateService) {
         super(log, rateService);
         this.all = this.all.bind(this);
         this.load = this.load.bind(this);
         this.update = this.update.bind(this);
+        this.rate = this.rate.bind(this);
+        this.validator = createValidator<Rate>(rateModel);
         //console.log(JSON.stringify(this.keys))
     }
 
@@ -54,9 +58,11 @@ export class RateController extends Controller<Rate, RateId, RateFilter>{
 
     rate(req: Request, res: Response) {
         const rate: Rate = req.body;
-        rate.rateTime = new Date()
+        rate.rateTime = new Date();
+        console.log(rate);
+        
         this.rateService.rate(rate).then(rs => {
-            res.json(rs).end();
+            return res.json(rs).end();
         }).catch(err => handleError(err, res, this.log));
     }
 }

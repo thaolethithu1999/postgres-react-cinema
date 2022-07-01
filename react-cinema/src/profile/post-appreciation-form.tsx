@@ -30,7 +30,9 @@ export const PostRateForm = (props: Props) => {
   };
   const renderRateStar = (value: any) => {
     let list5 = Array(5);
-    list5 = list5.fill(<i />);
+    list5 = list5.fill(<i />).map((item, index )=>{
+      return (<i key={index}></i>)
+    });
     const listClass = [];
     for (let i = 1; i <= value; i++) {
       listClass.push(`star-${i}`);

@@ -7,7 +7,7 @@ export interface RateId {
 }
 export interface Rate {
   id: string;
-  userId: string;
+  userId?: string;
   rate?: number;
   rateTime?: Date;
   review?: string;
@@ -16,7 +16,7 @@ export interface Rate {
 export interface RateFilter extends Filter {
   id?: string;
   userId?: string;
-  rate?: number;
+  rate: number;
   rateTime?: Date;
   review?: string;
 }
@@ -30,6 +30,7 @@ export interface RateService extends Service<Rate, RateId, RateFilter> {
   // searchRate(rate: RateFilter): Promise<Rate | null>;
   // updateRate(rate: RateFilter): Promise<boolean>;
   rate(rate: Rate): Promise<boolean>;
+  update(rate: Rate): Promise<number>;
 }
 
 export const rateModel: Attributes = {

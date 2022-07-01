@@ -1,5 +1,4 @@
 import { Attributes, Filter, Service, Tracking } from 'onecore';
-
 export interface CinemaFilter extends Filter {
   id?: string;
   name?: string;
@@ -39,10 +38,10 @@ export interface Cinema extends Tracking {
   updatedat?: Date;
   coverURL?: string;
   gallery?: Gallery[];
-  info?: CinemaInfo;
+  info?: Info;
 }
 
-export interface CinemaInfo {
+export interface Info {
   viewCount: number;
   rateLocation: number;
   rate: number;

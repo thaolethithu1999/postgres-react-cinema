@@ -40,7 +40,9 @@ export const PostRateFilmForm = (props: Props) => {
   };
   const renderRateStar = (value: any) => {
     let list5 = Array(10);
-    list5 = list5.fill(<i />);
+    list5 = list5.fill(<i />).map((item, index )=>{
+      return (<i key={index}></i>)
+    });
 
     const listClass = [];
     for (let i = 1; i <= value; i++) {

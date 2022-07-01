@@ -7,7 +7,7 @@ import { DataPostRate, PostRateForm } from '../../rate/post-rate-form';
 import { RateItem } from '../../rate/rate-item';
 import { RatingStar } from '../../rate/rateting-star';
 import { ReviewScore } from '../../rate/review-score';
-import { getCinemaRates, Cinema, CinemaRate, useCinema } from '../service';
+import { Cinema, CinemaRate, useCinema } from '../service';
 import { CinemaRateFilter } from '../service/cinema-rate/cinema-rate';
 
 import { useRate } from '../../rate/service';
@@ -27,7 +27,7 @@ export const CinemaReview = () => {
   const [voteStar, setVoteStar] = useState<number>();
   const [pageSize, setPageSize] = useState(3);
   const cinemaService = useCinema();
-  const cinemaRateService = getCinemaRates();
+  //const cinemaRateService = getCinemaRates();
   const rateService = useRate();
 
 
@@ -37,14 +37,11 @@ export const CinemaReview = () => {
 
   const load = async () => {
     const cinemaRateSM = new RateFilter();
-    console.log(cinemaRateSM);
-    const userId: string | undefined = storage.getUserId();
-    console.log(userId);
-    
+    //console.log(cinemaRateSM);
+     const userId: string | undefined = storage.getUserId();
+    // console.log(userId);
     const { id } = params;
-
-    cinemaRateSM.id = id || '';
-    cinemaRateSM.userId = userId || '';
+    cinemaRateSM.id = id;
     cinemaRateSM.limit = pageSize;
     cinemaRateSM.sort = '-rateTime';
 
@@ -54,34 +51,35 @@ export const CinemaReview = () => {
       setCinema(currentCinema);
     }
 
-    //const searchResult = await rateService.search(cinemaRateSM, pageSize);
-    const searchResult = await rateService.getRateByRateId(cinemaRateSM.id, cinemaRateSM.userId);
-    console.log(searchResult);
-    const list = searchResult;
-    setRates(list);
+    const searchResult = await rateService.search(cinemaRateSM, pageSize);
+    console.log(searchResult.list);
+    setRates(searchResult.list);
   }
 
-  console.log(cinema?.info);
-  console.log(rates);
 
   const postReview = async (data: DataPostRate): Promise<void> => {
     try {
       const id: string | undefined = storage.getUserId();
       if (!id || !cinema) {
-        return;
+        return storage.alert("You must sign in to review");
       }
       const rate: Rate = {};
       rate.id = cinema.id;
       rate.userId = id;
       rate.rate = data.rate;
       rate.review = data.review;
+      rate.rateTime = new Date();
 
-      console.log(rate);
+      //console.log(rate);
 
-      let handle = await rateService.getRateByRateId(rate.id, rate.userId);
-      console.log(handle);
-      if (handle) {
-        storage.alert(`You reviewed ${cinema.name}`);
+      let addRate = await rateService.rate(rate);
+      console.log(addRate); 
+
+      if (addRate === false) {
+        await rateService.update(rate);
+        storage.message("Your review updated");
+        setIsOpenRateModal(false);
+        await load();
       } else {
         storage.message('Your review is submited');
         setIsOpenRateModal(false);
@@ -110,7 +108,7 @@ export const CinemaReview = () => {
       <>
         <div className='row top-content row-rate'>
           {cinema?.info && <ReviewScore rate={cinema.info.rate} />}
-          <div className='col s8 m7 l6'>
+          <div key={cinema.id} className='col s8 m7 l6'>
             {DetailStart(cinema?.info)}
           </div>
         </div>
@@ -126,11 +124,12 @@ export const CinemaReview = () => {
               rates && rates.length > 0 &&
               (rates.map((value: Rate, index: number) => {
                 return <RateItem
+                  key={value.id}
                   review={value.review ?? ''}
                   maxLengthReviewText={maxLengthReviewText}
                   rateTime={value.rateTime}
                   rate={value.rate || 1}
-                  resource={resource}></RateItem>;
+                  resource={resource}/>;
               }) || '')
             )
           }

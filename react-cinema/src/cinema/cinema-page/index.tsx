@@ -42,8 +42,7 @@ export const CinemaPage = () => {
   }, [id])
 
   const getCinema = async (cinamaId: string) => {
-    const currentCinema = await cinemaService.load(cinamaId)
-    console.log(currentCinema);
+    const currentCinema = await cinemaService.load(cinamaId);
 
     if (currentCinema) {
       setCinema(currentCinema);

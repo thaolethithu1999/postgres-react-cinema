@@ -12,7 +12,7 @@ export interface CinemaFilter extends Filter {
   parentCinema?: string;
   updatedby?: string;
   updatedat?: Date | DateRange;
-  info?: CinemaInfo;
+  info?: Info;
 }
 
 export interface Cinema {
@@ -29,10 +29,10 @@ export interface Cinema {
   updatedby?: string;
   updatedat?: Date;
   gallery?: string;
-  info?: CinemaInfo;
+  info?: Info;
 }
 
-export interface CinemaInfo {
+export interface Info {
   id: string;
   rate: number;
   rate1: number;
@@ -45,31 +45,31 @@ export interface CinemaInfo {
 
 export interface CinemaRate {
   id: string;
-  userid: string;
+  userId: string;
   rate: number;
-  ratetime?: Date;
+  rateTime?: Date;
   review?: string;
 }
 
 export interface CinemaRateFilter extends Filter {
   id?: string;
-  userid?: string;
+  userId?: string;
   rate?: number;
-  ratetime?: Date;
+  rateTime?: Date;
   review?: string;
 }
 
 export interface CinemaRepository extends Repository<Cinema, string> { }
 
 export interface CinemaService extends Service<Cinema, string, CinemaFilter> {
-  rate(rate: CinemaRate): Promise<boolean>;
+  //rate(rate: CinemaRate): Promise<boolean>;
 }
 
-export interface CinemaInfoRepository extends Repository<CinemaInfo, string> { };
+export interface InfoRepository extends Repository<Info, string> { };
 
 export interface CinemaRateRepository extends Repository<CinemaRate, string> { 
-  search(rate: CinemaRateFilter): Promise<CinemaRate | null>;
-  updateCinemaRate(rate: CinemaRateFilter): Promise<boolean>;
+  // search(rate: CinemaRateFilter): Promise<CinemaRate | null>;
+  // updateCinemaRate(rate: CinemaRateFilter): Promise<boolean>;
 };
 
 export interface CinemaRateService extends Service<CinemaRate, string, CinemaRateFilter> { 
@@ -147,10 +147,10 @@ export const cinemaRateModel: Attributes = {
   },
   review: {
     q: true,
-  },
+  }
 }
 
-export const cinemaInfoModel: Attributes = {
+export const infoModel: Attributes = {
   id: {
     key: true,
   },

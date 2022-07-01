@@ -13,7 +13,7 @@ export class CinemaRateClient extends Client<CinemaRate, string, CinemaRateFilte
 
   getCinemaByCinemaId(cinemaId: string): Promise<CinemaRate[]>{
     const url = this.locationUrl + '/' + cinemaId;
-    console.log(this.locationUrl);
+    //console.log(this.locationUrl);
     
     return this.http.get(url);
   }

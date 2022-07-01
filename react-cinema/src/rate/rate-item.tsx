@@ -5,17 +5,22 @@ import '../rate.css';
 
 interface Props {
   maxLengthReviewText: number;
-  rateTime: Date|undefined;
+  rateTime: Date | undefined;
   rate: number;
   review: string;
   resource: StringMap;
 }
 export const RateItem = ({ maxLengthReviewText, rateTime, rate, review, resource }: Props) => {
   const renderReviewStar = (value: any) => {
-    const starList = Array(5).fill(<i />);
+    const starList = Array(5).fill(<i />).map((item, index )=>{
+      return (<i key={index}></i>)
+    });
     const classes = Array.from(Array(value).keys()).map(i => `star-${i + 1}`).join(' ');
     return <div className={`rv-star2 ${classes}`}>{starList}</div>;
   };
+  //console.log(renderReviewStar(rate));
+
+
   const formatReviewText = (text: string) => {
     if (text && text.length > maxLengthReviewText) {
       let textSub = text.substring(0, maxLengthReviewText);
@@ -39,7 +44,9 @@ export const RateItem = ({ maxLengthReviewText, rateTime, rate, review, resource
 
 export const RateItemFilm = ({ maxLengthReviewText, rateTime, rate, review, resource }: Props) => {
   const renderReviewStar = (value: any) => {
-    const starList = Array(10).fill(<i />);
+    const starList = Array(10).fill(<i />).map((item, index )=>{
+      return (<i key={index}></i>)
+    });;
     const classes = Array.from(Array(value).keys()).map(i => `star-${i + 1}`).join(' ');
     return <div className={`rv-star2 ${classes}`}>{starList}</div>;
   };

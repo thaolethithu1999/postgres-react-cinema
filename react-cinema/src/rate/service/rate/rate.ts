@@ -24,14 +24,14 @@ export class RateFilter implements Filter {
   id?: string;
   userId?: string;
   rate?: number;
-  ratetime?: Date;
+  rateTime?: Date;
   review?: string;
   limit?: number;
 }
 
 export interface RateService extends Service<Rate, string , RateFilter>{
   getRateByRateId(id: string, userId: string): Promise<Rate[]>;
-  
+  rate(obj: Rate): Promise<any>;
 }
 
 export const rateModel: Attributes = {

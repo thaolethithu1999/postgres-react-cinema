@@ -99,14 +99,15 @@ export function route(app: Application, ctx: Context, secure: boolean): void {
   app.put('/cinema/:id', checkCinema, ctx.cinema.update);
   app.patch('/cinema/:id', checkCinema, ctx.cinema.patch);
   app.delete('/cinema/:id', checkCinema, ctx.cinema.delete);
-  app.post('/cinema/rate',  ctx.cinema.rate);
-  app.post('/cinema-rate/search', ctx.cinemaRate.search);
-  app.get('/cinema-rate/search', ctx.cinemaRate.search);
+  // app.post('/cinema/rate',  ctx.cinema.rate);
+  // app.post('/cinema-rate/search', ctx.cinemaRate.search);
+  // app.get('/cinema-rate/search', ctx.cinemaRate.search);
 
   // const readRate = ctx.authorize('rate', read);
   // const writeRate = ctx.authorize('rate', write);
-  app.get('/rates', ctx.rate.all);
-  app.post('/rates', ctx.rate.create);
+  // app.get('/rates', ctx.rate.all);
+  app.post('/rates', ctx.rate.rate);
+  app.post('/rates/:id', ctx.rate.search);
   app.get('/rates/:id/:userId', ctx.rate.load);
   app.put('/rates/:id/:userId', ctx.rate.update);
 
