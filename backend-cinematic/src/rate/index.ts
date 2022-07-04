@@ -25,11 +25,7 @@ export class RateManager extends Manager<Rate, RateId, RateFilter> implements Ra
     }
 
     async rate(rate: Rate): Promise<boolean> {
-        console.log(rate);
-        const id = rate.id;
-        const userId = rate.userId || '';
-        const rateId: RateId = { id, userId };
-
+        //console.log(rate);
         let info = await this.infoRepository.load(rate.id);
         if (!info) {
             let dbInfo = {
@@ -135,28 +131,60 @@ export function useRateController(log: Log, db: DB, mapper?: TemplateMap): RateC
 }
 
 
-// let info = await this.infoRepository.load(rate.id);
-// if (!info) {
-//     let dbInfo = {
-//         'id': rate.id,
-//         'rate': 0,
-//         'rate1': 0,
-//         'rate2': 0,
-//         'rate3': 0,
-//         'rate4': 0,
-//         'rate5': 0,
-//         'viewCount': 0,
-//     };
-//     await this.infoRepository.insert(dbInfo);
-//     info = await this.infoRepository.load(rate.id);
-// }
-// if (!info || typeof info[('rate' + rate.rate?.toString()) as keyof Info] === 'undefined') {
-//     return false;
-// }
-// const dbRate = this.repository.load(rateId);
-// console.log(dbRate);
+// const id = rate.id;
+//         const userId = rate.userId || '';
+//         const rateId: RateId = { id, userId };
+//         let info = await this.infoRepository.load(rate.id);
+//         if (!info) {
+//             let dbInfo = {
+//                 'id': rate.id,
+//                 'rate': 0,
+//                 'rate1': 0,
+//                 'rate2': 0,
+//                 'rate3': 0,
+//                 'rate4': 0,
+//                 'rate5': 0,
+//                 'viewCount': 0,
+//             };
+//             await this.infoRepository.insert(dbInfo);
+//             info = await this.infoRepository.load(rate.id);
+//         }
+//         if (!info || typeof info[('rate' + rate.rate?.toString()) as keyof Info] === 'undefined') {
+//             return false;
+//         }
 
-// if(!dbRate){
-//     const res = await this.repository.update(rate);
-// }
+//         const dbRate =await this.repository.load(rateId);
+//         console.log(dbRate);
+
+//         if (dbRate) {
+//             const res = await this.repository.update(rate);
+//             if (res < 1) {
+//                 return false;
+//             }
+//         } else {
+//             const res = await this.repository.insert(rate);
+//             console.log("res" + res);
+
+//             if (res < 1) {
+//                 return false;
+//             }
+//             (info as any)['rate' + rate.rate?.toString()] += 1;
+//             const sumRate = info.rate1 +
+//                 info.rate2 * 2 +
+//                 info.rate3 * 3 +
+//                 info.rate4 * 4 +
+//                 info.rate5 * 5;
+
+//             const count = info.rate1 +
+//                 info.rate2 +
+//                 info.rate3 +
+//                 info.rate4 +
+//                 info.rate5;
+
+//             info.rate = sumRate / count;
+//             info.viewCount = count;
+//             this.infoRepository.update(info);
+//             return true;
+//         }
+//         return false;
 

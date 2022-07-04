@@ -52,7 +52,7 @@ export const CinemaReview = () => {
     }
 
     const searchResult = await rateService.search(cinemaRateSM, pageSize);
-    console.log(searchResult.list);
+    //console.log(searchResult.list);
     setRates(searchResult.list);
   }
 
@@ -74,7 +74,9 @@ export const CinemaReview = () => {
 
       let addRate = await rateService.rate(rate);
       console.log(addRate); 
-
+      storage.message('Your review is submited');
+      setIsOpenRateModal(false);
+      await load();
       if (addRate === false) {
         await rateService.update(rate);
         storage.message("Your review updated");
@@ -124,7 +126,7 @@ export const CinemaReview = () => {
               rates && rates.length > 0 &&
               (rates.map((value: Rate, index: number) => {
                 return <RateItem
-                  key={value.id}
+                  key={value.userId}
                   review={value.review ?? ''}
                   maxLengthReviewText={maxLengthReviewText}
                   rateTime={value.rateTime}

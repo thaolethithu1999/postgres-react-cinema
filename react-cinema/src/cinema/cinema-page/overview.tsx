@@ -31,14 +31,14 @@ export const CinemaOverview = () => {
   const load = async () => {
     const { id } = params;
     const currentCinema = await cinemaService.load(id || '');
-    console.log(currentCinema);
+    //console.log(currentCinema);
     
     if (currentCinema) {
       setCinema(currentCinema);
     }
   };
 
-  console.log(locationPath);
+  //console.log(locationPath);
 
   if (cinema && locationPath.pathname.split('/').length === 3) {
     return (
