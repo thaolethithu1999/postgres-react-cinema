@@ -33,6 +33,7 @@ export class LocationManager extends ViewManager<Location, string> implements Lo
       }
     });
   }
+
   async rate(rate: Rate): Promise<boolean> {
     const info = await this.infoRepository.load(rate.locationId);
     if (!info || typeof info[('rate' + rate.rate.toString()) as keyof LocationInfo] === 'undefined') {
@@ -70,6 +71,7 @@ export class RateManagaer extends ViewManager<Rate, string> implements RateServi
     super(repository);
   }
 }
+
 export function useLocationController(log: Log, db: Db): LocationController {
   const mapper = new PointMapper<Location>('geo', 'latitude', 'longitude');
   const builder = new SearchBuilder<Location, LocationFilter>(db, 'location', query, locationModel, mapper.fromPoint);

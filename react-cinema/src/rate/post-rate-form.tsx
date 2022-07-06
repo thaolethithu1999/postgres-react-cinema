@@ -40,7 +40,7 @@ export const PostRateForm = (props: Props) => {
   };
   const renderRateStar = (value: any) => {
     let list5 = Array(5);
-    list5 = list5.fill(<i />).map((item, index )=>{
+    list5 = list5.fill(<i />).map((_, index )=>{
       return (<i key={index}></i>)
     });
 

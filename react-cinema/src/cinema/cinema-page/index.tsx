@@ -114,8 +114,6 @@ export const CinemaPage = () => {
       });
   }
 
-  console.log(currentPath.pathname);
-
   return (
     <>
       <div className="profile view-container">

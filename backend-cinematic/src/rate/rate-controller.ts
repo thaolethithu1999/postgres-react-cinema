@@ -1,5 +1,5 @@
 import { Controller, handleError, Log, getStatusCode } from "express-ext";
-import { Rate, RateFilter, RateId, rateModel, RateRepository, RateService } from './rate';
+import { Rate, RateFilter, RateId, rateModel, RateRepository, RateService, UsefulRate, UsefulRateId } from './rate';
 import { Request, Response } from 'express';
 import { Search, Validator } from 'onecore';
 import { createValidator } from 'xvalidators';
@@ -14,6 +14,7 @@ export class RateController extends Controller<Rate, RateId, RateFilter>{
         this.load = this.load.bind(this);
         this.update = this.update.bind(this);
         this.rate = this.rate.bind(this);
+        this.setUseful = this.setUseful.bind(this);
         this.validator = createValidator<Rate>(rateModel);
         //console.log(JSON.stringify(this.keys))
     }
@@ -64,5 +65,26 @@ export class RateController extends Controller<Rate, RateId, RateFilter>{
         this.rateService.rate(rate).then(rs => {
             return res.json(rs).end();
         }).catch(err => handleError(err, res, this.log));
+    }
+
+
+
+    setUseful(req: Request, res: Response){
+        const usefulrate: UsefulRate = req.body;
+        console.log(usefulrate);
+        console.log(req.body);
+        
+        
+        // const id = req.params.id;
+        // const userId = req.params.userId;
+        // const author = req.params.author;
+        // usefulrate.reviewTime = new Date();
+
+        // const usefulrateId: UsefulRateId = { id, userId, author };
+        
+        // this.rateService.setUseful(usefulrateId).then(rs => {
+        //     return res.json(rs).end();
+        // }).catch(err => handleError(err, res, this.log));
+
     }
 }

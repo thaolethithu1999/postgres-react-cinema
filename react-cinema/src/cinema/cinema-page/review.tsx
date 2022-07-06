@@ -37,22 +37,21 @@ export const CinemaReview = () => {
 
   const load = async () => {
     const cinemaRateSM = new RateFilter();
-    //console.log(cinemaRateSM);
-     const userId: string | undefined = storage.getUserId();
-    // console.log(userId);
+    const userId: string | undefined = storage.getUserId();
     const { id } = params;
-    cinemaRateSM.id = id;
+    cinemaRateSM.id = id || '';
     cinemaRateSM.limit = pageSize;
     cinemaRateSM.sort = '-rateTime';
-
+    
     const currentCinema = await cinemaService.load(id || '');
-    console.log(currentCinema);
+    
     if (currentCinema) {
       setCinema(currentCinema);
     }
 
     const searchResult = await rateService.search(cinemaRateSM, pageSize);
-    //console.log(searchResult.list);
+    console.log(searchResult);
+    //const currentRate = await rateService.getRateByRateId(id, userId)
     setRates(searchResult.list);
   }
 
@@ -70,32 +69,28 @@ export const CinemaReview = () => {
       rate.review = data.review;
       rate.rateTime = new Date();
 
-      //console.log(rate);
-
       let addRate = await rateService.rate(rate);
-      console.log(addRate); 
       storage.message('Your review is submited');
       setIsOpenRateModal(false);
       await load();
-      if (addRate === false) {
-        await rateService.update(rate);
-        storage.message("Your review updated");
-        setIsOpenRateModal(false);
-        await load();
-      } else {
-        storage.message('Your review is submited');
-        setIsOpenRateModal(false);
-        await load();
-      }
+      // if (addRate === false) {
+      //   await rateService.update(rate);
+      //   storage.message("Your review updated");
+      //   setIsOpenRateModal(false);
+      //   await load();
+      // } else {
+      //   storage.message('Your review is submited');
+      //   setIsOpenRateModal(false);
+      //   await load();
+      // }
     } catch (err) {
       storage.alert('error');
-      console.log(err);
     }
   }
 
   const moreReview = async (e: any) => {
     e.preventDefault();
-    const cinemaRateSM = new CinemaRateFilter();
+    const cinemaRateSM = new RateFilter();
     const { id } = params;
     cinemaRateSM.id = id;
     cinemaRateSM.limit = pageSize + 3;
@@ -104,7 +99,7 @@ export const CinemaReview = () => {
     setRates(searchRates.list);
     setPageSize(pageSize + 3);
   };
-
+  
   if (cinema && window.location.pathname.includes('review')) {
     return (
       <>
@@ -124,7 +119,7 @@ export const CinemaReview = () => {
           {
             (
               rates && rates.length > 0 &&
-              (rates.map((value: Rate, index: number) => {
+              (rates.map((value: Rate) => {
                 return <RateItem
                   key={value.userId}
                   review={value.review ?? ''}

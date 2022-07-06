@@ -43,14 +43,14 @@ export const DetailStart = (rateInfo?: Rate) => {
     if (totalRate !== 0) {
       percent = value * 100 / totalRate;
     }
-    const numberStar = Array(i).fill(<i />).map((item, index )=>{
+    const numberStar = Array(i).fill(<i />).map((_, index )=>{
       return (<i key={index}></i>)
     });
     const startDiv = <div className='rv-star'>{numberStar}</div>;
     const endDiv = <div key={i} className='progress'>
       <span style={{ width: `${percent}%` }} />
     </div>;
-    const rateDiv = <div className='detail'>{startDiv}{endDiv}</div>;
+    const rateDiv = <div key={i} className='detail'>{startDiv}{endDiv}</div>;
     list.push(rateDiv);
   }
   return list;
@@ -78,7 +78,7 @@ export const DetailStartFilm = (rateInfo?: RateFilm) => {
     if (totalRate !== 0) {
       percent = value * 100 / totalRate;
     }
-    const numberStar = Array(i).fill(<i />).map((item, index )=>{
+    const numberStar = Array(i).fill(<i />).map((_, index )=>{
       return (<i key={index}></i>)
     });
     const startDiv = <div className='rv-star'>{numberStar}</div>;

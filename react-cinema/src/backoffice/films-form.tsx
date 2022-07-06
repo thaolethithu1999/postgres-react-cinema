@@ -6,7 +6,6 @@ import Pagination from 'reactx-pagination';
 import { inputSearch } from 'uione';
 import { useFilm } from './service';
 import { Film, FilmFilter } from './service/film';
-import LocationCarousel from './carousel-film';
 
 interface FilmSearch extends SearchComponentState<Film, FilmFilter> {
   statusList: ValueText[];

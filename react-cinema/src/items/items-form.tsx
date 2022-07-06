@@ -23,7 +23,7 @@ const initialState: ItemSearch = {
   statusList: [],
   filter: itemFilter,
 };
-export const MyItems = () => {
+export const ItemsForm = () => {
   const navigate = useNavigate();
   const refForm = React.useRef();
   const {
@@ -48,7 +48,7 @@ export const MyItems = () => {
 
   const edit = (e: React.MouseEvent<HTMLElement, MouseEvent>, id: string) => {
     e.preventDefault();
-    navigate(`edit/${id}`);
+    navigate(`${id}`);
   };
 
   const add = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
@@ -216,7 +216,6 @@ export const MyItems = () => {
               {list &&
                 list.length > 0 &&
                 list.map((item: any, i: number) => {
-                  console.log(i);
                   return (
                     <li
                       key={i}

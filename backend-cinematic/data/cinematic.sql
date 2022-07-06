@@ -17,6 +17,14 @@ create table films(
   updatedat timestamp
 );
 
+create table if not exists usefulfilm(
+  id character varying(255) ,
+  author character varying(255),
+  createdat timestamp,
+  updatedat timestamp,
+  PRIMARY KEY (id, author)
+)
+
 --drop table categories
 create table categories(
   categoryid character varying(40) primary key,
@@ -130,13 +138,14 @@ CREATE TABLE filmInfo (
   viewCount integer DEFAULT 0
 );
 
-CREATE TABLE filmRate (
-  id varchar(255) PRIMARY KEY,
-  userId varchar(255),
-  filmId varchar(255),
+CREATE TABLE filmrate (
+  id varchar(255),
+  userid varchar(255),
   rate integer DEFAULT 0,
   rateTime date,
-  review: varchar(255)
+  review varchar(255),
+  usefulcount integer DEFAULT 0,
+  PRIMARY KEY (id , userid)
 );
 
 CREATE TABLE info(
@@ -160,6 +169,13 @@ CREATE TABLE rates(
   primary key(id, userid);
 )
 
+CREATE TABLE usefulrates(
+	id character varying(255),
+	userid character varying(255),
+	author character varying(255),
+	reviewtime timestamp,
+	primary key(id, userid, author)
+)
 
 INSERT INTO categories (categoryid,categoryname,status) VALUES('adventure','adventure','A');
 INSERT INTO categories (categoryid,categoryname,status) VALUES ('animated','animated','A');

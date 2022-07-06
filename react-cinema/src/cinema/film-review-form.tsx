@@ -92,7 +92,8 @@ export const ReviewFilm = ({ film}: Props) => {
             (
               rates && rates.length > 0 &&
               (rates.map((value: FilmRate, index: number) => {
-                return <RateItemFilm review={value.review ?? ''} maxLengthReviewText={maxLengthReviewText} rateTime={value.rateTime} rate={value.rate || 1} resource={resource} ></RateItemFilm>;
+                
+                return <RateItemFilm data={value} maxLengthReviewText={maxLengthReviewText} resource={resource}></RateItemFilm>;
               }) || '')
             )}
         </ul>

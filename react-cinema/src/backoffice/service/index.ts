@@ -3,7 +3,7 @@ import { HttpRequest } from 'axios-core';
 import { options, storage } from 'uione';
 import { CategoryClient, CategoryService } from './category';
 // import { CinemaClient, CinemaService } from './cinema';
-import { FilmClient, FilmService, FilmRateService, FilmRateClient } from './film';
+import { FilmClient, FilmService } from './film';
 import { LocationClient } from './location';
 import { LocationRateClient } from './location-rate';
 import { LocationRateService } from './location-rate/location-rate';
@@ -26,7 +26,6 @@ export interface Config {
   cinema_url: string;
   category_url: string;
   film_url: string;
-  film_rate_url: string;
   role_url: string;
   privilege_url: string;
   audit_log_url: string;
@@ -39,7 +38,6 @@ class ApplicationContext {
   cinemaService?: CinemaService;
   categoryService?: CategoryService;
   filmService?: FilmService;
-  filmRateService?: FilmRateService;
   masterDataService?: MasterDataService;
   locationService?: LocationService;
   locationRateService?: LocationRateService;
@@ -84,14 +82,6 @@ class ApplicationContext {
     return this.filmService;
   }
 
-  getFilmRateService(): FilmRateService {
-    if (!this.filmRateService) {
-      const c = this.getConfig();
-      this.filmRateService = new FilmRateClient(httpRequest, c.film_rate_url);
-    }
-    return this.filmRateService;
-  }
-
   getCategoryService(): CategoryService {
     if (!this.categoryService) {
       const c = this.getConfig();
@@ -133,10 +123,6 @@ export function useCategory(): CategoryService {
 }
 export function useFilm(): FilmService {
   return context.getFilmService();
-}
-
-export function useFilmRate(): FilmRateService {
-  return context.getFilmRateService();
 }
 
 export function useMasterData(): MasterDataService {

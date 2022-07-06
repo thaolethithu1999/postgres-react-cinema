@@ -29,7 +29,9 @@ import { CategoriesForm } from './backoffice/categories-form';
 import { CategoryForm } from './backoffice/category-form';
 
 import { FilmForm } from './backoffice/film-form';
-import { FilmsForm } from './backoffice/films-form';
+import { FilmsForm } from './backoffice/films-form'; 
+import { FilmForm as Film } from './film/film-form';
+import { FilmsForm as Films } from './film/films-form'; 
 import { LocationForm } from './backoffice/location-form';
 import { LocationsForm } from './backoffice/locations-form';
 import { LocationPage } from './location/location-page';
@@ -86,6 +88,8 @@ import { ArticleForm } from './article/article';
 import { MyItems } from './my-items/items-form';
 import { MyItem } from './my-items/item-form';
 import { Test } from './rate/test-rate';
+import { ItemsForm } from './items/items-form';
+import { ItemForm } from './items/item-form';
 let isInit = false;
 export function init() {
   if (isInit) {
@@ -164,13 +168,18 @@ function App() {
           <Route path='backoffice/categories' element={<CategoriesForm />} />
           <Route path='backoffice/categories/edit/:id' element={<CategoryForm />} />
           <Route path='backoffice/categories/add' element={<CategoryForm />} />
+
           <Route path='backoffice/films' element={<FilmsForm />} />
           <Route path='backoffice/films/add' element={<FilmForm />} />
           <Route path='backoffice/films/edit/:id' element={<FilmForm />} />
+          <Route path='films' element={<Films />} />
+          <Route path='films/edit/:id' element={<Film />} />
+
           <Route path='backoffice/location' element={<LocationsForm />} />
           <Route path='backoffice/location/edit/:id' element={<LocationForm />} />
           <Route path='backoffice/location/add' element={<LocationForm />} />
           <Route path='backoffice/location/edit/:id/upload' element={<LocationUpload />} />
+
           <Route path='location' element={<LocationsPage />} />
           <Route path='location/add' element={<LocationForm />} />
           <Route path='location/edit/:id' element={<LocationForm />} />
@@ -187,9 +196,12 @@ function App() {
           <Route path='article' element={<Articles />} />
           <Route path="article/edit/:id" element={<ArticleForm />} />
 
-          <Route path='item' element={<MyItems />} />
-          <Route path="item/add" element={<MyItem />} />
-          <Route path="item/edit/:id" element={<MyItem />} />
+          <Route path='my-item' element={<MyItems />} />
+          <Route path="my-item/add" element={<MyItem />} />
+          <Route path="my-item/edit/:id" element={<MyItem />} />
+
+          <Route path="item" element={<ItemsForm />} />
+          <Route path="item/:id" element={<ItemForm />} />
           {/* <Route path={'upload/:id/image'} element={<UploadFile />} />
           <Route path={'upload'} element={<UploadFile />} /> */}
         </Route>

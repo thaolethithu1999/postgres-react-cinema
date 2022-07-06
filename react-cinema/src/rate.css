@@ -273,3 +273,6 @@ ul.list-view.row > li.col.review-custom {
   color: #BFBFBF;
 }
 
+.useful-button{
+  cursor: pointer;
+}

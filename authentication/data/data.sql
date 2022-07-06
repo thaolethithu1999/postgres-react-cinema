@@ -57,3 +57,76 @@ insert into searchs(item) values('friend');
 insert into searchs(item) values('room mate');
 insert into searchs(item) values('basketball team');
 -- insert into skills(skill) values ('java') on conflict(skill) do nothing
+
+create table articles (
+  id varchar(40) not null,
+  name varchar(120),
+  type varchar(40),
+  description varchar(120),
+  content varchar(120),
+  tags varchar(40),
+  status varchar(120),
+  authorId varchar(40)
+);
+
+insert into articles(id, name, type, description, content, tags, status, authorId) values ('w1', 'John Cena', 'wrestler', 'wwe-superstar', 'world heavyweight chapm', 'team1', 'winner','01');
+insert into articles(id, name, type, description, content, tags, status, authorId) values ('w2', 'Randy Orton', 'wrestler', 'wwe-superstar', 'wwe chapm', 'team2', 'winner','02');
+insert into articles(id, name, type, description, content, tags, status, authorId) values ('w3', 'Mark Henry', 'wrestler', 'wwe-superstar', 'tagteam chapm', 'team2', 'winner','03');
+insert into articles(id, name, type, description, content, tags, status, authorId) values ('w4', 'Under Taker', 'wrestler', 'wwe-superstar', 'tagteam chapm', 'team2', 'winner','04');
+
+
+
+create table AppreciationItemReply (
+  id varchar(20) not null,
+  authorId varchar(40),
+  itemId varchar(40),
+  title varchar(120),
+  description varchar(120),
+  createdAt  date
+);
+
+insert into AppreciationItemReply(id, authorId, itemId, title, description) values ("01", "01", "w1","good!!!","interest wrestler");
+
+
+create table if not exists appreciation (
+  id varchar(40) not null,
+  authorid varchar(40),
+  title varchar(120),
+  description varchar(120),
+  usefulcount integer,
+  replycount integer,
+  createdat date,
+  userid varchar(40),
+  primary key (id)
+);
+
+create table if not exists appreciationreply (
+  id varchar(40) not null,
+  appreciationid varchar(40),
+  title varchar(120),
+  description varchar(120),
+  createdat varchar(120),
+  updateat varchar(120),
+  authorid varchar(40),
+  usefulcount integer,
+  replycount integer,
+  userid varchar(40),
+  primary key (id)
+);
+
+create table if not exists usefulappreciation (
+  id varchar(40) not null,
+  appreciationid varchar(40),
+  userid varchar(40),
+  createdat date,
+  updateat date,
+  primary key (id)
+);
+
+create table if not exists comments(
+  id varchar(255) not null,
+  author varchar(255),
+  comment text,
+  createdat date,
+)
+

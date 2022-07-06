@@ -154,7 +154,7 @@ export const MyItem = () => {
               placeholder={resource.description} />
           </label>
           <label className='col s12 m6'>
-            {resource.description}
+            {resource.status}
             <input
               type='text'
               id='status'

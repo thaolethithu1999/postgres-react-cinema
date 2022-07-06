@@ -35,12 +35,12 @@ export interface FilmInfo{
 }
 
 export interface FilmRate {
-  id?: string;
+  id: string;
   filmId: string;
   userId: string;
   rate: number;
-  rateTime?: Date;
-  review?: string;
+  rateTime: Date;
+  review: string;
 }
 
 export interface FilmRateFilter extends Filter {

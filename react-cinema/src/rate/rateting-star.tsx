@@ -71,7 +71,6 @@ export const RatingStarFilm = ({ setIsOpenRateModal, setVoteStar, ratingText }: 
     setRateClassName(rateClass);
   };
   const handleOnMouseLeave = () => {
-    console.log(1232142);
     
     setRateClassName(currClass);
   };
