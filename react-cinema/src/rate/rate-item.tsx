@@ -8,15 +8,21 @@ import like from '../assets/images/like.svg';
 import likeFilled from '../assets/images/like_filled.svg';
 import { OnClick } from 'react-hook-core';
 import { storage } from 'uione';
+import { Rate } from './service/rate';
+import { useRate } from './service/index';
 
 interface Props {
-  review: string | '';
+  data: Rate;
   maxLengthReviewText: number;
-  rateTime: Date | undefined;
-  rate: number;
   resource: StringMap;
+  usefulReaction?: any;
+  removeUsefulReaction?: any;
 }
-export const RateItem = ({ review, maxLengthReviewText, rateTime, rate, resource }: Props) => {
+export const RateItem = ({ data, maxLengthReviewText, resource, usefulReaction, removeUsefulReaction }: Props) => {
+  const rateService = useRate();
+  const [exist, setExist] = useState<boolean>(false);
+  const author: string | undefined = storage.getUserId();
+
   const renderReviewStar = (value: any) => {
     const starList = Array(5).fill(<i />).map((item, index) => {
       return (<i key={index}></i>)
@@ -24,8 +30,6 @@ export const RateItem = ({ review, maxLengthReviewText, rateTime, rate, resource
     const classes = Array.from(Array(value).keys()).map(i => `star-${i + 1}`).join(' ');
     return <div className={`rv-star2 ${classes}`}>{starList}</div>;
   };
-  //console.log(renderReviewStar(rate));
-
 
   const formatReviewText = (text: string) => {
     if (text && text.length > maxLengthReviewText) {
@@ -37,15 +41,17 @@ export const RateItem = ({ review, maxLengthReviewText, rateTime, rate, resource
       return <span>{resource.review} {text}</span>;
     }
   };
+  
   return (
     <li className='col s12 m12 l12 review-custom'>
       <section className='card'>
-        <p>{moment(rateTime).format('DD/MM/YYYY')}</p>
-        {renderReviewStar(rate)}
-        {formatReviewText(review ?? '')}
+        <p>{moment(data.rateTime).format('DD/MM/YYYY')}</p>
+        {renderReviewStar(data.rate)}
+        {formatReviewText(data.review ?? '')}
         <p>
-          {<img alt='' className='useful-button' width={20} src={like}  />}
-          { 0} </p>
+          {/* {data.isUseful ? <img alt='' className='useful-button' width={20} src={likeFilled} onClick={(e) => usefulReaction(e, data)} /> : <img alt='' className='useful-button' width={20} src={like} onClick={(e) => removeUsefulReaction(e, data)} />} */}
+          {<img alt='' className='useful-button' width={20} src={like} onClick={(e) => usefulReaction(e, data)} />}
+          {data.usefulCount ? data.usefulCount : 0}</p>
       </section>
     </li>
   );
@@ -60,6 +66,7 @@ interface PropsRate {
 export const RateItemFilm = ({ data, maxLengthReviewText, resource }: PropsRate) => {
   const [rate, setRate] = useState<FilmRate>();
   const FilmRateService = useFilmRate();
+
   useEffect(() => {
     checkUseful(data);
   }, []);
@@ -115,7 +122,7 @@ export const RateItemFilm = ({ data, maxLengthReviewText, resource }: PropsRate)
     }
   };
   console.log(rate);
-  
+
   if (rate) {
     return (
       <li className='col s12 m12 l12 review-custom'>
@@ -123,7 +130,6 @@ export const RateItemFilm = ({ data, maxLengthReviewText, resource }: PropsRate)
           <p>{moment(rate.rateTime).format('DD/MM/YYYY')}</p>
           {renderReviewStar(rate.rate)}
           {formatReviewText(rate.review ?? '')}
-
           <p>
             {rate.isUseful ? <img alt='' className='useful-button' width={20} src={likeFilled} onClick={(e) => postUseful(e, rate)} /> : <img alt='' className='useful-button' width={20} src={like} onClick={(e) => postUseful(e, rate)} />}
             {rate.usefulCount ? rate.usefulCount : 0} </p>

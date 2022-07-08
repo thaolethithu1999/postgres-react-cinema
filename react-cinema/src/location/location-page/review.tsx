@@ -30,11 +30,11 @@ export const Review = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   console.log("resource");
   console.log(resource);
-  
+
   const load = async () => {
     const locationRateSM = new LocationRateFilter();
     console.log(locationRateSM);
-    
+
     const { id } = params;
     locationRateSM.locationId = id;
     locationRateSM.limit = pageSize;
@@ -42,7 +42,7 @@ export const Review = () => {
     const locationObj = await locationService.load(id || '');
     const searchResult = await locationRateService.search(locationRateSM);
     console.log(searchResult);
-    
+
     setRates(searchResult.list);
     if (locationObj) {
       setLocation(locationObj);
@@ -79,7 +79,7 @@ export const Review = () => {
       locationRate.review = data.review;
 
       console.log(location);
-      
+
       await locationService.rateLocation(locationRate);
       storage.message('Your review is submited');
       setIsOpenRateModal(false);
@@ -114,10 +114,8 @@ export const Review = () => {
               rates && rates.length > 0 &&
               (rates.map((value: LocationRate, index: number) => {
                 return <RateItem
-                  review={value.review ?? ''}
+                  data={value}
                   maxLengthReviewText={maxLengthReviewText}
-                  rateTime={value.rateTime}
-                  rate={value.rate || 1}
                   resource={resource}></RateItem>;
               }) || '')
             )}

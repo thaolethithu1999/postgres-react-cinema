@@ -1,7 +1,7 @@
 import { HttpRequest } from 'axios-core';
 import { log } from 'console';
 import { Client } from 'web-clients';
-import { Rate, RateFilter, RateService, rateModel } from './rate';
+import { Rate, RateFilter, RateService, rateModel, UsefulRateId } from './rate';
 
 export * from './rate';
 
@@ -9,13 +9,15 @@ export class RateClient extends Client<Rate, string, RateFilter> implements Rate
   constructor(http: HttpRequest, url: string) {
     super(http, url, rateModel);
     this.searchGet = true;
-    this.getRateByRateId = this.getRateByRateId.bind(this);
+    //this.getRate = this.getRate.bind(this);
+    this.setUseful = this.setUseful.bind(this);
+    this.removeUseful = this.removeUseful.bind(this);
   }
-
-  getRateByRateId(id: string, userId: string): Promise<Rate[]> {
-    const url = `${this.serviceUrl}/${id}/${userId}`;
-    return this.http.get(url);
-  }
+  // /rates/:id/:userId
+  // getRate(id: string, userId: string): Promise<Rate[]> {
+  //   const url = `${this.serviceUrl}/${id}/${userId}`;
+  //   return this.http.get(url);
+  // }
 
   protected postOnly(s: Rate): boolean {
     return true;
@@ -26,9 +28,19 @@ export class RateClient extends Client<Rate, string, RateFilter> implements Rate
     return this.http.post(url, obj);
   }
 
-  update(obj: Rate): Promise<any> {
-    const url = `${this.serviceUrl}/${obj.id}/${obj.userId}`;
-    return this.http.put(url, obj);
+  setUseful(id: string, userId: string, author: string, ctx?: any): Promise<number> {
+    const url = `${this.serviceUrl}/useful/${id}/${userId}/${author}`;
+    console.log(url);
+    
+    return this.http.post(url, ctx);
   }
+
+  removeUseful(id: string, userId: string, author: string, ctx?: any): Promise<number>{
+    const url = `${this.serviceUrl}/useful/${id}/${userId}/${author}`;
+    console.log(url);
+    
+    return this.http.delete(url);
+  }
+
 }
 

@@ -11,6 +11,8 @@ export interface Rate extends Tracking {
     rate?: number;
     rateTime?: Date;
     review?: string;
+    usefulCount?: number;
+    isUseful?: boolean;
 }
 
 export class RateFilter implements Filter {
@@ -26,12 +28,36 @@ export class RateFilter implements Filter {
   rate?: number;
   rateTime?: Date;
   review?: string;
+  usefulCount?: number;
   limit?: number;
 }
 
+export interface UsefulRateId {
+  id: string;
+  userId: string;
+  author: string;
+}
+
+export interface UsefulRate {
+  id: string;
+  userId: string;
+  author: string;
+  reviewTime: Date;
+}
+
+export interface UsefulRateFilter extends Filter {
+  id?: string;
+  userId?: string;
+  author?: string;
+  reviewTime?: Date;
+}
+
 export interface RateService extends Service<Rate, string , RateFilter>{
-  getRateByRateId(id: string, userId: string): Promise<Rate[]>;
+ // getRate(id: string, userId: string): Promise<Rate[]>;
   rate(obj: Rate): Promise<any>;
+  setUseful(id: string, userId: string, author: string, ctx?: any): Promise<number>;
+  removeUseful(id: string, userId: string, author: string, ctx?: any): Promise<number>;
+
 }
 
 export const rateModel: Attributes = {
@@ -54,4 +80,25 @@ export const rateModel: Attributes = {
     review: {
         q: true,
     },
+    usefulCount: {
+      type: 'integer'
+    }
+}
+
+export const usefulRateModel: Attributes = {
+  id: {
+    key: true,
+    required: true
+  },
+  userId: {
+    key: true,
+    required: true
+  },
+  author: {
+    key: true,
+    required: true
+  },
+  reviewTime: {
+    type: 'datetime',
+  },
 }

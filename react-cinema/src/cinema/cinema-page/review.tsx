@@ -15,25 +15,26 @@ import { Rate } from '../../rate/service/rate';
 import { RateFilter } from '../../rate/service/rate/rate';
 import './rate.css';
 
+import RateList from './rateList';
+
 ReactModal.setAppElement('#root');
 
 export const CinemaReview = () => {
   const params = useParams();
   const [cinema, setCinema] = useState<Cinema>();
-  const [rates, setRates] = useState<Rate[]>([]);
   const [resource] = useState(storage.resource().resource());
   const [maxLengthReviewText] = useState(100);
   const [isOpenRateModal, setIsOpenRateModal] = useState(false);
   const [voteStar, setVoteStar] = useState<number>();
   const [pageSize, setPageSize] = useState(3);
+  const [rates, setRates] = useState<Rate[]>();
   const cinemaService = useCinema();
-  //const cinemaRateService = getCinemaRates();
   const rateService = useRate();
 
 
   useEffect(() => {
     load();
-  }, [])
+  }, []);
 
   const load = async () => {
     const cinemaRateSM = new RateFilter();
@@ -42,19 +43,13 @@ export const CinemaReview = () => {
     cinemaRateSM.id = id || '';
     cinemaRateSM.limit = pageSize;
     cinemaRateSM.sort = '-rateTime';
-    
     const currentCinema = await cinemaService.load(id || '');
-    
     if (currentCinema) {
       setCinema(currentCinema);
     }
-
     const searchResult = await rateService.search(cinemaRateSM, pageSize);
-    console.log(searchResult);
-    //const currentRate = await rateService.getRateByRateId(id, userId)
     setRates(searchResult.list);
-  }
-
+  };
 
   const postReview = async (data: DataPostRate): Promise<void> => {
     try {
@@ -73,32 +68,10 @@ export const CinemaReview = () => {
       storage.message('Your review is submited');
       setIsOpenRateModal(false);
       await load();
-      // if (addRate === false) {
-      //   await rateService.update(rate);
-      //   storage.message("Your review updated");
-      //   setIsOpenRateModal(false);
-      //   await load();
-      // } else {
-      //   storage.message('Your review is submited');
-      //   setIsOpenRateModal(false);
-      //   await load();
-      // }
     } catch (err) {
       storage.alert('error');
     }
   }
-
-  const moreReview = async (e: any) => {
-    e.preventDefault();
-    const cinemaRateSM = new RateFilter();
-    const { id } = params;
-    cinemaRateSM.id = id;
-    cinemaRateSM.limit = pageSize + 3;
-    cinemaRateSM.sort = '-rateTime';
-    const searchRates = await rateService.search(cinemaRateSM, pageSize + 3);
-    setRates(searchRates.list);
-    setPageSize(pageSize + 3);
-  };
   
   if (cinema && window.location.pathname.includes('review')) {
     return (
@@ -115,27 +88,7 @@ export const CinemaReview = () => {
             setIsOpenRateModal={setIsOpenRateModal}
             setVoteStar={(setVoteStar)} />
         </div>
-        <ul className='row list-view'>
-          {
-            (
-              rates && rates.length > 0 &&
-              (rates.map((value: Rate) => {
-                return <RateItem
-                  key={value.userId}
-                  review={value.review ?? ''}
-                  maxLengthReviewText={maxLengthReviewText}
-                  rateTime={value.rateTime}
-                  rate={value.rate || 1}
-                  resource={resource}/>;
-              }) || '')
-            )
-          }
-        </ul>
-        <div className='col s12 m12 l12 more-reviews-div'>
-          <span className='more-reviews' onClick={moreReview}>
-            <b>MORE REVIEWS</b>
-          </span>
-        </div>
+        <RateList pageSize={pageSize} setPageSize={setPageSize}  load={load} rates={rates} setRates={setRates} />
         <PostRateForm
           rate={voteStar ?? 1}
           name={cinema.name}
