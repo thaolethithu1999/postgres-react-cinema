@@ -2,13 +2,14 @@ import { attr, Log } from 'express-ext';
 import { Manager, Search } from 'onecore';
 import { buildCountQuery, buildToInsert, buildToInsertBatch, DB, postgres, Repository, SearchBuilder, Service, Statement } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
-import { Rate, RateFilter, RateId, rateModel, RateRepository, RateService, Info, infoModel, InfoRepository, UsefulRateRepository, UsefulRate, usefulRateModel, UsefulRateFilter, UsefulRateId, UsefulRateService } from './rate';
+import { Rate, RateFilter, RateId, rateModel, RateRepository, RateService, Info, infoModel, InfoRepository, UsefulRateRepository, UsefulRate, usefulRateModel, UsefulRateFilter, UsefulRateId, UsefulRateService, appreciationModel, AppreciationRepository } from './rate';
 import { RateController } from './rate-controller';
 import { SqlRateRepository } from './sql-rate-repository';
 import { SqlInfoRepository } from './sql-info-repository';
 import { buildToSave } from 'pg-extension';
 import { SqlUsefulRateRepository } from './sql-useful-repository';
 import { buildQuery } from './query';
+import { SqlAppreciationRepository } from './sql-appreciation-repository';
 export * from './rate-controller';
 export * from './rate';
 export { RateController };
@@ -17,39 +18,40 @@ export class RateManager extends Manager<Rate, RateId, RateFilter> implements Ra
     constructor(search: Search<Rate, RateFilter>,
         public repository: RateRepository,
         private infoRepository: InfoRepository,
-        private usefulRepository: UsefulRateRepository) {
+        private usefulRepository: UsefulRateRepository,
+        private appreciationRepository: AppreciationRepository) {
         super(search, repository);
         this.rate = this.rate.bind(this);
         this.update = this.update.bind(this);
         this.save = this.save.bind(this);
     }
-    getRate(id: string, userId: string): Promise<Rate | null> {
-        return this.repository.getRate(id, userId);
+    getRate(id: string, author: string): Promise<Rate | null> {
+        return this.repository.getRate(id, author);
     }
-    setUseful(id: string, userId: string, author: string): Promise<number> {
-        return this.usefulRepository.getUseful(id, userId, author).then(exist => {
+    setUseful(id: string, author: string, userId: string,): Promise<number> {
+        return this.usefulRepository.getUseful(id, author, userId).then(exist => {
             if (exist) {
                 return 0;
             } else {
                 const useful: UsefulRate = { id, userId, author, reviewTime: new Date() };
-                console.log({useful});
-                
+                console.log({ useful });
+
                 return this.usefulRepository.save(useful).then(res => {
                     if (res > 0) {
-                        return this.repository.increaseUsefulCount(id, userId);                       
+                        return this.repository.increaseUsefulCount(id, author);
                     } else {
                         return 0;
                     }
                 })
             }
         });
-    }
-    removeUseful(id: string, userId: string, author: string): Promise<number> {
-        return this.usefulRepository.getUseful(id, userId, author).then(exist => {
+    }  
+    removeUseful(id: string, author: string, userId: string,): Promise<number> {
+        return this.usefulRepository.getUseful(id, author, userId).then(exist => {
             if (exist) {
-                return this.usefulRepository.removeUseful(id, userId, author).then(res => {
+                return this.usefulRepository.removeUseful(id, author, userId).then(res => {
                     if (res > 0) {
-                        return this.repository.decreaseUsefulCount(id, userId);
+                        return this.repository.decreaseUsefulCount(id, author);
                     } else {
                         return 0;
                     }
@@ -60,11 +62,6 @@ export class RateManager extends Manager<Rate, RateId, RateFilter> implements Ra
         });
     }
     async rate(rate: Rate): Promise<boolean> {
-       
-        // if (rate.usefulCount) {
-        //     rate.usefulCount = 0;
-        // }
-        console.log(rate);
         let info = await this.infoRepository.load(rate.id);
         if (!info) {
             info = {
@@ -78,9 +75,7 @@ export class RateManager extends Manager<Rate, RateId, RateFilter> implements Ra
                 'viewCount': 0,
             };
         }
-        const exist = await this.repository.getRate(rate.id, rate.userId);
-        console.log(exist);
-        
+        const exist = await this.repository.getRate(rate.id, rate.author);
         const r = (exist ? exist.rate : 0);
         (info as any)['rate' + rate.rate?.toString()] += 1;
         const sumRate = info.rate1 +
@@ -105,16 +100,16 @@ export class RateManager extends Manager<Rate, RateId, RateFilter> implements Ra
 }
 
 export function useRateService(db: DB, mapper?: TemplateMap): RateService {
-    const query = useQuery('rate', mapper, rateModel, true);
+    const query = useQuery('rates', mapper, rateModel, true);
     const builder = new SearchBuilder<Rate, RateFilter>(db.query, 'rates', rateModel, db.driver, query);
     const repository = new SqlRateRepository(db, 'rates', buildToSave);
     const infoRepository = new SqlInfoRepository(db, 'info', buildToSave);
-    const usefulRateRepository = new SqlUsefulRateRepository(db, 'usefulrates', usefulRateModel  , buildToSave);
-    return new RateManager(builder.search, repository, infoRepository, usefulRateRepository);
+    const usefulRateRepository = new SqlUsefulRateRepository(db, 'usefulrates', usefulRateModel, buildToSave);
+    const appreciationRepository = new SqlAppreciationRepository(db, 'appreciation', buildToSave);
+    return new RateManager(builder.search, repository, infoRepository, usefulRateRepository, appreciationRepository);
 }
-
+ 
 export function useRateController(log: Log, db: DB, mapper?: TemplateMap): RateController {
     return new RateController(log, useRateService(db, mapper));
 }
 
-  

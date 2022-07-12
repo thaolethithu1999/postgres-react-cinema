@@ -56,8 +56,6 @@ export const AppreciationModel: Attributes = {
   }
 };
 
-//////////
-
 export interface AppreciationReplyFilter extends Filter {
   id?: string;
   authorId?: string;
@@ -80,7 +78,7 @@ export interface AppreciationReply {
   usefulCount: number;
   createdAt?: Date;
   updatedAt?: Date;
-  isUseful?:boolean
+  isUseful?:boolean 
   appreciationId?: string;
 }
 export interface AppreciationReplyRepository extends Repository<AppreciationReply, string> {

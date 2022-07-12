@@ -4,7 +4,6 @@ import { UsefulAppreciation, UsefulAppreciationModel, UsefulAppreciationReposito
 export class SqlUsefulAppreciationRepository extends Repository<UsefulAppreciation, string> implements UsefulAppreciationRepository {
   constructor(db: DB) {
     super(db, 'usefulappreciation', UsefulAppreciationModel);
-    // this.
   }
 
   async deleteUseful(appreciationId: string, userId: string, ctx?: any): Promise<boolean> {

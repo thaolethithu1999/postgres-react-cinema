@@ -1,17 +1,18 @@
-import { Attributes, Filter, Service } from 'onecore';
-
-export interface Item {
-  id: string;
-  title?: string;
-  description?: string;
-  status?: string
-}
+import { Attributes, Filter, Service, Tracking, Repository } from 'onecore';
 
 export interface ItemFilter extends Filter {
   id: string;
-  title?: string;
+  title: string;
+  status: string;
+  description: string;
+  categories: string[];
+}
+export interface Item extends Tracking {
+  id: string;
+  title: string;
+  status: string;
   description?: string;
-  status?: string;
+  categories: string[];
 }
 
 export const itemModel: Attributes = {
@@ -27,13 +28,15 @@ export const itemModel: Attributes = {
   },
   description: {
     length: 100,
-    required: true,
     q: true
   },
   status: {
     length: 100,
     required: true,
     q: true
+  },
+  categories: {
+    type: 'primitives',
   }
 };
 

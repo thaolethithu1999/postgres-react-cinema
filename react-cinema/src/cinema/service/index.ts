@@ -10,12 +10,12 @@ import { LocationRateService } from './location-rate/location-rate';
 import { LocationService } from './location/location';
 import { MasterDataClient, MasterDataService } from './master-data';
 
-import { CinemaClient} from './cinema';
+import { CinemaClient } from './cinema';
 import { CinemaRateService } from './cinema-rate/cinema-rate';
 import { CinemaRateClient } from './cinema-rate';
-import { CinemaService} from '../service/cinema/cinema';
+import { CinemaService } from '../service/cinema/cinema';
 import { useState } from 'react';
-
+import { RateClient, rateModel, RateService } from './rate';
 
 export * from './cinema';
 export * from './category';
@@ -31,8 +31,8 @@ export interface Config {
   audit_log_url: string;
   location_backoffice_url: string;
   location_rate_url: string;
-  //
   cinema_rate_url: string;
+  rate_url: string;
 }
 class ApplicationContext {
   cinemaService?: CinemaService;
@@ -42,8 +42,9 @@ class ApplicationContext {
   masterDataService?: MasterDataService;
   locationService?: LocationService;
   locationRateService?: LocationRateService;
-  //add
   cinemaRateService?: CinemaRateService;
+  rateService?: RateService;
+
 
   constructor() {
     this.getConfig = this.getConfig.bind(this);
@@ -52,11 +53,19 @@ class ApplicationContext {
     this.getCategoryService = this.getCategoryService.bind(this);
     this.getFilmService = this.getFilmService.bind(this);
     this.getLocationService = this.getLocationService.bind(this);
-    //add
     this.getCinemaService = this.getCinemaService.bind(this);
+    this.getRateService = this.getRateService.bind(this);
   }
   getConfig(): Config {
     return storage.config();
+  }
+
+  getRateService(): RateService {
+    if (!this.rateService) {
+      const c = this.getConfig();
+      this.rateService = new RateClient(httpRequest, c.rate_url);
+    }
+    return this.rateService;
   }
 
   getCinemaService(): CinemaService {
@@ -66,9 +75,9 @@ class ApplicationContext {
     }
     return this.cinemaService;
   }
-  //add
+
   getCinemaRateService(): CinemaRateService {
-    if(!this.cinemaRateService) {
+    if (!this.cinemaRateService) {
       const c = this.getConfig();
       this.cinemaRateService = new CinemaRateClient(httpRequest, c.cinema_rate_url, c.cinema_url)
     }
@@ -105,6 +114,7 @@ class ApplicationContext {
     }
     return this.masterDataService;
   }
+  
   getLocationService(): LocationService {
     if (!this.locationService) {
       const c = this.getConfig();
@@ -117,12 +127,15 @@ class ApplicationContext {
 
 export const context = new ApplicationContext();
 
+export function useRate(): RateService {
+  return context.getRateService();
+}
+
 export function useCinema(): CinemaService {
   const [service] = useState(() => context.getCinemaService());
-  //return context.getCinemaService();
   return service;
 }
-//add
+
 export function getCinemaRates(): CinemaRateService {
   return context.getCinemaRateService();
 }

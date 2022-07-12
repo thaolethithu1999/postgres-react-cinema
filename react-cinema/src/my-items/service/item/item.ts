@@ -4,7 +4,8 @@ export interface Item {
   id: string;
   title?: string;
   description?: string;
-  status?: string
+  status?: string;
+  categories: string[];
 }
 
 export interface ItemFilter extends Filter {
@@ -12,6 +13,7 @@ export interface ItemFilter extends Filter {
   title?: string;
   description?: string;
   status?: string;
+  categories: string[];
 }
 
 export const itemModel: Attributes = {
@@ -34,6 +36,9 @@ export const itemModel: Attributes = {
     length: 100,
     required: true,
     q: true
+  },
+  categories: {
+    type: 'primitives',
   }
 };
 

@@ -37,14 +37,14 @@ export const config = {
       user: 'postgres',
       host: 'localhost',
       password: '12345678',
-      database: 'masterdata2',
+      database: 'backoffice',
       port: 5432
     },
     query_items: {
       user: 'postgres',
       host: 'localhost',
       password: '12345678',
-      database: 'masterdata2',
+      database: 'backoffice',
       port: 5432
     },
     nothingtosay: {
@@ -58,7 +58,7 @@ export const config = {
       user: 'postgres',
       host: 'localhost',
       password: '12345678',
-      database: 'masterdata2',
+      database: 'backoffice',
       port: 5432
     }
   },

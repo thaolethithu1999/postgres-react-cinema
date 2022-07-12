@@ -10,9 +10,9 @@ import { ReviewScore } from '../../rate/review-score';
 import { Cinema, CinemaRate, useCinema } from '../service';
 import { CinemaRateFilter } from '../service/cinema-rate/cinema-rate';
 
-import { useRate } from '../../rate/service';
-import { Rate } from '../../rate/service/rate';
-import { RateFilter } from '../../rate/service/rate/rate';
+import { useRate } from '../service';
+import { Rate } from '../service/rate';
+import { RateFilter} from '../service/rate/rate';
 import './rate.css';
 
 import RateList from './rateList';
@@ -31,7 +31,6 @@ export const CinemaReview = () => {
   const cinemaService = useCinema();
   const rateService = useRate();
 
-
   useEffect(() => {
     load();
   }, []);
@@ -43,6 +42,7 @@ export const CinemaReview = () => {
     cinemaRateSM.id = id || '';
     cinemaRateSM.limit = pageSize;
     cinemaRateSM.sort = '-rateTime';
+    cinemaRateSM.userId = userId;
     const currentCinema = await cinemaService.load(id || '');
     if (currentCinema) {
       setCinema(currentCinema);
@@ -59,7 +59,7 @@ export const CinemaReview = () => {
       }
       const rate: Rate = {};
       rate.id = cinema.id;
-      rate.userId = id;
+      rate.author = id;
       rate.rate = data.rate;
       rate.review = data.review;
       rate.rateTime = new Date();

@@ -87,7 +87,6 @@ import { Articles } from './article/articles';
 import { ArticleForm } from './article/article';
 import { MyItems } from './my-items/items-form';
 import { MyItem } from './my-items/item-form';
-import { Test } from './rate/test-rate';
 import { ItemsForm } from './items/items-form';
 import { ItemForm } from './items/item-form';
 let isInit = false;
@@ -163,7 +162,6 @@ function App() {
           <Route path='cinema/:id/review' element={<CinemaPage />} />
           <Route path='cinema/:id/photo' element={<CinemaPage />} />
           <Route path='cinema/:id/about' element={<CinemaPage />} />
-          <Route path='test' element={<Test />} />
 
           <Route path='backoffice/categories' element={<CategoriesForm />} />
           <Route path='backoffice/categories/edit/:id' element={<CategoryForm />} />
@@ -201,7 +199,9 @@ function App() {
           <Route path="my-item/edit/:id" element={<MyItem />} />
 
           <Route path="item" element={<ItemsForm />} />
-          <Route path="item/:id" element={<ItemForm />} />
+          <Route path="item/add" element={<ItemForm />} />
+          <Route path="item/edit/:id" element={<ItemForm />} />
+
           {/* <Route path={'upload/:id/image'} element={<UploadFile />} />
           <Route path={'upload'} element={<UploadFile />} /> */}
         </Route>

@@ -103,6 +103,7 @@ export const FilmsForm = () => {
             </label>
           </section>
         </form>
+        
         <form className='list-result'>
           {component.view === 'table' && <div className='table-responsive'>
             <table>

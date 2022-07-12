@@ -7,6 +7,7 @@ export * from './item';
 export class ItemClient extends Client<Item, string, ItemFilter> implements ItemService {
   constructor(http: HttpRequest, private url: string) {
     super(http, url, itemModel);
+    this.searchGet = false;
     this.getMyItem = this.getMyItem.bind(this);
     this.updateItem = this.updateItem.bind(this);
   }

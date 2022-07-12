@@ -4,7 +4,7 @@ import { Rate } from '../../rate/service/rate';
 import { RateFilter } from '../../rate/service/rate/rate';
 import { storage } from 'uione';
 import { useParams } from 'react-router-dom';
-import { RateItem } from '../../rate/rate-item';
+import { RateItem } from '../rate-item';
 import { OnClick } from 'react-hook-core';
 
 
@@ -31,30 +31,27 @@ const RateList = (props: RateListInterface) => {
   const moreReview = async (e: any) => {
     e.preventDefault();
     const cinemaRateSM = new RateFilter();
+    const userId: string | undefined = storage.getUserId();
     const { id } = params;
     cinemaRateSM.id = id;
     cinemaRateSM.limit = pageSize + 3;
     cinemaRateSM.sort = '-rateTime';
+    cinemaRateSM.userId = userId;
     const searchRates = await rateService.search(cinemaRateSM, pageSize + 3);
+    console.log({searchRates});
+    
     setRates(searchRates.list);
     setPageSize(pageSize + 3);
   };
 
   const usefulReaction = async (e: OnClick, rate: Rate) => {
     if (!author) {
-      return storage.alert("You must sign in");
+      return storage.alert("Please sign in");
     }
     const id = rate.id || '';
-    const userId = rate.userId || '';
-    console.log(id + '/' + userId + '/' + author);
-
-    const rs = await rateService.setUseful(id, userId, author);
+    const userId = rate.author || '';
+    const rs = await rateService.setUseful(id, author, userId);
     load();
-    if(rs === 0){
-      rate.isUseful = true;
-    } else {
-      rate.isUseful = false;
-    }
   }
 
   const RemoveUseful = async (e: OnClick, rate: Rate) => {
@@ -62,8 +59,9 @@ const RateList = (props: RateListInterface) => {
       return;
     }
     const id = rate.id || '';
-    const userId = rate.userId || '';
-    await rateService.removeUseful(id, userId, author);
+    const userId = rate.author || '';
+
+    await rateService.removeUseful(id, author, userId);
     load();
   }
 
@@ -76,7 +74,7 @@ const RateList = (props: RateListInterface) => {
             (rates.map((value: Rate) => {
               return <RateItem
                 data={value}
-                key={value.userId}
+                key={value.author}
                 maxLengthReviewText={maxLengthReviewText}
                 resource={resource}
                 usefulReaction={usefulReaction}

@@ -82,7 +82,8 @@ export const rateModel: Attributes = {
     q: true,
   },
   usefulCount: {
-    type: 'integer'
+    type: 'integer',
+    min: 0
   }
 }
 

@@ -15,8 +15,14 @@ interface Props {
   data: any;
   maxLengthReviewText: number;
   resource: StringMap;
+  usefulReaction?: any;
+  removeUsefulReaction?: any;
 }
-export const RateItem = ({ data, maxLengthReviewText, resource }: Props) => {
+export const RateItem = ({ data, maxLengthReviewText, resource, usefulReaction, removeUsefulReaction }: Props) => {
+  const rateService = useRate();
+  const [exist, setExist] = useState<boolean>(false);
+  const author: string | undefined = storage.getUserId();
+
   const renderReviewStar = (value: any) => {
     const starList = Array(5).fill(<i />).map((item, index) => {
       return (<i key={index}></i>)
@@ -43,7 +49,7 @@ export const RateItem = ({ data, maxLengthReviewText, resource }: Props) => {
         {renderReviewStar(data.rate)}
         {formatReviewText(data.review ?? '')}
         <p>
-          <img alt='' className='useful-button' width={20} src={like}/>
+          {data.disable === true ? <img alt='' className='useful-button' width={20} src={likeFilled} onClick={(e) => removeUsefulReaction(e, data)} /> : <img alt='' className='useful-button' width={20} src={like} onClick={(e) => usefulReaction(e, data)} />}
           {data.usefulCount ? data.usefulCount : 0}</p>
       </section>
     </li>
@@ -114,6 +120,8 @@ export const RateItemFilm = ({ data, maxLengthReviewText, resource }: PropsRate)
 
     }
   };
+  console.log(rate);
+
   if (rate) {
     return (
       <li className='col s12 m12 l12 review-custom'>

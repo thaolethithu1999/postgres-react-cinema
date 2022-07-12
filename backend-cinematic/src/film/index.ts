@@ -161,21 +161,6 @@ export class FilmRateManager extends Manager<FilmRate, string, FilmRateFilter> i
     const filmRate = await this.repository.load(obj.id)
     if (filmRate) {
       isInsert ? filmRate.usefulCount ? filmRate.usefulCount += 1 : filmRate.usefulCount = 1 : filmRate.usefulCount ? filmRate.usefulCount -= 1 : filmRate.usefulCount = 0;
-
-      // if (isInsert) {
-      //   if (filmRate.usefulCount) {
-      //     filmRate.usefulCount += 1
-      //   } else {
-      //     filmRate.usefulCount = 1
-      //   }
-      // } else {
-      //   if (filmRate.usefulCount) {
-      //     filmRate.usefulCount -= 1
-      //   } else {
-      //     filmRate.usefulCount = 0
-      //   }
-      // }
-
       const rs = await this.repository.update(filmRate);
       if (rs === 1) {
         return isInsert ? 1 : 2;///1:insert

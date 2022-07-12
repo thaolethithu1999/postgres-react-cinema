@@ -1,31 +1,38 @@
-import { Chip, createTheme, TextField, ThemeProvider } from '@material-ui/core';
-import { Autocomplete } from '@material-ui/lab';
-import * as React from 'react';
-import { checked, OnClick, PageSizeSelect, SearchComponentState, useSearch, value } from 'react-hook-core';
-import { useNavigate } from 'react-router';
-import { Pagination } from 'reactx-pagination';
-import { inputSearch } from 'uione';
-import femaleIcon from '../assets/images/female.png';
-import maleIcon from '../assets/images/male.png';
-import { getUserService, User, UserFilter } from './service/user';
-import { Skill } from './service/user/user';
-interface UserSearch extends SearchComponentState<User, UserFilter> {
-}
+import { Chip, createTheme, TextField, ThemeProvider } from "@material-ui/core";
+import { Autocomplete } from "@material-ui/lab";
+import * as React from "react";
+import {
+  checked,
+  OnClick,
+  PageSizeSelect,
+  SearchComponentState,
+  useSearch,
+  value,
+} from "react-hook-core";
+import { useNavigate } from "react-router";
+import { Pagination } from "reactx-pagination";
+import { inputSearch } from "uione";
+import femaleIcon from "../assets/images/female.png";
+import maleIcon from "../assets/images/male.png";
+import { getUserService, User, UserFilter } from "./service/user";
+import { Skill } from "./service/user/user";
+
+interface UserSearch extends SearchComponentState<User, UserFilter> {}
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#4db6ac'
-    }
-  }
+      main: "#4db6ac",
+    },
+  },
 });
 const userFilter: UserFilter = {
-  id: '',
-  username: '',
-  displayName: '',
-  email: '',
+  id: "",
+  username: "",
+  displayName: "",
+  email: "",
   status: [],
-  q: '',
+  q: "",
   interests: [],
   // skills: [],
 };
@@ -42,7 +49,26 @@ export const UsersPage = () => {
     return value(state.filter);
   };
   const p = { getFilter };
-  const { state, resource, search, component, updateState, sort, clearQ, toggleFilter, changeView, pageChanged, pageSizeChanged, setState } = useSearch<User, UserFilter, UserSearch>(refForm, initialState, getUserService(), inputSearch(), p);
+  const {
+    state,
+    resource,
+    search,
+    component,
+    updateState,
+    sort,
+    clearQ,
+    toggleFilter,
+    changeView,
+    pageChanged,
+    pageSizeChanged,
+    setState,
+  } = useSearch<User, UserFilter, UserSearch>(
+    refForm,
+    initialState,
+    getUserService(),
+    inputSearch(),
+    p
+  );
   component.viewable = true;
   component.editable = true;
   const edit = (e: OnClick, id: string) => {
@@ -54,76 +80,137 @@ export const UsersPage = () => {
   const { list } = state;
 
   return (
-    <div className='view-container'>
+    <div className="view-container">
       <header>
         <h2>{resource.users}</h2>
-        <div className='btn-group'>
-          {component.view !== 'table' && <button type='button' id='btnTable' name='btnTable' className='btn-table' data-view='table' onClick={changeView} />}
-          {component.view === 'table' && <button type='button' id='btnListView' name='btnListView' className='btn-list-view' data-view='listview' onClick={changeView} />}
+        <div className="btn-group">
+          {component.view !== "table" && (
+            <button
+              type="button"
+              id="btnTable"
+              name="btnTable"
+              className="btn-table"
+              data-view="table"
+              onClick={changeView}
+            />
+          )}
+          {component.view === "table" && (
+            <button
+              type="button"
+              id="btnListView"
+              name="btnListView"
+              className="btn-list-view"
+              data-view="listview"
+              onClick={changeView}
+            />
+          )}
         </div>
       </header>
       <div>
-        <form id='usersForm' name='usersForm' noValidate={true} ref={refForm as any}>
-          <section className='row search-group'>
-            <label className='col s12 m4 search-input'>
-              <PageSizeSelect size={component.pageSize} sizes={component.pageSizes} onChange={pageSizeChanged} />
-              <input type='text' id='q' name='q' value={filter.q || ''} onChange={updateState} maxLength={255} placeholder={resource.keyword} />
-              <button type='button' hidden={!filter.q} className='btn-remove-text' onClick={clearQ} />
-              <button type='button' className='btn-filter' onClick={toggleFilter} />
-              <button type='submit' className='btn-search' onClick={search} />
+        <form
+          id="usersForm"
+          name="usersForm"
+          noValidate={true}
+          ref={refForm as any}
+        >
+          <section className="row search-group">
+            <label className="col s12 m4 search-input">
+              <PageSizeSelect
+                size={component.pageSize}
+                sizes={component.pageSizes}
+                onChange={pageSizeChanged}
+              />
+              <input
+                type="text"
+                id="q"
+                name="q"
+                value={filter.q || ""}
+                onChange={updateState}
+                maxLength={255}
+                placeholder={resource.keyword}
+              />
+              <button
+                type="button"
+                hidden={!filter.q}
+                className="btn-remove-text"
+                onClick={clearQ}
+              />
+              <button
+                type="button"
+                className="btn-filter"
+                onClick={toggleFilter}
+              />
+              <button type="submit" className="btn-search" onClick={search} />
             </label>
-            <Pagination className='col s12 m8' total={component.total} size={component.pageSize} max={component.pageMaxSize} page={component.pageIndex} onChange={pageChanged} />
+            <Pagination
+              className="col s12 m8"
+              total={component.total}
+              size={component.pageSize}
+              max={component.pageMaxSize}
+              page={component.pageIndex}
+              onChange={pageChanged}
+            />
           </section>
-          <section className='row search-group inline' hidden={component.hideFilter}>
-            <label className='col s12 m4 l4'>
+          <section
+            className="row search-group inline"
+            hidden={component.hideFilter}
+          >
+            <label className="col s12 m4 l4">
               {resource.username}
-              <input type='text'
-                id='username' name='username'
-                value={filter.username || ''}
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value={filter.username || ""}
                 onChange={updateState}
                 maxLength={255}
-                placeholder={resource.username} />
+                placeholder={resource.username}
+              />
             </label>
-            <label className='col s12 m4 l4'>
+            <label className="col s12 m4 l4">
               {resource.display_name}
-              <input type='text'
-                id='displayName' name='displayName'
-                value={filter.displayName || ''}
+              <input
+                type="text"
+                id="displayName"
+                name="displayName"
+                value={filter.displayName || ""}
                 onChange={updateState}
                 maxLength={255}
-                placeholder={resource.display_name} />
+                placeholder={resource.display_name}
+              />
             </label>
-            <label className='col s12 m4 l4 checkbox-section'>
+            <label className="col s12 m4 l4 checkbox-section">
               {resource.status}
-              <section className='checkbox-group'>
+              <section className="checkbox-group">
                 <label>
                   <input
-                    type='checkbox'
-                    id='A'
-                    name='status'
-                    value='A'
-                    checked={checked(filter.status, 'A')}
-                    onChange={updateState} />
+                    type="checkbox"
+                    id="A"
+                    name="status"
+                    value="A"
+                    checked={checked(filter.status, "A")}
+                    onChange={updateState}
+                  />
                   {resource.active}
                 </label>
                 <label>
                   <input
-                    type='checkbox'
-                    id='I'
-                    name='status'
-                    value='I'
-                    checked={checked(filter.status, 'I')}
-                    onChange={updateState} />
+                    type="checkbox"
+                    id="I"
+                    name="status"
+                    value="I"
+                    checked={checked(filter.status, "I")}
+                    onChange={updateState}
+                  />
                   {resource.inactive}
                 </label>
               </section>
             </label>
-            <div className='col s12 m4 l4'>
-
+            <div className="col s12 m4 l4">
               <Autocomplete
                 options={[]}
                 multiple
-                id='tags-filled'
+                id="tags-filled"
                 freeSolo
                 value={interests}
                 onChange={(e, newValue: string[]) => {
@@ -134,24 +221,28 @@ export const UsersPage = () => {
                 }}
                 renderTags={(v: readonly string[], getTagProps) =>
                   v.map((option: string, index: number) => (
-                    <Chip variant='outlined' label={option} {...getTagProps({ index })} />
+                    <Chip
+                      variant="outlined"
+                      label={option}
+                      {...getTagProps({ index })}
+                    />
                   ))
                 }
                 renderInput={(params) => (
                   <ThemeProvider theme={theme}>
                     <TextField
                       {...params}
-                      variant='standard'
-                      name='interest'
-                      color='primary'
+                      variant="standard"
+                      name="interest"
+                      color="primary"
                       // onChange={(e)=>setInterest(e.target.value)}
                       label={resource.interests}
                       placeholder={resource.interests}
-                    // value={interest}
-                    /></ThemeProvider>
+                      // value={interest}
+                    />
+                  </ThemeProvider>
                 )}
               />
-
             </div>
             {/* <div className='col s12 m4 l4'>
               <Autocomplete
@@ -222,49 +313,95 @@ export const UsersPage = () => {
             </label> */}
           </section>
         </form>
-        <form className='list-result'>
-          {component.view === 'table' && <div className='table-responsive'>
-            <table>
-              <thead>
-                <tr>
-                  <th>{resource.sequence}</th>
-                  <th data-field='userId'><button type='button' id='sortUserId' onClick={sort}>{resource.user_id}</button></th>
-                  <th data-field='username'><button type='button' id='sortUserName' onClick={sort}>{resource.username}</button></th>
-                  <th data-field='email'><button type='button' id='sortEmail' onClick={sort}>{resource.email}</button></th>
-                  <th data-field='displayname'><button type='button' id='sortDisplayName' onClick={sort}>{resource.display_name}</button></th>
-                  <th data-field='status'><button type='button' id='sortStatus' onClick={sort}>{resource.status}</button></th>
-                </tr>
-              </thead>
-              {list && list.length > 0 && list.map((user, i) => {
-                return (
-                  <tr key={i} onClick={e => edit(e, user.userId)}>
-                    <td className='text-right'>{(user as any).sequenceNo}</td>
-                    <td>{user.userId}</td>
-                    <td>{user.username}</td>
-                    <td>{user.email}</td>
-                    <td>{user.displayName}</td>
-                    <td>{user.status}</td>
+        <form className="list-result">
+          {component.view === "table" && (
+            <div className="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>{resource.sequence}</th>
+                    <th data-field="userId">
+                      <button type="button" id="sortUserId" onClick={sort}>
+                        {resource.user_id}
+                      </button>
+                    </th>
+                    <th data-field="username">
+                      <button type="button" id="sortUserName" onClick={sort}>
+                        {resource.username}
+                      </button>
+                    </th>
+                    <th data-field="email">
+                      <button type="button" id="sortEmail" onClick={sort}>
+                        {resource.email}
+                      </button>
+                    </th>
+                    <th data-field="displayname">
+                      <button type="button" id="sortDisplayName" onClick={sort}>
+                        {resource.display_name}
+                      </button>
+                    </th>
+                    <th data-field="status">
+                      <button type="button" id="sortStatus" onClick={sort}>
+                        {resource.status}
+                      </button>
+                    </th>
                   </tr>
-                );
-              })}
-            </table>
-          </div>}
-          {component.view !== 'table' && <ul className='row list-view'>
-            {list && list.length > 0 && list.map((user, i) => {
-              return (
-                <li key={i} className='col s12 m6 l4 xl3' onClick={e => edit(e, user.id)}>
-                  <section>
-                    <img src={user.imageURL && user.imageURL.length > 0 ? user.imageURL : (user.gender === 'F' ? femaleIcon : maleIcon)} alt='user' className='round-border' />
-                    <div>
-                      <h3 className={user.status === 'I' ? 'inactive' : ''}>{user.displayName}</h3>
-                      <p>{user.email}</p>
-                    </div>
-                    <button className='btn-detail' />
-                  </section>
-                </li>
-              );
-            })}
-          </ul>}
+                </thead>
+                {list &&
+                  list.length > 0 &&
+                  list.map((user, i) => {
+                    return (
+                      <tr key={i} onClick={(e) => edit(e, user.userId)}>
+                        <td className="text-right">
+                          {(user as any).sequenceNo}
+                        </td>
+                        <td>{user.userId}</td>
+                        <td>{user.username}</td>
+                        <td>{user.email}</td>
+                        <td>{user.displayName}</td>
+                        <td>{user.status}</td>
+                      </tr>
+                    );
+                  })}
+              </table>
+            </div>
+          )}
+          {component.view !== "table" && (
+            <ul className="row list-view">
+              {list &&
+                list.length > 0 &&
+                list.map((user, i) => {
+                  return (
+                    <li
+                      key={i}
+                      className="col s12 m6 l4 xl3"
+                      onClick={(e) => edit(e, user.id)}
+                    >
+                      <section>
+                        <img
+                          src={
+                            user.imageURL && user.imageURL.length > 0
+                              ? user.imageURL
+                              : user.gender === "F"
+                              ? femaleIcon
+                              : maleIcon
+                          }
+                          alt="user"
+                          className="round-border"
+                        />
+                        <div>
+                          <h3 className={user.status === "I" ? "inactive" : ""}>
+                            {user.displayName}
+                          </h3>
+                          <p>{user.email}</p>
+                        </div>
+                        <button className="btn-detail" />
+                      </section>
+                    </li>
+                  );
+                })}
+            </ul>
+          )}
         </form>
       </div>
     </div>
