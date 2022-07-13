@@ -102,6 +102,8 @@ export function route(app: Application, ctx: Context, secure: boolean): void {
   app.post('/film-rate/search', ctx.filmRate.search);
   app.get('/film-rate/search', ctx.filmRate.search);
 
+
+
   // const readCinemaParent = ctx.authorize('cinemaParent', read);
   // const writeCinemaParent = ctx.authorize('cinemaParent', write);
 
@@ -126,14 +128,27 @@ export function route(app: Application, ctx: Context, secure: boolean): void {
   app.put('/cinema/:id', checkCinema, ctx.cinema.update);
   app.patch('/cinema/:id', checkCinema, ctx.cinema.patch);
   app.delete('/cinema/:id', checkCinema, ctx.cinema.delete);
+  // app.post('/cinema/rate',  ctx.cinema.rate);
+  // app.post('/cinema-rate/search', ctx.cinemaRate.search);
+  // app.get('/cinema-rate/search', ctx.cinemaRate.search);
 
   app.post('/rates', ctx.rate.rate);
   app.get('/rates/search', ctx.rate.search);
   app.post('/rates/search', ctx.rate.search);
-  app.get('/rates/:id/:userId', ctx.rate.load);
-  app.put('/rates/:id/:userId', ctx.rate.update);
-  app.post('/rates/useful/:id/:userid/:author', ctx.rate.setUseful);
-  app.delete('/rates/useful/:id/:userid/:author', ctx.rate.removeUseful);
+  app.get('/rates/:id/:author', ctx.rate.load);
+  app.put('/rates/:id/:author', ctx.rate.update);
+  app.post('/rates/useful/:id/:author/:userid', ctx.rate.setUseful);
+  app.delete('/rates/useful/:id/:author/:userid', ctx.rate.removeUseful);
+
+  app.get('/appreciation/search', ctx.appreciation.search);
+  app.post('/appreciation/search', ctx.appreciation.search);
+  app.post('/appreciation', ctx.appreciation.create)
+  app.post('/appreciation/:id/:author', ctx.appreciation.load);
+  app.put('/appreciation/:id/:author', ctx.appreciation.update);
+  app.patch('/appreciation/:id/:author', ctx.appreciation.patch);
+  app.post('/appreciation/reply/:id/:author/:userid', ctx.appreciation.reply);
+  app.delete('/appreciation/reply/:id/:author/:userid', ctx.appreciation.removeReply);
+  app.put('/appreciation/reply/:id/:author/:userid', ctx.appreciation.updateReply);
 
   app.get('/uploads', ctx.uploads.all);
   app.get('/uploads/:id', ctx.uploads.load);

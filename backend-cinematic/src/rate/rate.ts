@@ -42,6 +42,7 @@ export interface RateFilter extends Filter {
   review?: string;
   usefulCount?: number;
 }
+
 export interface RateRepository extends Repository<Rate, RateId> {
   save(obj: Rate, ctx?: any): Promise<number>;
   getRate(id: string, author: string): Promise<Rate | null>;
@@ -59,6 +60,12 @@ export interface RateService extends Service<Rate, RateId, RateFilter> {
 export interface UsefulRateService extends Service<UsefulRate, UsefulRateId, UsefulRateFilter> {
   setUseful(id: string, author: string, userId: string,): Promise<number>;
 }
+
+export interface UsefulRateRepository {
+  getUseful(id: string, author: string, userId: string): Promise<UsefulRate | null>;
+  removeUseful(id: string,  author: string,userId: string, ctx?: any): Promise<number>;
+  save(obj: UsefulRate, ctx?: any): Promise<number>;
+};
 
 export const rateModel: Attributes = {
   id: {
@@ -117,13 +124,6 @@ export interface Info {
   viewCount: number;
 }
 
-export interface UsefulRateRepository {
-  getUseful(id: string, userId: string, author: string): Promise<UsefulRate | null>;
-  //getUsefulByAuthor(id: string, author: string): Promise<UsefulRate | null>;
-  removeUseful(id: string, userId: string, author: string, ctx?: any): Promise<number>;
-  save(obj: UsefulRate, ctx?: any): Promise<number>;
-};
-
 export interface InfoRepository extends Repository<Info, string> {
   save(obj: Info, ctx?: any): Promise<number>;
 };
@@ -154,52 +154,3 @@ export const infoModel: Attributes = {
     type: 'number',
   },
 }
-
-export interface Appreciation {
-  id: string;
-  author: string;
-  userId: string;
-  title: string,
-  description: string;
-  replyCount: number;
-  createAt: Date;
-}
-
-export interface AppreciationFilter extends Filter {
-  id?: string;
-  author?: string;
-  userId?: string;
-  title?: string,
-  description?: string;
-  replyCount?: number;
-  createAt?: Date;
-}
-
-export interface AppreciationRepository extends Repository<Appreciation, string> {
-  save(obj: Appreciation, ctx?: any): Promise<number>;
-};
-
-export const appreciationModel: Attributes = {
-  id: {
-    key: true,
-    required: true
-  },
-  author: {
-    key: true,
-    required: true
-  },
-  userId: {
-    key: true,
-    required: true
-  },
-  title: {},
-  description: {},
-  replyCount: {
-    type: 'number'
-  },
-  createdAt: {
-    type: 'datetime'
-  }
-}
-
-

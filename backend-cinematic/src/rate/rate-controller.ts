@@ -52,6 +52,8 @@ export class RateController extends Controller<Rate, RateId, RateFilter>{
         const id = req.params.id;
         const author = req.params.author;
         const userId = req.params.userid;
+        //const usefulId: UsefulRateId = {id, userId, author};
+
         this.rateService.setUseful(id, author, userId).then(rs => {
             return res.status(200).json(rs).end();
         }).catch(err => handleError(err, res, this.log));

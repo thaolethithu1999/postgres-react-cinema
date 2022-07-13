@@ -2,14 +2,13 @@ import { attr, Log } from 'express-ext';
 import { Manager, Search } from 'onecore';
 import { buildCountQuery, buildToInsert, buildToInsertBatch, DB, postgres, Repository, SearchBuilder, Service, Statement } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
-import { Rate, RateFilter, RateId, rateModel, RateRepository, RateService, Info, infoModel, InfoRepository, UsefulRateRepository, UsefulRate, usefulRateModel, UsefulRateFilter, UsefulRateId, UsefulRateService, appreciationModel, AppreciationRepository } from './rate';
+import { Rate, RateFilter, RateId, rateModel, RateRepository, RateService, Info, infoModel, InfoRepository, UsefulRateRepository, UsefulRate, usefulRateModel, UsefulRateFilter, UsefulRateId, UsefulRateService } from './rate';
 import { RateController } from './rate-controller';
 import { SqlRateRepository } from './sql-rate-repository';
 import { SqlInfoRepository } from './sql-info-repository';
 import { buildToSave } from 'pg-extension';
 import { SqlUsefulRateRepository } from './sql-useful-repository';
 import { buildQuery } from './query';
-import { SqlAppreciationRepository } from './sql-appreciation-repository';
 export * from './rate-controller';
 export * from './rate';
 export { RateController };
@@ -18,8 +17,7 @@ export class RateManager extends Manager<Rate, RateId, RateFilter> implements Ra
     constructor(search: Search<Rate, RateFilter>,
         public repository: RateRepository,
         private infoRepository: InfoRepository,
-        private usefulRepository: UsefulRateRepository,
-        private appreciationRepository: AppreciationRepository) {
+        private usefulRepository: UsefulRateRepository) {
         super(search, repository);
         this.rate = this.rate.bind(this);
         this.update = this.update.bind(this);
@@ -62,6 +60,7 @@ export class RateManager extends Manager<Rate, RateId, RateFilter> implements Ra
         });
     }
     async rate(rate: Rate): Promise<boolean> {
+        console.log(rate);
         let info = await this.infoRepository.load(rate.id);
         if (!info) {
             info = {
@@ -76,6 +75,8 @@ export class RateManager extends Manager<Rate, RateId, RateFilter> implements Ra
             };
         }
         const exist = await this.repository.getRate(rate.id, rate.author);
+        console.log(exist);
+
         const r = (exist ? exist.rate : 0);
         (info as any)['rate' + rate.rate?.toString()] += 1;
         const sumRate = info.rate1 +
@@ -105,10 +106,9 @@ export function useRateService(db: DB, mapper?: TemplateMap): RateService {
     const repository = new SqlRateRepository(db, 'rates', buildToSave);
     const infoRepository = new SqlInfoRepository(db, 'info', buildToSave);
     const usefulRateRepository = new SqlUsefulRateRepository(db, 'usefulrates', usefulRateModel, buildToSave);
-    const appreciationRepository = new SqlAppreciationRepository(db, 'appreciation', buildToSave);
-    return new RateManager(builder.search, repository, infoRepository, usefulRateRepository, appreciationRepository);
+    return new RateManager(builder.search, repository, infoRepository, usefulRateRepository);
 }
- 
+
 export function useRateController(log: Log, db: DB, mapper?: TemplateMap): RateController {
     return new RateController(log, useRateService(db, mapper));
 }
