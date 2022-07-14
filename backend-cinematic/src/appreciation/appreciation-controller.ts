@@ -18,6 +18,7 @@ export class AppreciationController extends Controller<Appreciation, Appreciatio
         this.reply = this.reply.bind(this);
         this.removeReply = this.removeReply.bind(this);
         this.updateReply = this.updateReply.bind(this);
+        this.setUseful = this.setUseful.bind(this);
     }
 
     load(req: Request, res: Response) {
@@ -62,4 +63,17 @@ export class AppreciationController extends Controller<Appreciation, Appreciatio
         }).catch(err => handleError(err, res, this.log))
     }
 
+    setUseful(req: Request, res: Response) {
+        console.log("useful");
+        console.log(req.params);
+        
+        const id = req.params.id;
+        const author = req.params.author;
+        const userId = req.params.userid;
+        this.appreciationService.setUseful(id, author, userId).then(rs => {
+            return res.status(200).json(rs).end();
+        }).catch(err => handleError(err, res, this.log));
+
+    }
 }
+

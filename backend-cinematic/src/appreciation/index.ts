@@ -3,22 +3,27 @@ import { Manager, Search } from 'onecore';
 import { buildCountQuery, buildToInsert, buildToInsertBatch, DB, postgres, Repository, SearchBuilder, Service, Statement, update } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import { buildToSave } from 'pg-extension';
-import { Appreciation, AppreciationFilter, AppreciationId, AppreciationRepository, AppreciationService, appreciationModel, ReplyRepository, Reply, replyModel, ReplyFilter } from './appreciation';
+import { Appreciation, AppreciationFilter, AppreciationId, AppreciationRepository, AppreciationService, appreciationModel, ReplyRepository, Reply, replyModel, ReplyFilter, ReplyService, ReplyId, usefulModel, UsefulRepository, Useful } from './appreciation';
 import { AppreciationController } from './appreciation-controller';
+import { AppreciationReplyController } from './reply-controller';
 import { SqlAppreciationRepository } from './sql-appreciation-repository';
 import { SqlReplyRepository } from './sql-reply-repository';
+import { SqlUsefulRepository } from './sql-useful-repository';
 
 export * from './appreciation-controller';
+export * from './reply-controller';
 export * from './appreciation';
 export { AppreciationController };
+export { AppreciationReplyController };
 
 export class AppreciationManager extends Manager<Appreciation, AppreciationId, AppreciationFilter> implements AppreciationService {
     constructor(search: Search<Appreciation, AppreciationFilter>,
-        public repository: AppreciationRepository, private replyRepository: ReplyRepository) {
+        public repository: AppreciationRepository, private replyRepository: ReplyRepository, private usefulRepository: UsefulRepository) {
         super(search, repository);
         this.reply = this.reply.bind(this);
         this.removeReply = this.removeReply.bind(this);
         this.updateReply = this.updateReply.bind(this);
+        this.setUseful = this.setUseful.bind(this);
     }
 
     async reply(reply: Reply): Promise<boolean> {
@@ -37,6 +42,8 @@ export class AppreciationManager extends Manager<Appreciation, AppreciationId, A
                 reply.replyCount ? reply.replyCount = reply.replyCount : reply.replyCount = 0;
                 //insert
                 const wait = await this.replyRepository.insert(reply);
+                console.log(reply);
+
                 //increase reply count
                 await this.repository.increaseReplyCount(reply.id, reply.author);
                 return true;
@@ -68,22 +75,62 @@ export class AppreciationManager extends Manager<Appreciation, AppreciationId, A
             return await this.replyRepository.update(reply);
         }
     }
+
+    async setUseful(id: string, author: string, userId: string, ctx?: any): Promise<number> {
+        const check = await this.usefulRepository.getUseful(id, author, userId);
+        console.log(check);
+        if (check) {
+            return 0;
+        } else {
+            const useful: Useful = { id, author, userId, reviewTime: new Date };
+            const rs = await this.usefulRepository.save(useful);
+            console.log(rs);
+            if(rs > 0){
+                const res = await this.replyRepository.increaseUsefulCount(id, author, userId);
+                console.log(res);
+                
+                return 1;
+            } else {
+                return 0;
+            }
+
+        }
+    }
+
+
 }
 
 export function useAppreciationService(db: DB, mapper?: TemplateMap): AppreciationService {
     const query = useQuery('appreciation', mapper, appreciationModel, true);
     const builder = new SearchBuilder<Appreciation, AppreciationFilter>(db.query, 'appreciation', appreciationModel, db.driver, query);
     const repository = new SqlAppreciationRepository(db, 'appreciation', buildToSave);
-
-    // const repQuery = useQuery('appreciationreply', mapper, replyModel, true);
-    // const repBuilder = new SearchBuilder<Reply, ReplyFilter>(db.query, 'appreciationreply', replyModel, db.driver, repQuery);
-    const replyRepository = new SqlReplyRepository(db, 'appreciationreply', buildToSave);
-
-    return new AppreciationManager(builder.search, repository, replyRepository);
+    const replyRepository = new SqlReplyRepository(db, 'reply', buildToSave);
+    const usefulRepository = new SqlUsefulRepository(db, 'usefulrates', usefulModel, buildToSave);
+    return new AppreciationManager(builder.search, repository, replyRepository, usefulRepository);
 }
 
 export function useAppreciationController(log: Log, db: DB, mapper?: TemplateMap): AppreciationController {
     return new AppreciationController(log, useAppreciationService(db, mapper));
+}
+
+
+export class ReplyManager extends Manager<Reply, ReplyId, ReplyFilter> implements ReplyService {
+    constructor(search: Search<Reply, ReplyFilter>,
+        protected replyRepository: ReplyRepository) {
+        super(search, replyRepository);
+    }
+}
+
+export function useReplyService(db: DB, mapper?: TemplateMap): ReplyService {
+    const repQuery = useQuery('reply', mapper, replyModel, true);
+    const builder = new SearchBuilder<Reply, ReplyFilter>(db.query, 'reply', replyModel, db.driver, repQuery);
+    const replyRepository = new SqlReplyRepository(db, 'reply', buildToSave);
+    return new ReplyManager(builder.search, replyRepository);
+}
+
+
+export function useAppreciationReplyController(log: Log, db: DB, mapper?: TemplateMap): AppreciationReplyController {
+    return new AppreciationReplyController(log, useReplyService(db, mapper));
 }
 
 

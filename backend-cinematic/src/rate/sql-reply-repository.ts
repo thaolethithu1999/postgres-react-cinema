@@ -1,5 +1,5 @@
 import { DB, Repository, metadata } from 'query-core';
-import { replyModel, Reply, ReplyFilter, ReplyId, ReplyRepository, ReplyService } from './appreciation';
+import { replyModel, Reply, ReplyFilter, ReplyId, ReplyRepository, ReplyService } from './rate';
 import { Attributes, Statement, StringMap } from "pg-extension";
 
 export class SqlReplyRepository extends Repository<Reply, ReplyId> implements ReplyRepository {
@@ -9,6 +9,7 @@ export class SqlReplyRepository extends Repository<Reply, ReplyId> implements Re
         this.getReply = this.getReply.bind(this);
         this.removeReply = this.removeReply.bind(this);
     }
+    
     save(obj: Reply, ctx?: any): Promise<number> {
         console.log({ obj });
 
@@ -26,7 +27,6 @@ export class SqlReplyRepository extends Repository<Reply, ReplyId> implements Re
             return rep && rep.length > 0 ? rep[0] : null;
         })
     }
-
     removeReply(id: string, author: string, userId: string, ctx?: any): Promise<number> {
         return this.exec(`delete from ${this.table} where id = ${this.param(1)} and author = ${this.param(2)} and  userId= ${this.param(3)}`, [id, author, userId], ctx);
     }

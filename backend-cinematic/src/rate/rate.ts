@@ -12,6 +12,7 @@ export interface Rate {
   rateTime: Date;
   review: string;
   usefulCount: number;
+  replyCount: number;
 }
 
 export interface UsefulRateId {
@@ -41,6 +42,7 @@ export interface RateFilter extends Filter {
   rateTime?: Date;
   review?: string;
   usefulCount?: number;
+  replyCount?: number;
 }
 
 export interface RateRepository extends Repository<Rate, RateId> {
@@ -48,13 +50,19 @@ export interface RateRepository extends Repository<Rate, RateId> {
   getRate(id: string, author: string): Promise<Rate | null>;
   increaseUsefulCount(id: string, author: string, ctx?: any): Promise<number>;
   decreaseUsefulCount(id: string, author: string, ctx?: any): Promise<number>;
+  increaseReplyCount(id: string, author: string, ctx?: any): Promise<number>;
+  decreaseReplyCount(id: string, author: string, ctx?: any): Promise<number>;
 };
 
 export interface RateService extends Service<Rate, RateId, RateFilter> {
   getRate(id: string, author: string): Promise<Rate | null>;
+  updateRate(rate: Rate): Promise<number>;
   rate(rate: Rate): Promise<boolean>;
   setUseful(id: string, author: string, userId: string, ctx?: any): Promise<number>;
   removeUseful(id: string, author: string, userId: string, ctx?: any): Promise<number>;
+  reply(reply: Reply): Promise<boolean>;
+  removeReply(id: string, author: string, userId: string, ctx?: any): Promise<number>;
+  updateReply(reply: Reply): Promise<number>;
 }
 
 export interface UsefulRateService extends Service<UsefulRate, UsefulRateId, UsefulRateFilter> {
@@ -63,9 +71,20 @@ export interface UsefulRateService extends Service<UsefulRate, UsefulRateId, Use
 
 export interface UsefulRateRepository {
   getUseful(id: string, author: string, userId: string): Promise<UsefulRate | null>;
-  removeUseful(id: string,  author: string,userId: string, ctx?: any): Promise<number>;
+  removeUseful(id: string, author: string, userId: string, ctx?: any): Promise<number>;
   save(obj: UsefulRate, ctx?: any): Promise<number>;
 };
+
+export interface ReplyRepository extends Repository<Reply, ReplyId> {
+  getReply(id: string, author: string, userId: string): Promise<Reply | null>;
+  save(obj: Reply, ctx?: any): Promise<number>;
+  removeReply(id: string, author: string, userId: string, ctx?: any): Promise<number>;
+  increaseUsefulCount(id: string, author: string, userId: string, ctx?: any): Promise<number>;
+  decreaseUsefulCount(id: string, author: string, userId: string, ctx?: any): Promise<number>;
+}
+
+export interface ReplyService extends Service<Reply, ReplyId, ReplyFilter> { }
+
 
 export const rateModel: Attributes = {
   id: {
@@ -92,6 +111,10 @@ export const rateModel: Attributes = {
   usefulCount: {
     type: 'integer',
     min: 0
+  },
+  replyCount: {
+    type: 'integer',
+    min: 0
   }
 }
 
@@ -111,6 +134,27 @@ export const usefulRateModel: Attributes = {
   reviewTime: {
     type: 'datetime',
   },
+}
+
+export const rateReactionModel: Attributes = {
+  id: {
+    key: true,
+    required: true
+  },
+  userId: {
+    key: true,
+    required: true
+  },
+  author: {
+    key: true,
+    required: true
+  },
+  reviewTime: {
+    type: 'datetime',
+  },
+  reaction: {
+    type: 'integer', // 1 -> useless , 0 -> usefull //set data type min value
+  }
 }
 
 export interface Info {
@@ -153,4 +197,65 @@ export const infoModel: Attributes = {
   rate5: {
     type: 'number',
   },
+}
+
+export interface ReplyId {
+  id: string;
+  author: string;
+  userId: string;
+}
+
+export interface Reply {
+  id: string;
+  author: string;
+  userId: string;
+  description: string;
+  createAt: Date;
+  updateAt: Date;
+  usefulCount: number;
+  replyCount: number;
+}
+
+export interface ReplyFilter extends Filter {
+  id?: string;
+  author?: string;
+  userId?: string;
+  description?: string;
+  createAt?: Date;
+  updateAt?: Date;
+  usefulCount?: number;
+  replyCount?: number;
+}
+
+export const replyModel: Attributes = {
+  id: {
+    key: true,
+    required: true,
+    match: 'equal'
+  },
+  author: {
+    key: true,
+    required: true,
+    match: 'equal'
+  },
+  userId: {
+    key: true,
+    required: true,
+    match: 'equal'
+  },
+  description: {},
+  createAt: {
+    type: 'datetime'
+  },
+  updateAt: {
+    type: 'datetime'
+  },
+  usefulCount: {
+    type: 'integer',
+    min: 0
+  },
+  replyCount: {
+    type: 'integer',
+    min: 0
+  }
 }

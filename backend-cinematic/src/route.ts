@@ -133,15 +133,18 @@ export function route(app: Application, ctx: Context, secure: boolean): void {
   // app.get('/cinema-rate/search', ctx.cinemaRate.search);
 
   app.post('/rates', ctx.rate.rate);
-  app.get('/rates/search', ctx.rate.search);
   app.post('/rates/search', ctx.rate.search);
+  app.post('/rates/reply/search', ctx.reply.search)
+  app.put('/rates/:id/:author', ctx.rate.updateRate);
   app.get('/rates/:id/:author', ctx.rate.load);
-  app.put('/rates/:id/:author', ctx.rate.update);
   app.post('/rates/useful/:id/:author/:userid', ctx.rate.setUseful);
   app.delete('/rates/useful/:id/:author/:userid', ctx.rate.removeUseful);
+  app.post('/rates/reply/:id/:author/:userid', ctx.rate.reply);
+  app.delete('/rates/reply/:id/:author/:userid', ctx.rate.removeReply);
+  app.put('/rates/reply/:id/:author/:userid', ctx.rate.updateReply);
 
-  app.get('/appreciation/search', ctx.appreciation.search);
   app.post('/appreciation/search', ctx.appreciation.search);
+  app.post('/appreciation/reply/search', ctx.reply.search);
   app.post('/appreciation', ctx.appreciation.create)
   app.post('/appreciation/:id/:author', ctx.appreciation.load);
   app.put('/appreciation/:id/:author', ctx.appreciation.update);

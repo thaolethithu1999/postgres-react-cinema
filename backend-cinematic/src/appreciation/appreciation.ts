@@ -1,5 +1,5 @@
 import { Attributes, Filter, Search, Service } from 'onecore';
-import { Repository } from 'query-core';
+import { Repository, SearchResult } from 'query-core';
 
 export interface AppreciationId {
     id: string;
@@ -34,18 +34,27 @@ export interface AppreciationService extends Service<Appreciation, AppreciationI
     reply(reply: Reply): Promise<boolean>;
     removeReply(id: string, author: string, userId: string, ctx?: any): Promise<number>;
     updateReply(reply: Reply): Promise<number>;
+    setUseful(id: string, author: string, userId: string, ctx?: any): Promise<number>;
 }
 
 export interface ReplyRepository extends Repository<Reply, AppreciationId> {
     getReply(id: string, author: string, userId: string): Promise<Reply | null>;
     save(obj: Reply, ctx?: any): Promise<number>;
     removeReply(id: string, author: string, userId: string, ctx?: any): Promise<number>;
-    //updateReply(obj: Reply): Promise<number>;
+    increaseUsefulCount(id: string, author: string, userId: string, ctx?: any): Promise<number>;
+    decreaseUsefulCount(id: string, author: string, userId: string, ctx?: any): Promise<number>;
 }
 
-export interface ReplyService extends Service<Reply, ReplyId, ReplyFilter> {
+export interface ReplyService extends Service<Reply, ReplyId, ReplyFilter> { }
 
+export interface UsefulService extends Service<Useful, UsefulId, UsefulFilter> {
 }
+
+export interface UsefulRepository {
+    getUseful(id: string, author: string, userId: string): Promise<Useful | null>;
+    removeUseful(id: string, author: string, userId: string, ctx?: any): Promise<number>;
+    save(obj: Useful, ctx?: any): Promise<number>;
+};
 
 export const appreciationModel: Attributes = {
     id: {
@@ -97,8 +106,6 @@ export interface ReplyFilter extends Filter {
     replyCount?: number;
 }
 
-
-
 export const replyModel: Attributes = {
     id: {
         key: true,
@@ -130,4 +137,43 @@ export const replyModel: Attributes = {
         type: 'integer',
         min: 0
     }
+}
+
+export interface Useful {
+    id: string;
+    author: string;
+    userId: string;
+    reviewTime: Date;
+}
+
+export interface UsefulFilter extends Filter {
+    id?: string;
+    userId?: string;
+    author?: string;
+    reviewTime?: Date;
+}
+
+export interface UsefulId {
+    id: string;
+    author: string;
+    userId: string;
+}
+
+
+export const usefulModel: Attributes = {
+    id: {
+        key: true,
+        required: true
+    },
+    userId: {
+        key: true,
+        required: true
+    },
+    author: {
+        key: true,
+        required: true
+    },
+    reviewTime: {
+        type: 'datetime',
+    },
 }

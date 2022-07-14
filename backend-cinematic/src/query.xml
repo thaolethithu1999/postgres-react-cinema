@@ -208,6 +208,40 @@
     </if>
   </select>
 
+  <select id="reply">
+    select *
+    from reply
+    where
+    <if test="id != null">
+      id = #{id} and
+    </if> 
+    <if test="author != null">
+      author = #{author} and
+    </if> 
+     <if test="userId != null">
+      userId = #{userId} and
+    </if>
+    <if test="description != null">
+      description ilike #{description} and
+    </if>
+    <if test="createAt != null">
+      createAt >= #{createAt} and
+    </if>
+    <if test="updateAt != null">
+      updateAt >= #{updateAt} and
+    </if>
+    <if test="usefulCount != null">
+      replyCount >= #{replyCount} and
+    </if>
+    <if test="replyCount != null">
+      replyCount >= #{replyCount} and
+    </if>
+    1 = 1
+    <if test="sort != null">
+      order by {sort}
+    </if>
+  </select>
+
   <select id="usefulrates">
     select *
     from usefulrates
@@ -255,37 +289,5 @@
     </if>
   </select>
 
-  <select id="appreciationreply">
-    select *
-    from appreciationreply
-    where
-    <if test="id != null">
-      id = #{id} and
-    </if> 
-    <if test="author != null">
-      author = #{author} and
-    </if> 
-     <if test="userId != null">
-      userId = #{userId} and
-    </if>
-    <if test="description != null">
-      description ilike #{description} and
-    </if>
-    <if test="createAt != null">
-      createAt >= #{createAt} and
-    </if>
-    <if test="updateAt != null">
-      updateAt >= #{updateAt} and
-    </if>
-    <if test="usefulCount != null">
-      replyCount >= #{replyCount} and
-    </if>
-    <if test="replyCount != null">
-      replyCount >= #{replyCount} and
-    </if>
-    1 = 1
-    <if test="sort != null">
-      order by {sort}
-    </if>
-  </select>
+  
 </mapper>
