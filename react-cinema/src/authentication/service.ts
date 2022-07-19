@@ -32,7 +32,9 @@ class ApplicationContext {
   getSignupService(): SignupService<Signup> {
     if (!this.signupService) {
       const c = this.getConfig();
-      this.signupService = new SignupClient<Signup>(httpRequest, c.signup_url + '/signup', c.signup_url);
+      console.log();
+      
+      this.signupService = new SignupClient<Signup>(httpRequest, c.signup_url  + '/signup', c.signup_url);
     }
     return this.signupService;
   }

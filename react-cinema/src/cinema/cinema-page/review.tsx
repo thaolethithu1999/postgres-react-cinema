@@ -10,9 +10,9 @@ import { ReviewScore } from '../../rate/review-score';
 import { Cinema, CinemaRate, useCinema } from '../service';
 import { CinemaRateFilter } from '../service/cinema-rate/cinema-rate';
 
-import { useRate } from '../service';
+import { useRate, useReply } from '../service';
 import { Rate } from '../service/rate';
-import { RateFilter} from '../service/rate/rate';
+import { RateFilter, Reply, ReplyId, ReplyFilter } from '../service/rate/rate';
 import './rate.css';
 
 import RateList from './rateList';
@@ -28,20 +28,23 @@ export const CinemaReview = () => {
   const [voteStar, setVoteStar] = useState<number>();
   const [pageSize, setPageSize] = useState(3);
   const [rates, setRates] = useState<Rate[]>();
+  const [replies, setReplies] = useState<Reply[]>();
+
   const cinemaService = useCinema();
   const rateService = useRate();
+  const replyService = useReply();
 
   useEffect(() => {
     load();
   }, []);
 
   const load = async () => {
-    const cinemaRateSM = new RateFilter();
-    const userId: string | undefined = storage.getUserId();
     const { id } = params;
+    const userId: string | undefined = storage.getUserId() || '';
+    const cinemaRateSM = new RateFilter();
     cinemaRateSM.id = id || '';
     cinemaRateSM.limit = pageSize;
-    cinemaRateSM.sort = '-rateTime';
+    cinemaRateSM.sort = '-time';
     cinemaRateSM.userId = userId;
     const currentCinema = await cinemaService.load(id || '');
     if (currentCinema) {
@@ -62,7 +65,7 @@ export const CinemaReview = () => {
       rate.author = id;
       rate.rate = data.rate;
       rate.review = data.review;
-      rate.rateTime = new Date();
+      rate.time = new Date();
 
       let addRate = await rateService.rate(rate);
       storage.message('Your review is submited');
@@ -72,7 +75,7 @@ export const CinemaReview = () => {
       storage.alert('error');
     }
   }
-  
+
   if (cinema && window.location.pathname.includes('review')) {
     return (
       <>
@@ -88,7 +91,7 @@ export const CinemaReview = () => {
             setIsOpenRateModal={setIsOpenRateModal}
             setVoteStar={(setVoteStar)} />
         </div>
-        <RateList pageSize={pageSize} setPageSize={setPageSize}  load={load} rates={rates} setRates={setRates} />
+        <RateList pageSize={pageSize} setPageSize={setPageSize} load={load} rates={rates} setRates={setRates} replies={replies} setReplies={setReplies} />
         <PostRateForm
           rate={voteStar ?? 1}
           name={cinema.name}

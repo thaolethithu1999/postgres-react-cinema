@@ -27,6 +27,7 @@ export const config = {
   appreciation_reply_url:'http://localhost:8082/appreciation-reply',
   cinema_rate_url:'http://localhost:8080/cinema-rate',
   rate_url:'http://localhost:8080/rates',
+  reply_url: 'http://localhost:8080/reply/search',
   comment_url: 'http://localhost:8082/comment',
   my_item_url: 'http://localhost:8082/my-items',
 };

@@ -218,13 +218,16 @@ ul.list-view.row > li.col.review-custom {
   color: #4d4d4d;
 }
 
-.review-custom > .card > p {
+.review-custom > .card > p, .review-custom > .card > div {
   width: 100%;
   font-size: 15px;
   font-weight: 500;
   margin-block-end: 0;
   color: darkgrey;
 }
+
+
+
 
 .review-custom > .card > div.star-1,
 .review-custom > .card > div.star-2,
@@ -276,3 +279,61 @@ ul.list-view.row > li.col.review-custom {
 .useful-button{
   cursor: pointer;
 }
+
+.btn-reply{
+  font-size: 11px;
+  border-style: none;
+  background-color: #F5F5F5;
+  float: right;
+  cursor: pointer;
+  color: darkgray;
+}
+
+ #reply-card{
+  float: right !important;
+  display: flex;
+  flex-direction: column;
+  padding: 5px 16px;
+  border-radius: 20px;
+  background-color: #F5F5F5;
+  margin-top: 0.5rem;
+}
+
+#reply-card > input {
+  width: 50vw;
+  border-style: none;
+  background-color: #F5F5F5;
+  border-bottom: 1px solid gray;
+
+}
+
+.btn-post-reply, .btn-edit-reply {
+  float: right;
+  font-size: 11px;
+  margin-top: 0.3rem;
+  max-width: max-content;
+  padding:0 0.1rem;
+  cursor: pointer;
+}
+
+.reply-card > input:focus {
+ outline: none;
+}
+
+.input-review-disable:hover{
+  cursor: default !important;
+}
+
+.btn-delete-reply{
+
+}
+
+/* .reply-card {
+  display: grid;
+  height: 200px;
+  grid-template-columns: 200px;
+  grid-template-rows: repeat(6, 1fr);
+} */
+
+
+

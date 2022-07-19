@@ -1,12 +1,15 @@
 import { useEffect, useId, useState } from 'react';
-import { useRate } from '../../rate/service';
+//import { useRate } from '../../rate/service';
+import { useRate } from '../service';
+
 import { Rate } from '../../rate/service/rate';
 import { RateFilter } from '../../rate/service/rate/rate';
 import { storage } from 'uione';
 import { useParams } from 'react-router-dom';
 import { RateItem } from '../rate-item';
 import { OnClick } from 'react-hook-core';
-
+import debounce from "lodash/debounce";
+import { Reply } from '../service/rate';
 
 export interface RateListInterface {
   pageSize: number;
@@ -14,6 +17,8 @@ export interface RateListInterface {
   load: any;
   rates: Rate[] | undefined;
   setRates: any;
+  replies: Reply[] | undefined;
+  setReplies: any;
 }
 
 const RateList = (props: RateListInterface) => {
@@ -22,8 +27,9 @@ const RateList = (props: RateListInterface) => {
   const [resource] = useState(storage.resource().resource());
   const rateService = useRate();
   const author: string | undefined = storage.getUserId();
-  const { pageSize, setPageSize, load, rates, setRates } = props;
-  const [isUseful, setIsUseful] = useState()
+  const { pageSize, setPageSize, load, rates, setRates, replies, setReplies } = props;
+  const [isUseful, setIsUseful] = useState();
+
   useEffect(() => {
     load();
   }, [setRates]);
@@ -35,36 +41,38 @@ const RateList = (props: RateListInterface) => {
     const { id } = params;
     cinemaRateSM.id = id;
     cinemaRateSM.limit = pageSize + 3;
-    cinemaRateSM.sort = '-rateTime';
+    cinemaRateSM.sort = '-time';
     cinemaRateSM.userId = userId;
     const searchRates = await rateService.search(cinemaRateSM, pageSize + 3);
-    console.log({searchRates});
-    
     setRates(searchRates.list);
     setPageSize(pageSize + 3);
   };
 
   const usefulReaction = async (e: OnClick, rate: Rate) => {
-    if (!author) {
-      return storage.alert("Please sign in");
-    }
+    console.log(rate);
     const id = rate.id || '';
-    const userId = rate.author || '';
+    const author = rate.author || '';
+    const userId: string | undefined = storage.getUserId();
+    if (!userId) {
+      return;
+    }
     const rs = await rateService.setUseful(id, author, userId);
     load();
   }
 
-  const RemoveUseful = async (e: OnClick, rate: Rate) => {
-    if (!author) {
+  const removeUseful = async (e: OnClick, rate: Rate) => {
+    const id = rate.id || '';
+    const author = rate.author || '';
+    const userId: string | undefined = storage.getUserId();
+    if (!userId) {
       return;
     }
-    const id = rate.id || '';
-    const userId = rate.author || '';
-
     await rateService.removeUseful(id, author, userId);
     load();
   }
 
+  
+  console.log({rates});
   return (
     <>
       <ul className='row list-view'>
@@ -78,7 +86,7 @@ const RateList = (props: RateListInterface) => {
                 maxLengthReviewText={maxLengthReviewText}
                 resource={resource}
                 usefulReaction={usefulReaction}
-                removeUsefulReaction={RemoveUseful}
+                removeUsefulReaction={removeUseful}
               />;
             }) || '')
           )

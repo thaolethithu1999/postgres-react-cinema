@@ -15,7 +15,7 @@ import { CinemaRateService } from './cinema-rate/cinema-rate';
 import { CinemaRateClient } from './cinema-rate';
 import { CinemaService } from '../service/cinema/cinema';
 import { useState } from 'react';
-import { RateClient, rateModel, RateService } from './rate';
+import { RateClient, rateModel, RateService, ReplyClient, ReplyService } from './rate';
 
 export * from './cinema';
 export * from './category';
@@ -33,6 +33,7 @@ export interface Config {
   location_rate_url: string;
   cinema_rate_url: string;
   rate_url: string;
+  reply_url: string;
 }
 class ApplicationContext {
   cinemaService?: CinemaService;
@@ -44,7 +45,7 @@ class ApplicationContext {
   locationRateService?: LocationRateService;
   cinemaRateService?: CinemaRateService;
   rateService?: RateService;
-
+  replyService?: ReplyService;
 
   constructor() {
     this.getConfig = this.getConfig.bind(this);
@@ -55,6 +56,7 @@ class ApplicationContext {
     this.getLocationService = this.getLocationService.bind(this);
     this.getCinemaService = this.getCinemaService.bind(this);
     this.getRateService = this.getRateService.bind(this);
+    this.getReplyService = this.getReplyService.bind(this);
   }
   getConfig(): Config {
     return storage.config();
@@ -66,6 +68,14 @@ class ApplicationContext {
       this.rateService = new RateClient(httpRequest, c.rate_url);
     }
     return this.rateService;
+  }
+
+  getReplyService(): ReplyService {
+    if (!this.replyService) {
+      const c = this.getConfig();
+      this.replyService = new ReplyClient(httpRequest, c.reply_url);
+    }
+    return this.replyService;
   }
 
   getCinemaService(): CinemaService {
@@ -129,6 +139,10 @@ export const context = new ApplicationContext();
 
 export function useRate(): RateService {
   return context.getRateService();
+}
+
+export function useReply(): ReplyService {
+  return context.getReplyService();
 }
 
 export function useCinema(): CinemaService {

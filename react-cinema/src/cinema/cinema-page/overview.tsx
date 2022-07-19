@@ -31,11 +31,9 @@ export const CinemaOverview = () => {
   const load = async () => {
     const { id } = params;
     const currentCinema = await cinemaService.load(id || '');
-    //console.log(currentCinema);
-    
     if (currentCinema) {
       setCinema(currentCinema);
-    }
+    }   
   };
 
   //console.log(locationPath);
