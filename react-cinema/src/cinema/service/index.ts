@@ -15,7 +15,7 @@ import { CinemaRateService } from './cinema-rate/cinema-rate';
 import { CinemaRateClient } from './cinema-rate';
 import { CinemaService } from '../service/cinema/cinema';
 import { useState } from 'react';
-import { RateClient, rateModel, RateService, ReplyClient, ReplyService } from './rate';
+import { RateClient, rateModel, RateService, RateCommentClient, RateCommentService} from './rate';
 
 export * from './cinema';
 export * from './category';
@@ -33,7 +33,8 @@ export interface Config {
   location_rate_url: string;
   cinema_rate_url: string;
   rate_url: string;
-  reply_url: string;
+  rate_comment_url: string;
+  comment_url: string;
 }
 class ApplicationContext {
   cinemaService?: CinemaService;
@@ -45,7 +46,7 @@ class ApplicationContext {
   locationRateService?: LocationRateService;
   cinemaRateService?: CinemaRateService;
   rateService?: RateService;
-  replyService?: ReplyService;
+  rateCommentService?: RateCommentService;
 
   constructor() {
     this.getConfig = this.getConfig.bind(this);
@@ -56,7 +57,7 @@ class ApplicationContext {
     this.getLocationService = this.getLocationService.bind(this);
     this.getCinemaService = this.getCinemaService.bind(this);
     this.getRateService = this.getRateService.bind(this);
-    this.getReplyService = this.getReplyService.bind(this);
+    this.getRateCommentService = this.getRateCommentService.bind(this);
   }
   getConfig(): Config {
     return storage.config();
@@ -70,12 +71,12 @@ class ApplicationContext {
     return this.rateService;
   }
 
-  getReplyService(): ReplyService {
-    if (!this.replyService) {
+  getRateCommentService(): RateCommentService {
+    if (!this.rateCommentService) {
       const c = this.getConfig();
-      this.replyService = new ReplyClient(httpRequest, c.reply_url);
+      this.rateCommentService = new RateCommentClient(httpRequest, c.rate_comment_url);
     }
-    return this.replyService;
+    return this.rateCommentService;
   }
 
   getCinemaService(): CinemaService {
@@ -141,8 +142,8 @@ export function useRate(): RateService {
   return context.getRateService();
 }
 
-export function useReply(): ReplyService {
-  return context.getReplyService();
+export function useRateComment(): RateCommentService {
+  return context.getRateCommentService();
 }
 
 export function useCinema(): CinemaService {

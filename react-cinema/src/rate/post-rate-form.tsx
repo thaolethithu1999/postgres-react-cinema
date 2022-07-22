@@ -10,6 +10,7 @@ interface Props {
   isOpenRateModal: boolean;
   close(): void;
 }
+
 export interface DataPostRate {
   review: string;
   rate: number;
@@ -25,25 +26,28 @@ export const customStyles = {
     transform: 'translate(-50%, -50%)',
   }
 };
+
 ReactModal.setAppElement('#root');
 
 export const PostRateForm = (props: Props) => {
   const [review, setReview] = useState('');
   const [resource] = useState(storage.resource().resource());
+
   const closeModal = () => {
     props.close();
   };
+
   const handleChange = (event: any) => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     setReview(value);
   };
+
   const renderRateStar = (value: any) => {
     let list5 = Array(5);
     list5 = list5.fill(<i />).map((_, index )=>{
       return (<i key={index}></i>)
     });
-
     const listClass = [];
     for (let i = 1; i <= value; i++) {
       listClass.push(`star-${i}`);
@@ -52,6 +56,7 @@ export const PostRateForm = (props: Props) => {
     const divStar = <div className={`rv-star3 ${longClass}`}>{list5}</div>;
     return divStar;
   };
+
   const postReview = async (event: any) => {
     event.preventDefault();
     const rate: DataPostRate = {

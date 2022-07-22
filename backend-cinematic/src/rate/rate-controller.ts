@@ -2,11 +2,11 @@ import { Request, Response } from 'express';
 import { Controller, getStatusCode, handleError, Log } from 'express-ext';
 import { Validator } from 'onecore';
 import { createValidator } from 'xvalidators';
-import { Rate, RateFilter, RateId, rateModel, RateService, Reply, replyModel } from './rate';
+import { Rate, RateComment, rateCommentModel, RateFilter, RateId, rateModel, RateService } from './rate';
 
 export class RateController extends Controller<Rate, RateId, RateFilter> {
   validator: Validator<Rate>;
-  replyValidator: Validator<Reply>;
+  rateCommentValidator: Validator<RateComment>;
 
   constructor(log: Log, protected rateService: RateService) {
     super(log, rateService);
@@ -15,13 +15,13 @@ export class RateController extends Controller<Rate, RateId, RateFilter> {
     this.rate = this.rate.bind(this);
     this.setUseful = this.setUseful.bind(this);
     this.removeUseful = this.removeUseful.bind(this);
-    this.reply = this.reply.bind(this);
-    this.removeReply = this.removeReply.bind(this);
-    this.updateReply = this.updateReply.bind(this);
+    this.comment = this.comment.bind(this);
+    this.removeComment = this.removeComment.bind(this);
+    this.updateComment = this.updateComment.bind(this);
     this.updateRate = this.updateRate.bind(this);
     this.search = this.search.bind(this)
     this.validator = createValidator<Rate>(rateModel);
-    this.replyValidator = createValidator<Reply>(replyModel);
+    this.rateCommentValidator = createValidator<RateComment>(rateCommentModel);
   }
 
   load(req: Request, res: Response) {
@@ -69,44 +69,41 @@ export class RateController extends Controller<Rate, RateId, RateFilter> {
     }).catch(err => handleError(err, res, this.log));
   }
 
-  reply(req: Request, res: Response) {
+  comment(req: Request, res: Response) {
     const id = req.params.id;
     const author = req.params.author;
     const userId = req.params.userid;
-    const reply: Reply = { id, author, userId, ...req.body };
-    
-    console.log({reply});
-    
-    this.replyValidator.validate(reply).then(errors => {
+    const comment: RateComment = { id, author, userId, ...req.body };
+    this.rateCommentValidator.validate(comment).then(errors => {
       if (errors && errors.length > 0) {
         res.status(getStatusCode(errors)).json(errors).end();
       } else {
-        this.rateService.reply(reply).then(rep => {
+        this.rateService.comment(comment).then(rep => {
           return res.status(200).json(rep).end();
         }).catch(err => handleError(err, res, this.log));
       }
     }).catch(err => handleError(err, res, this.log));
   }
 
-  removeReply(req: Request, res: Response) {
-    const id = req.params.id;
+  removeComment(req: Request, res: Response) {
+    const commentId = req.params.commentid;
     const author = req.params.author;
-    const userId = req.params.userid;
-    this.rateService.removeReply(id, author, userId).then(reply => {
+    this.rateService.removeComment(commentId, author).then(reply => {
       return res.status(200).json(reply).end();
     }).catch(err => handleError(err, res, this.log));
   }
 
-  updateReply(req: Request, res: Response) {
+  updateComment(req: Request, res: Response) {
+    const commentId = req.params.commentid; 
     const id = req.params.id;
     const author = req.params.author;
     const userId = req.params.userid;
-    const reply: Reply = { id, author, userId, ...req.body };
-    this.replyValidator.validate(reply).then(errors => {
+    const comment: RateComment = {commentId, id, author, userId, ...req.body };
+    this.rateCommentValidator.validate(comment).then(errors => {
       if (errors && errors.length > 0) {
         res.status(getStatusCode(errors)).json(errors).end();
       } else {
-        this.rateService.updateReply(reply).then(rep => {
+        this.rateService.updateComment(comment).then(rep => {
           return res.status(200).json(rep).end();
         }).catch(err => handleError(err, res, this.log));
       }

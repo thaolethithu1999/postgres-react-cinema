@@ -1,15 +1,14 @@
 import { useEffect, useId, useState } from 'react';
-//import { useRate } from '../../rate/service';
 import { useRate } from '../service';
 
-import { Rate } from '../../rate/service/rate';
+import { Rate } from '../service/rate';
 import { RateFilter } from '../../rate/service/rate/rate';
 import { storage } from 'uione';
 import { useParams } from 'react-router-dom';
 import { RateItem } from '../rate-item';
 import { OnClick } from 'react-hook-core';
 import debounce from "lodash/debounce";
-import { Reply } from '../service/rate';
+import { RateComment } from '../service/rate';
 
 export interface RateListInterface {
   pageSize: number;
@@ -17,7 +16,7 @@ export interface RateListInterface {
   load: any;
   rates: Rate[] | undefined;
   setRates: any;
-  replies: Reply[] | undefined;
+  replies: RateComment[] | undefined;
   setReplies: any;
 }
 
@@ -30,6 +29,7 @@ const RateList = (props: RateListInterface) => {
   const { pageSize, setPageSize, load, rates, setRates, replies, setReplies } = props;
   const [isUseful, setIsUseful] = useState();
 
+  
   useEffect(() => {
     load();
   }, [setRates]);
@@ -71,8 +71,6 @@ const RateList = (props: RateListInterface) => {
     load();
   }
 
-  
-  console.log({rates});
   return (
     <>
       <ul className='row list-view'>

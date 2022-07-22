@@ -220,14 +220,11 @@ ul.list-view.row > li.col.review-custom {
 
 .review-custom > .card > p, .review-custom > .card > div {
   width: 100%;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   margin-block-end: 0;
   color: darkgrey;
 }
-
-
-
 
 .review-custom > .card > div.star-1,
 .review-custom > .card > div.star-2,
@@ -284,56 +281,210 @@ ul.list-view.row > li.col.review-custom {
   font-size: 11px;
   border-style: none;
   background-color: #F5F5F5;
-  float: right;
   cursor: pointer;
   color: darkgray;
+  float: right;
+  padding-left: 10px;
+  flex: 1;
 }
 
- #reply-card{
-  float: right !important;
+.btn-rep-edit, .btn-rep-remove{
+  text-align: center;
+  font-size: 11px;
+}
+
+.btn-rep-remove {
+  margin-left: 10px;
+}
+
+.more-replies-div {
+  text-align: center;
+  height: max-content;
+}
+.more-replies{
+  color:#4D4D4D; 
+  font-weight: 400;
+  font-size: 11px;
+}
+
+.review-custom > .comments-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 7px;
+}
+.review-custom > .comments-container > .comments {
+  border-radius: 20px;
+  background-color: #F5F5F5 !important;
+  width: max-content;
+  max-width: 80%;
+  margin: 0 16px; 
+  padding: 10px;
+}
+.review-custom > .comments-container > .comments > .header {
+  display: flex;
+  flex-direction: row;
+}
+.review-custom > .comments-container > .comments > .header > p:first-child {
+  min-width: 50px;
+}
+.review-custom > .comments-container > .comments > .header > p:last-child {
+  flex: 1;
+} 
+.review-custom > .comments-container > .comments > .header > .comment {
+  padding-left: 15px;
+  padding-bottom: 7px;
+}
+.review-custom > .comments-container > .comments > .header > p,
+.review-custom > .comments-container > .comments > .footer > p {
+  margin: 0;
+}
+.footer > .time {
+  font-size: 11px;
+}
+.header > .comment {
+  color: #4d4d4d;
+}
+.header > .comments > p:first-child {
+  width: max-content;
+}
+.footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.buttons{
+  display: flex;
+  justify-content: flex-end;
+}
+.review-custom > .comments-container > .create-comment {
+  max-width: 80%;
+  border-radius: 20px;
+  background-color: #F5F5F5 !important;
+  margin: 0 16px; 
+  padding: 10px;
+}
+.review-custom > .card > .footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+}
+.review-custom > .card > .footer > right {
+  display: flex;
+}
+.ul.list-view.row > li.col > *:last-child {
+  border-bottom: none !important;
+}
+.review-custom > .comments-container > .post-comment-container {
+  width: 80%;
+  display: flex;
+  justify-content: flex-end;
+  background-color: #F5F5F5;
+  border-radius: 20px;
+  margin: 0 16px; 
+  padding: 16px !important;
+  margin-bottom: 0 !important;
+  height: max-content;
+}
+.review-custom > .comments-container> .post-comment-container > .post-comment {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 5px 16px;
+}
+.review-custom > .comments-container> .post-comment-container > .post-comment > textarea {
+  flex: 1;
+  outline: none;
+  background-color: #F5F5F5;
+  border: none;
+  height: max-content;
+}
+.review-custom > .comments-container> .post-comment-container > .post-comment > textarea:focus {
+  outline: none;
+  background-color: #F5F5F5;
+}
+.review-custom > .comments-container> .post-comment-container > .post-comment > .btn-area {
+  display: flex;
+  justify-content: flex-end;
+}
+.review-custom > .comments-container > .post-comment-container > .post-comment > .btn-area > span {
+  text-align: center;
+  cursor: pointer;
+  padding: 5px;
+  font-size: 12px;
+}
+.post-comment > .btn-area > .value{
+  background-color: goldenrod;
+  border-radius: 5px;
+  color: white;
+}
+
+/* test */
+.review-custom > .comments-container > .comments2 {
   border-radius: 20px;
-  background-color: #F5F5F5;
-  margin-top: 0.5rem;
+  background-color: #F5F5F5 !important;
+  width: max-content;
+  width: 80%;
+  margin: 0 16px; 
+  padding: 10px;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
 }
-
-#reply-card > input {
-  width: 50vw;
-  border-style: none;
-  background-color: #F5F5F5;
-  border-bottom: 1px solid gray;
-
+.review-custom > .comments-container > .comments2 > .avatar {
+  min-width: 50px;
 }
-
-.btn-post-reply, .btn-edit-reply {
-  float: right;
-  font-size: 11px;
-  margin-top: 0.3rem;
-  max-width: max-content;
-  padding:0 0.1rem;
+.review-custom > .comments-container > .comments2 > .action {
+  min-width: 30px;
+  text-align: right;
+  margin-right: 5px;
   cursor: pointer;
 }
-
-.reply-card > input:focus {
- outline: none;
+.review-custom > .comments-container > .comments2 > .content {
+  flex: 1;
+}
+.review-custom > .comments-container > .comments2 > .content > .header >.username {
+  font-weight: 600; 
+  margin: 0;
+  padding-right: 10px;
+}
+.review-custom > .comments-container > .comments2 > .content > .header >.time{
+  font-size: 12px;  
+} 
+.review-custom > .comments-container > .comments2 > .content > .comment {
+  margin: 0;
+}
+.review-custom > .comments-container > .comments2 > .content > .header {
+  display: flex;
+  height: 25px;
+}
+.review-custom > .comments-container > .comments2 > .actions{
+  position: absolute; 
+  margin-top: 20px;
+  background-color: #EDEDED;
+  display: flex;
+  flex-direction: column;
+  min-width: 80px;
+  border-radius: 7px;
+}
+.review-custom > .comments-container > .comments2 > .actions > .btn-edit-comment,
+.review-custom > .comments-container > .comments2 > .actions > .btn-delete-comment  {
+  display: flex;
+  border-bottom: 1px solid white;
+  padding: 5px;
+  cursor: pointer;
+}
+.review-custom > .comments-container > .comments2 > .actions > .btn-edit-comment > p,
+.review-custom > .comments-container > .comments2 > .actions > .btn-delete-comment > p {
+  margin: 0;
+  min-width: 30px;
+}
+.review-custom > .comments-container > .comments2 > .actions > .btn-edit-comment > span,
+.review-custom > .comments-container > .comments2 > .actions > .btn-delete-comment > span {
+  flex: 1;
+}
+.user-input > .rateReview {
+  margin-top: 15px;
 }
 
-.input-review-disable:hover{
-  cursor: default !important;
-}
-
-.btn-delete-reply{
-
-}
-
-/* .reply-card {
-  display: grid;
-  height: 200px;
-  grid-template-columns: 200px;
-  grid-template-rows: repeat(6, 1fr);
-} */
 
 
 

@@ -7,15 +7,12 @@ import { useParams } from 'react-router-dom';
 import { Cinema, useCinema } from '../service';
 import './rate.css';
 
-export const CinemaOverview = () => {
-  const locationPath = useLocation();
-  const params = useParams();
-  const [cinema, setCinema] = useState<Cinema>();
-  const cinemaService = useCinema();
+export interface Props {
+  cinema: Cinema;
+}
 
-  useEffect(() => {
-    load();
-  }, []);
+export const CinemaOverview = ({cinema}:Props ) => {
+  const locationPath = useLocation();
 
   useEffect(() => {
     const L = require('leaflet');
@@ -26,17 +23,6 @@ export const CinemaOverview = () => {
       shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
     });
   }, []);
-
-
-  const load = async () => {
-    const { id } = params;
-    const currentCinema = await cinemaService.load(id || '');
-    if (currentCinema) {
-      setCinema(currentCinema);
-    }   
-  };
-
-  //console.log(locationPath);
 
   if (cinema && locationPath.pathname.split('/').length === 3) {
     return (

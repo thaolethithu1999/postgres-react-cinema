@@ -43,7 +43,6 @@ export const CinemaPage = () => {
 
   const getCinema = async (cinamaId: string) => {
     const currentCinema = await cinemaService.load(cinamaId);
-
     if (currentCinema) {
       setCinema(currentCinema);
       setUploadedCover(currentCinema?.coverURL);
@@ -103,7 +102,6 @@ export const CinemaPage = () => {
     e.preventDefault();
     setCinema({ ...cinema, coverURL: url });
     setUploadedCover(url);
-
     cinemaService.update({ ...cinema, coverURL: url })
       .then((success) => {
         if (success) {
@@ -168,9 +166,9 @@ export const CinemaPage = () => {
             </nav>
           </header>
           <div className='row'>
-            <CinemaOverview />
-            <CinemaReview />
-            <CinemaPhoto />
+            <CinemaOverview cinema={cinema} />
+            <CinemaReview cinema={cinema} setCinema={setCinema}/>
+            <CinemaPhoto cinema={cinema} setCinema={setCinema}/>
           </div>
         </form>
 

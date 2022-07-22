@@ -25,9 +25,9 @@ import { CinemaParentController, useCinemaParentController } from './cinemaparen
 import { useFilmController, useFilmRateController } from './film';
 import { FilmController } from './film/film-controller';
 import { FilmRateController } from './film/film-rate-controller';
-import { useRateController, useReplyController } from './rate';
+import { useRateController, useRateCommentController } from './rate';
 import { RateController } from './rate/rate-controller';
-import { ReplyController } from './rate/reply-controller';
+import { RateCommentController } from './rate/comment-controller';
 import { RoleController, useRoleController } from './role';
 import { SqlUploadSerive } from './uploads/SqlUploadsService';
 import { UploadController } from './uploads/UploadController';
@@ -65,7 +65,7 @@ export interface Context {
   rate: RateController;
   appreciation: AppreciationController;
   appreciationReply: AppreciationReplyController;
-  reply: ReplyController;
+  comment: RateCommentController;
 }
 
 const credentials = {
@@ -117,7 +117,7 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: 
   const rate = useRateController(logger.error, db, mapper);
   const appreciation = useAppreciationController(logger.error, db, mapper);
   const appreciationReply = useAppreciationReplyController(logger.error, db, mapper);
-  const reply = useReplyController(logger.error, db, mapper);
+  const comment = useRateCommentController(logger.error, db, mapper);
   // const healthChecker2  =new Checker2('mongo',"https://localhost:443/health",5000);
   // const health2 = new HealthController2([healthChecker2])
   const manager = new PoolManager(pool);
@@ -127,5 +127,5 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: 
   const storageService = new GoogleStorageService(bucket, storageConfig, map);
   const uploadService = new SqlUploadSerive(pool, 'media', storageService.upload, storageService.delete, param, manager.query, manager.exec, manager.execBatch);
   const uploads = new UploadController(logger.error, uploadService);
-  return { health, log, middleware, role, user, auditLog, film, category, cinema, cinemaParent, uploads, filmRate, cinemaRate, rate, appreciation, appreciationReply, reply };
+  return { health, log, middleware, role, user, auditLog, film, category, cinema, cinemaParent, uploads, filmRate, cinemaRate, rate, appreciation, appreciationReply, comment };
 }

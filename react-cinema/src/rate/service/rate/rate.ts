@@ -9,10 +9,10 @@ export interface Rate extends Tracking {
   id?: string;
   author?: string;
   rate?: number;
-  rateTime?: Date;
+  time?: Date;
   review?: string;
   usefulCount?: number;
-  isUseful?: boolean;
+  replyCount?: number;
 }
 
 export class RateFilter implements Filter {
@@ -26,9 +26,10 @@ export class RateFilter implements Filter {
   id?: string;
   author?: string;
   rate?: number;
-  rateTime?: Date;
+  time?: Date;
   review?: string;
   usefulCount?: number;
+  replyCount?: number;
   userId?: string;
   limit?: number;
 }

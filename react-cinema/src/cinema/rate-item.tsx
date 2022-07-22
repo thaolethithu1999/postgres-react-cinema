@@ -8,8 +8,13 @@ import like from '../assets/images/like.svg';
 import likeFilled from '../assets/images/like_filled.svg';
 import { OnClick } from 'react-hook-core';
 import { storage } from 'uione';
-import { Rate, Reply } from './service/rate';
-import { useRate, useReply } from './service';
+import { Rate } from './service/rate';
+import { useRate, useRateComment } from './service';
+import { RateComment, RateCommentFilter } from './service/rate/rate';
+import { KeyObject } from 'crypto';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCoffee, faCircle, faUser, faUserCircle, faPencil, faEllipsis, faEllipsisVertical, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { CommentItem } from './comment-item';
 
 interface Props {
   data: any;
@@ -19,13 +24,15 @@ interface Props {
   removeUsefulReaction?: any;
 }
 export const RateItem = ({ data, maxLengthReviewText, resource, usefulReaction, removeUsefulReaction }: Props) => {
-  const userId: string | undefined = storage.getUserId();
+  const userId: string | undefined = storage.getUserId() || '';
   const [hide, setHide] = useState(false);
+  const [hideComment, setHideComment] = useState(false);
   const [input, setInput] = useState('');
-  const [replies, setReplies] = useState<Reply[]>();
-
+  const [replies, setReplies] = useState<RateComment[]>([]);
+  const [pageSize, setPageSize] = useState(3);
   const rateService = useRate();
-  const replyService = useReply();
+  const commentService = useRateComment();
+  const username = storage.username();
 
   const renderReviewStar = (value: any) => {
     const starList = Array(5).fill(<i />).map((item, index) => {
@@ -35,68 +42,74 @@ export const RateItem = ({ data, maxLengthReviewText, resource, usefulReaction, 
     return <div className={`rv-star2 ${classes}`}>{}</div>;
   };
 
+  const showText = (e: OnClick, text: string) => {
+    console.log(text);
+    
+  }
+
   const formatReviewText = (text: string) => {
     if (text && text.length > maxLengthReviewText) {
       let textSub = text.substring(0, maxLengthReviewText);
       textSub = textSub + ' ...';
-      const a = <span>{resource.review} {textSub} <span className='more-reviews'>More</span></span>;
+      const a = <span>{resource.review} {textSub} <span className='more-reviews' onClick={(e) => showText(e, text)}>More</span></span>;
       return a;
     } else {
       return <span>{resource.review} {text}</span>;
     }
   };
 
-  const createReply = async (e: OnClick, rate: Rate, input: any, setHide: any) => {
+  const createReply = async (e: OnClick, rate: Rate, input: any) => {
     const id = rate.id || '';
     const author = rate.author || '';
     const userId: string | undefined = storage.getUserId();
     if (!userId) {
       return storage.alert('You must sign in');;
     }
-    const reply: Reply = { id, author, userId, review: input, time: new Date() };
-    const rs = await rateService.reply(reply);
+    const comment: RateComment = { id, author, userId, comment: input, time: new Date() };
+    const rs = await rateService.comment(comment);
     if (rs === false) {
       return;
     } else {
       storage.message('Your review is submited');
       setHide(false);
-      showReply(e, data);
+      showComments(e, data);
     }
-
   }
 
-  const showReply = async (e: OnClick, data: Rate) => {
+  const showComments = async (e: OnClick, data: Rate) => {
     setHide(!hide);
-    const id = data.id;
-    const author = data.author;
-    const replySearch: any = { id, author };
-    const reps = await replyService.search(replySearch);
+    setHideComment(false);
+    const replyFilter = new RateCommentFilter();
+    replyFilter.id = data.id;
+    replyFilter.author = data.author;
+    replyFilter.limit = pageSize;
+    replyFilter.sort = '-time';
+    const reps = await commentService.search(replyFilter, pageSize);
     setReplies(reps.list);
   }
 
-  const editReply = async (e: OnClick, input: any, reply: Reply) => {
-    if (reply.userId !== userId) {
+  const updateComment = async (e: OnClick, input: any, comment: RateComment) => {
+    if (comment.userId !== userId) {
       return storage.alert("...");
     } else {
-      const id = reply.id;
-      const author = reply.author;
-      const newReply: Reply = { id, author, userId, review: input, time: new Date() };
-      await rateService.updateReply(newReply);
-      showReply(e, reply);
+      const commentId = comment.commentId || '';
+      const id = comment.id || '';
+      const author = comment.author || '';
+      const newComment: RateComment = { commentId, id, author, userId, comment: input, time: new Date() };
+      await rateService.updateComment(newComment);
+      showComments(e, comment);
     }
   }
 
-  const removeReply = async (e: OnClick, reply: Reply) => {
-    const id = reply.id || '';
-    const author = reply.author || '';
-    const userId = reply.userId || '';
-    await rateService.removeReply(id, author, userId).then(res =>{
-      if(res > 0){
+  const removeComment = async (e: OnClick, comment: RateComment) => {
+    const commentId = comment.commentId || '';
+    const author = comment.author || '';
+    await rateService.removeComment(commentId, author).then(res => {
+      if (res > 0) {
         storage.message("Removed successfully!")
-        showReply(e, reply);
+        showComments(e, comment);
       }
     })
-
   }
 
   const handleChange = (e: any) => {
@@ -104,54 +117,65 @@ export const RateItem = ({ data, maxLengthReviewText, resource, usefulReaction, 
     setInput(e.target.value);
   }
 
+  const moreReply = async (e: any, data: RateComment) => {
+    setHide(!hide);
+    const commentFilter = new RateCommentFilter();
+    commentFilter.id = data.id;
+    commentFilter.author = data.author;
+    commentFilter.limit = pageSize + 3;
+    commentFilter.sort = '-time';
+    const reps = await commentService.search(commentFilter, pageSize + 3);
+    setReplies(reps.list);
+    setPageSize(pageSize + 3);
+    showComments(e, data);
+  }
+
   return (
     <li className='col s12 m12 l12 review-custom'>
       <section className='card'>
-        <p>{moment(data.rateTime).format('DD/MM/YYYY')}</p>
+        {data.author === userId ?
+          <p>{moment(data.time).format('DD/MM/YYYY')}--{data.rate} star <FontAwesomeIcon icon={faCircle} color="lightgreen" size="xs" /></p> :
+          <p>{moment(data.time).format('DD/MM/YYYY')}--{data.rate} star</p>}
         {renderReviewStar(data.rate)}
         {formatReviewText(data.review ?? '')}
-        <p>
-          {data.disable === true ? <img alt='' className='useful-button' width={20} src={likeFilled} onClick={(e) => removeUsefulReaction(e, data)} /> : <img alt='' className='useful-button' width={20} src={like} onClick={(e) => usefulReaction(e, data)} />}
-          {data.usefulCount ? data.usefulCount : 0}
-          <span className="btn-reply" id="btn-reply" onClick={(e) => showReply(e, data)}>Reply</span>
-        </p>
+        <div className="footer">
+          <div className="left">
+            {data.disable === true ? <img alt='' className='useful-button' width={20} src={likeFilled} onClick={(e) => removeUsefulReaction(e, data)} /> : <img alt='' className='useful-button' width={20} src={like} onClick={(e) => usefulReaction(e, data)} />}
+            {data.usefulCount ? data.usefulCount : 0}
+          </div>
+          <div className="right">
+            <span className="btn-reply" onClick={(e) => showComments(e, data)}>Replies</span>
+          </div>
+        </div>
       </section>
       {hide ? <>
         {replies && replies.length > 0 &&
-          (replies.map((rep: Reply, i) => {
-            return <>
-              <section className='reply-card' id="reply-card">
-                <p>{moment(rep.time).format('DD/MM/YYYY')}</p>
-                {rep.author === userId ?
-                  <input
-                    id="input-review"
-                    type='text'
-                    placeholder="..."
-                    maxLength={255}
-                    defaultValue={rep.review}
-                    value={undefined}
-                    onChange={e => handleChange(e)}
-                  /> : <input
-                    id="input-review-disable"
-                    type='text'
-                    maxLength={255}
-                    value={rep.review} />}
-
-                {rep.author === userId ? <div className="btn-edit-reply" onClick={(e) => editReply(e, input, rep)}>Save</div> : null}
-                {rep.author === userId ? <div className="btn-delete-reply" onClick={(e) => removeReply(e, rep)}>Delete</div> : null}
-              </section>
-            </>
+          (replies.map((cmt: RateComment, i) => {
+            return <CommentItem cmt={cmt} userId={userId} removeComment={removeComment} updateComment={updateComment} />
           })) || ''
         }
-        <section className='reply-card' id="reply-card">
-          <input
-            type='text'
-            placeholder="..."
-            maxLength={255}
-            onChange={(e) => handleChange(e)}
-          />
-          <div className="btn-post-reply" onClick={(e) => createReply(e, data, input, setHide)}>Post</div>
-        </section>
+        {replies && replies.length >= 3 && (<div className='col more-replies-div'>
+          <span className='more-replies' onClick={(e) => moreReply(e, data)}>
+            <b>MORE REVIEWS</b>
+          </span>
+        </div>)}
+        <div className="comments-container">
+          <div className="post-comment-container">
+            <div className="post-comment">
+              <textarea placeholder="type comment here..." className="comment" value={input}
+                onChange={(e) => handleChange(e)} />
+              <div className="btn-area">
+                {input.length > 0 ? <>
+                  <span className="btn-post" onClick={() => { setHideComment(!hideComment) }} >Cancel</span>
+                  <span className="btn-post value" onClick={(e) => createReply(e, data, input)}>Post</span>
+                </> : <>
+                  <span className="btn-post" onClick={() => { setHideComment(!hideComment) }} >Cancel</span>
+                  <span className="btn-post" onClick={(e) => createReply(e, data, input)}>Post</span>
+                </>}
+              </div>
+            </div>
+          </div>
+        </div>
       </>
         : null}
     </li>

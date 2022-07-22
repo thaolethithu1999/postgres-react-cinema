@@ -125,23 +125,23 @@ export function route(app: Application, ctx: Context, secure: boolean): void {
   app.patch('/cinema/:id', checkCinema, ctx.cinema.patch);
   app.delete('/cinema/:id', checkCinema, ctx.cinema.delete);
 
-  app.get('/reply/search', ctx.reply.search);
-  app.post('/reply/search', ctx.reply.search);
+  app.get('/comment/search', ctx.comment.search);
+  app.post('/comment/search', ctx.comment.search);
   app.post('/rates', ctx.rate.rate);
   app.get('/rates/search', ctx.rate.search);
   app.post('/rates/search', ctx.rate.search);
-  app.get('/rates/reply/search', ctx.reply.search);
-  app.post('/rates/reply/search', ctx.reply.search);
+  app.get('/rates/comment/search', ctx.comment.search);
+  app.post('/rates/comment/search', ctx.comment.search);
   app.put('/rates/:id/:author', ctx.rate.updateRate);
   app.get('/rates/:id/:author', ctx.rate.load);
   app.post('/rates/useful/:id/:author/:userid', ctx.rate.setUseful);
   app.delete('/rates/useful/:id/:author/:userid', ctx.rate.removeUseful);
-  app.post('/rates/reply/:id/:author/:userid', ctx.rate.reply);
-  app.delete('/rates/reply/:id/:author/:userid', ctx.rate.removeReply);
-  app.put('/rates/reply/:id/:author/:userid', ctx.rate.updateReply);
+  app.post('/rates/comment/:id/:author/:userid', ctx.rate.comment);
+  app.delete('/rates/comment/:commentid/:author', ctx.rate.removeComment);
+  app.put('/rates/comment/:commentid/:id/:author/:userid', ctx.rate.updateComment);
 
   app.post('/appreciation/search', ctx.appreciation.search);
-  app.post('/appreciation/reply/search', ctx.reply.search);
+  app.post('/appreciation/reply/search', ctx.comment.search);
   app.post('/appreciation', ctx.appreciation.create);
   app.post('/appreciation/:id/:author', ctx.appreciation.load);
   app.put('/appreciation/:id/:author', ctx.appreciation.update);

@@ -5,60 +5,75 @@ import { storage } from 'uione';
 import { DetailStart } from '../../rate/detail-star';
 import { DataPostRate, PostRateForm } from '../../rate/post-rate-form';
 import { RateItem } from '../../rate/rate-item';
-import { RatingStar } from '../../rate/rateting-star';
+import { RatingStar } from '../rateting-star';
 import { ReviewScore } from '../../rate/review-score';
 import { Cinema, CinemaRate, useCinema } from '../service';
 import { CinemaRateFilter } from '../service/cinema-rate/cinema-rate';
 
-import { useRate, useReply } from '../service';
+import { useRate, useRateComment } from '../service';
 import { Rate } from '../service/rate';
-import { RateFilter, Reply, ReplyId, ReplyFilter } from '../service/rate/rate';
+import { RateComment, RateFilter } from '../service/rate/rate';
 import './rate.css';
 
 import RateList from './rateList';
 
 ReactModal.setAppElement('#root');
 
-export const CinemaReview = () => {
+export interface Props {
+  cinema: Cinema;
+  setCinema: any;
+}
+
+export const CinemaReview = ({ cinema, setCinema }: Props) => {
   const params = useParams();
-  const [cinema, setCinema] = useState<Cinema>();
   const [resource] = useState(storage.resource().resource());
   const [maxLengthReviewText] = useState(100);
   const [isOpenRateModal, setIsOpenRateModal] = useState(false);
   const [voteStar, setVoteStar] = useState<number>();
   const [pageSize, setPageSize] = useState(3);
-  const [rates, setRates] = useState<Rate[]>();
-  const [replies, setReplies] = useState<Reply[]>();
-
+  const [rates, setRates] = useState<Rate[]>([]);
+  const [replies, setReplies] = useState<RateComment[]>();
   const cinemaService = useCinema();
   const rateService = useRate();
-  const replyService = useReply();
+  const userId: string | undefined = storage.getUserId() || '';
 
   useEffect(() => {
     load();
   }, []);
 
+  useEffect(() => {
+    getCurrentUserRate();
+  }, [rates]);
+
   const load = async () => {
     const { id } = params;
-    const userId: string | undefined = storage.getUserId() || '';
     const cinemaRateSM = new RateFilter();
     cinemaRateSM.id = id || '';
     cinemaRateSM.limit = pageSize;
     cinemaRateSM.sort = '-time';
     cinemaRateSM.userId = userId;
-    const currentCinema = await cinemaService.load(id || '');
-    if (currentCinema) {
-      setCinema(currentCinema);
-    }
+
     const searchResult = await rateService.search(cinemaRateSM, pageSize);
     setRates(searchResult.list);
   };
+
+  const getCurrentUserRate = () => {
+    let holdRate: any = 0;
+    if (rates.length > 0) {
+      for (const i in rates) {
+        if (userId === rates[i].author) {
+          holdRate = rates[i].rate;
+        }
+      }
+    }
+    setVoteStar(holdRate);
+  }
 
   const postReview = async (data: DataPostRate): Promise<void> => {
     try {
       const id: string | undefined = storage.getUserId();
       if (!id || !cinema) {
-        return storage.alert("You must sign in to review");
+        return storage.alert("Please sign in to review");
       }
       const rate: Rate = {};
       rate.id = cinema.id;
@@ -89,7 +104,8 @@ export const CinemaReview = () => {
           <RatingStar
             ratingText={resource.rating_text}
             setIsOpenRateModal={setIsOpenRateModal}
-            setVoteStar={(setVoteStar)} />
+            setVoteStar={(setVoteStar)}
+            voteStar={voteStar || 0} />
         </div>
         <RateList pageSize={pageSize} setPageSize={setPageSize} load={load} rates={rates} setRates={setRates} replies={replies} setReplies={setReplies} />
         <PostRateForm

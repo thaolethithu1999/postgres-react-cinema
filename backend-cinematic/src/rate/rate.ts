@@ -1,5 +1,5 @@
 import { Attributes, Filter, SearchResult, Service } from 'onecore';
-import { Repository } from 'query-core';
+import { Repository, SearchService } from 'query-core';
 
 export interface RateId {
   id: string;
@@ -14,7 +14,6 @@ export interface Rate {
   review: string;
   usefulCount: number;
   replyCount: number;
-  reply?: Reply[];
 }
 
 export interface RateFilter extends Filter {
@@ -25,7 +24,6 @@ export interface RateFilter extends Filter {
   review?: string;
   usefulCount?: number;
   replyCount?: number;
-  reply?: Reply[];
 }
 
 export interface RateRepository extends Repository<Rate, RateId> {
@@ -43,18 +41,9 @@ export interface RateService extends Service<Rate, RateId, RateFilter> {
   rate(rate: Rate): Promise<boolean>;
   setUseful(id: string, author: string, userId: string, ctx?: any): Promise<number>;
   removeUseful(id: string, author: string, userId: string, ctx?: any): Promise<number>;
-  reply(reply: Reply): Promise<boolean>;
-  removeReply(id: string, author: string, userId: string, ctx?: any): Promise<number>;
-  updateReply(reply: Reply): Promise<number>;
-}
-
-export interface ReplyRepository extends Repository<Reply, ReplyId> {
-  getReply(id: string, author: string, userId: string): Promise<Reply | null>;
-  save(obj: Reply, ctx?: any): Promise<number>;
-  removeReply(id: string, author: string, userId: string, ctx?: any): Promise<number>;
-}
-
-export interface ReplyService extends Service<Reply, ReplyId, ReplyFilter> {
+  comment(comment: RateComment): Promise<boolean>;
+  removeComment(id: string,author: string, ctx?: any): Promise<number>;
+  updateComment(comment: RateComment): Promise<number>;
 }
 
 export interface RateReactionRepository {
@@ -64,6 +53,13 @@ export interface RateReactionRepository {
 }
 
 export interface RateReactionService extends Service<RateReaction, RateReactionId, RateReactionFilter> {
+}
+
+export interface RateCommentRepository extends Repository<RateComment, string> {
+  save(obj: RateComment, ctx?: any): Promise<number>;
+}
+
+export interface RateCommentService extends Service<RateComment,string,RateCommentFilter> {
 }
 
 export const rateModel: Attributes = {
@@ -183,46 +179,49 @@ export const infoModel: Attributes = {
   },
 };
 
-export interface ReplyId {
+export interface RateCommentId {
   id: string;
   author: string;
   userId: string;
 }
 
-export interface Reply {
+export interface RateComment {
+  commentId: string;
   id: string;
   author: string;
   userId: string;
-  review: string;
+  comment: string;
   time: Date;
 }
 
-export interface ReplyFilter extends Filter {
+export interface RateCommentFilter extends Filter {
+  commentId?: string;
   id?: string;
   author?: string;
   userId?: string;
-  review?: string;
+  comment?: string;
   time?: Date;
 }
 
-export const replyModel: Attributes = {
+export const rateCommentModel: Attributes = {
+  commentId: {
+    key: true
+  },
   id: {
-    key: true,
     required: true,
     match: 'equal'
   },
   author: {
-    key: true,
     required: true,
     match: 'equal'
   },
   userId: {
-    key: true,
     required: true,
     match: 'equal'
   },
-  review: {},
+  comment: {},
   time: {
     type: 'datetime'
   }
 };
+

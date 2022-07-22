@@ -7,23 +7,12 @@ import { getCinemaRates, useCinema } from '../service/index';
 import { FileInfo } from 'reactx-upload';
 import './rate.css';
 
-export const CinemaPhoto = () => {
-  const { id = '' } = useParams();
-  const [cinema, setCinema] = useState<Cinema>() || undefined;
-  const cinemaService = useCinema();
+export interface Props {
+  cinema: Cinema;
+  setCinema: any;
+}
 
-  useEffect(() => {
-    getCinema(id ?? '');
-  }, [id]);
-
-  const getCinema = async (cinamaId: string) => {
-    const currentCinema = await cinemaService.load(cinamaId)
-    if (currentCinema) {
-      setCinema(currentCinema);
-    }
-  }
-
-  let gallery = cinema?.gallery || [];
+export const CinemaPhoto = ({cinema, setCinema}: Props) => {
 
   if (cinema && window.location.pathname.includes('photo')) {
     return (

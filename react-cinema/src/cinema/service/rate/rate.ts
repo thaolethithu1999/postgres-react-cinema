@@ -13,7 +13,6 @@ export interface Rate extends Tracking {
   review?: string;
   usefulCount?: number;
   replyCount?: number;
-  reply?: Reply[];
 }
 
 export class RateFilter implements Filter {
@@ -31,7 +30,6 @@ export class RateFilter implements Filter {
   review?: string;
   usefulCount?: number;
   replyCount?: number;
-  reply?: Reply[];
   userId?: string;
   limit?: number;
 }
@@ -64,13 +62,13 @@ export interface RateService extends Service<Rate, string, RateFilter> {
   rate(obj: Rate): Promise<any>;
   setUseful(id: string, author: string, userId: string, ctx?: any): Promise<number>;
   removeUseful(id: string, author: string, userId: string, ctx?: any): Promise<number>;
-  reply(reply: Reply): Promise<boolean>;
-  removeReply(id: string, author: string, userId: string, ctx?: any): Promise<number>;
-  updateReply(reply: Reply): Promise<number>;
-  getReplySearch(obj: Rate, ctx?: any): Promise<Reply[]>;
+  comment(comment: RateComment): Promise<boolean>;
+  removeComment(commentId: string, author: string, ctx?: any): Promise<number>;
+  updateComment(comment: RateComment): Promise<number>;
+  getCommentSearch(obj: Rate, ctx?: any): Promise<RateComment[]>;
 }
 
-export interface ReplyService extends Service<Reply, string, ReplyFilter> {
+export interface RateCommentService extends Service<RateComment, string, RateCommentFilter> {
 
 }
 
@@ -127,49 +125,51 @@ export const rateReactionModel: Attributes = {
   }
 };
 
-export interface ReplyId {
+export interface RateCommentId {
   id: string;
   author: string;
   userId: string;
 }
 
-export interface Reply {
+export interface RateComment {
+  commentId?: string;
+  id: string;
+  author: string;
+  userId: string;
+  comment: string;
+  time: Date;
+}
+
+export class RateCommentFilter implements Filter {
+  commentId?: string;
   id?: string;
   author?: string;
   userId?: string;
-  review?: string;
+  comment?: string;
   time?: Date;
-}
-
-export class ReplyFilter implements Filter {
   firstLimit?: number;
   fields?: string[];
   sort?: string;
-  id?: string;
-  author?: string;
-  userId?: string;
-  review?: string;
-  time?: Date;
   limit?: number;
 }
 
-export const replyModel: Attributes = {
+export const rateCommentModel: Attributes = {
+  commentId: {
+    key: true
+  },
   id: {
-    key: true,
     required: true,
     match: 'equal'
   },
   author: {
-    key: true,
     required: true,
     match: 'equal'
   },
   userId: {
-    key: true,
     required: true,
     match: 'equal'
   },
-  review: {},
+  comment: {},
   time: {
     type: 'datetime'
   }
