@@ -201,7 +201,7 @@
   margin-right: 15px;
 }
 ul.list-view.row > li.col.review-custom {
-  padding-bottom: 16px;
+  padding-bottom: 10px;
 }
 .review-custom > .card {
   display: flex;
@@ -209,6 +209,10 @@ ul.list-view.row > li.col.review-custom {
   padding: 5px 16px;
   border-radius: 20px;
   background-color: #F5F5F5;
+}
+
+.review-custom >  *:last-child {
+  border-bottom: none !important;
 }
 
 .review-custom > .card > h4 {
@@ -298,6 +302,8 @@ ul.list-view.row > li.col.review-custom {
 }
 
 .more-replies-div {
+  max-width: 80%;
+  margin: 0 16px; 
   text-align: center;
   height: max-content;
 }
@@ -305,6 +311,7 @@ ul.list-view.row > li.col.review-custom {
   color:#4D4D4D; 
   font-weight: 400;
   font-size: 11px;
+  text-align: center;
 }
 
 .review-custom > .comments-container {
@@ -421,7 +428,6 @@ ul.list-view.row > li.col.review-custom {
 .review-custom > .comments-container > .comments2 {
   border-radius: 20px;
   background-color: #F5F5F5 !important;
-  width: max-content;
   width: 80%;
   margin: 0 16px; 
   padding: 10px;

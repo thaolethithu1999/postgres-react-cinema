@@ -1,7 +1,6 @@
 import { HttpRequest } from 'axios-core';
-import { log } from 'console';
 import { Client } from 'web-clients';
-import { Rate, RateFilter, RateService, rateModel, UsefulRateId } from './rate';
+import { Rate, RateFilter, RateService, rateModel } from './rate';
 
 export * from './rate';
 

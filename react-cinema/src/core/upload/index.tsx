@@ -26,7 +26,7 @@ export const FileUpload = ({
   React.useEffect(() => {
     fecthGallery();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [id]);
   React.useEffect(() => {
     // tslint:disable-next-line:no-unused-expression
     setGallery && setGallery(filesUploaded ?? []);

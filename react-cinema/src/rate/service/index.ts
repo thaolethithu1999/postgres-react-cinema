@@ -2,7 +2,7 @@ import axios from 'axios';
 import { HttpRequest } from 'axios-core';
 import { options, storage } from 'uione';
 
-import { RateClient, rateModel, RateService } from './rate';
+import { RateClient, RateService } from './rate';
 
 const httpRequest = new HttpRequest(axios, options);
 

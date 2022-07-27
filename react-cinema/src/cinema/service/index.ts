@@ -5,7 +5,6 @@ import { CategoryClient, CategoryService } from './category';
 // import { CinemaClient, CinemaService } from './cinema';
 import { FilmClient, FilmService, FilmRateService, FilmRateClient } from './film';
 import { LocationClient } from './location';
-import { LocationRateClient } from './location-rate';
 import { LocationRateService } from './location-rate/location-rate';
 import { LocationService } from './location/location';
 import { MasterDataClient, MasterDataService } from './master-data';
@@ -32,7 +31,8 @@ export interface Config {
   location_backoffice_url: string;
   location_rate_url: string;
   cinema_rate_url: string;
-  rate_url: string;
+  rate_cinema_url: string;
+  rate_film_url: string;
   rate_comment_url: string;
   comment_url: string;
 }
@@ -66,7 +66,7 @@ class ApplicationContext {
   getRateService(): RateService {
     if (!this.rateService) {
       const c = this.getConfig();
-      this.rateService = new RateClient(httpRequest, c.rate_url);
+      this.rateService = new RateClient(httpRequest, c.rate_cinema_url);
     }
     return this.rateService;
   }

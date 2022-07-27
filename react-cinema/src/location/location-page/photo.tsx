@@ -30,7 +30,7 @@ export const LocationPhoto = () => {
   const load = async () => {
     const locationRateSM = new LocationRateFilter();
     const { id } = params;
-    locationRateSM.locationId = id;
+    locationRateSM.id = id;
     locationRateSM.limit = pageSize;
     locationRateSM.sort = '-rateTime';
     const locationObj = await locationService.load(id || '');

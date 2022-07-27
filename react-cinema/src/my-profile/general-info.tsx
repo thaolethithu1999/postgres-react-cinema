@@ -22,7 +22,7 @@ export const GeneralInfo = ({ resource, user, close, saveEmit }: Props) => {
   const save = (e: OnClick) => {
     e.preventDefault();
     const usr = state.user;
-    service.saveMyProfile({ ...usr, userId: usr.userId }).then(success => {
+    service.saveMyProfile({ ...usr, id: usr.id }).then(success => {
       let status = '';
       if (success) {
         status = 'success';
@@ -93,7 +93,7 @@ export const GeneralInfo = ({ resource, user, close, saveEmit }: Props) => {
               <i className='fab fa-facebook' />
               <input id='facebook' maxLength={100} name='facebookLink' data-field='links.facebook'
                 onChange={updateState} placeholder={resource.user_profile_facebook}
-                value={state.user.links?.facebook || ''} />1
+                value={state.user.links?.facebook || ''} />
             </label>
             <label className='inline-input'>
               <i className='fab fa-linkedin' />

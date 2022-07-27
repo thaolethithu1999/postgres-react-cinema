@@ -8,7 +8,7 @@ export interface UserFilter extends Filter {
   status: string[] | string;
 }
 export interface User extends Tracking {
-  userId: string;
+  id: string;
   username: string;
   email: string;
   displayName: string;
@@ -25,7 +25,7 @@ export interface UserService extends Service<User, string, UserFilter> {
 }
 
 export const userModel: Attributes = {
-  userId: {
+  id: {
     length: 40,
     required: true,
     key: true

@@ -1,4 +1,5 @@
 import { Attributes, Filter, Service } from 'onecore';
+import { Reply } from '../appreciation-reply';
 
 export class AppreciationFilter implements Filter {
   firstLimit?: number;
@@ -6,67 +7,67 @@ export class AppreciationFilter implements Filter {
   sort?: string;
   limit?: number;
   id?: string;
+  author?: string;
   title?: string;
-  description?: string;
-  createdAt?: Date|string;
-  authorId?: string;
-  usefulCount?: number;
+  review?: string;
+  createAt?: Date;
   replyCount?: number;
-  userId?: string;
-  userIdUseful?: string;
 }
-
+export interface AppreciationId {
+  id: string;
+  author: string;
+}
 export interface Appreciation {
-  id?: string;
+  id: string;
+  author: string;
   title: string;
-  description: string;
-  createdAt?: Date|string;
-  authorId: string;
-  usefulCount: number;
-  replyCount: number;
-  userId: string;
-  isUseful?: boolean;
+  review: string;
+  time?: Date;
+  updateAt?:Date;
+  histories?: Histories[];
+  replyCount?:number;
 }
 
+export interface Histories {
+  time: Date;
+  review: string;
+  title:string;
+}
 
-export interface UsefulAppreciation {
+export interface Useful {
   id?: string;
   updatedAt?: Date|string;
   createdAt?: Date|string;
   userId: string;
   appreciationId: string;
+  histories:Histories[]
 }
-export interface AppreciationService extends Service<Appreciation, string, AppreciationFilter> {
-  usefulAppreciation(obj: UsefulAppreciation): Promise<number>;
+export interface AppreciationService extends Service<Appreciation, AppreciationId, AppreciationFilter> {
+  reply(reply: Reply): Promise<boolean>;
+  removeReply(id: string, author: string, userId: string, ctx?: any): Promise<number>;
+  getReplys(id: string, author: string, ctx?: any): Promise<Reply[]>;
+  updateReply(reply: Reply): Promise<number>;
+  setUseful(id: string, author: string, userId: string, ctx?: any): Promise<number>;
 }
 export const appreciationModel: Attributes = {
   id: {
     key: true,
-    required: true,
-    length: 40,
+    length: 40
   },
-  userId: {
+  author: {
     required: true,
-    q: true
-  },
-  authorId: {
-    required: true,
-    q: true
+    length: 255,
   },
   title: {
-    length: 100,
-    q: true
+    length: 255
   },
-  description: {
-    length: 255,
-    q: true
+  review: {
+    length: 255
   },
-  createdAt: {
-    type: 'datetime',
-    q: true
+  createAt: {
+    type: 'datetime'
   },
-  usefulCount: {
-    length: 20,
-    q: true
+  histories:{
+
   }
 };

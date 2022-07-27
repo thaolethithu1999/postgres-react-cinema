@@ -5,8 +5,7 @@ import { OnClick } from 'react-hook-core';
 import { useNavigate } from 'react-router-dom';
 import { FileInfo } from 'reactx-upload';
 import { getLocations } from '../backoffice/service';
-import { Location } from '../backoffice/service/location/location';
-import { Cinema, Gallery } from '../backoffice/service/cinema/cinema';
+import { Cinema } from '../backoffice/service/cinema/cinema';
 import '../location/carousel.css';
 
 interface Props {
@@ -21,6 +20,7 @@ export default function CinemaCarousel({ cinema }: Props) {
 
   useEffect(() => {
     handleFetch();
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cinema, carousel]);
 
   const locationService = getLocations();
@@ -67,12 +67,12 @@ export default function CinemaCarousel({ cinema }: Props) {
   // setFiles(info);     
 
 
-  const toggleCarousel = (e: OnClick, enable: boolean, files: FileInfo[]) => {
-    e.preventDefault();
-    setCarousel(enable);
-    let len = files.length;
-    console.log(len);
-  };
+  // const toggleCarousel = (e: OnClick, enable: boolean, files: FileInfo[]) => {
+  //   e.preventDefault();
+  //   setCarousel(enable);
+  //   let len = files.length;
+  //   console.log(len);
+  // };
 
   // const navigateEdit = (e: OnClick) => {
   //   e.preventDefault();

@@ -90,8 +90,8 @@ export const ItemsForm = () => {
       </header>
       <div>
         <form
-          id='usersForm'
-          name='usersForm'
+          id='itemForm'
+          name='itemForm'
           noValidate={true}
           ref={refForm as any}
         >

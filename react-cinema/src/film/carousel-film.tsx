@@ -15,7 +15,6 @@ interface Props {
 export default function LocationCarousel({ edit, location }: Props) {
   const [carousel, setCarousel] = useState(false);
   const [files, setFiles] = useState<FileInfo[]>();
-  const navigate = useNavigate();
   useEffect(() => {
     handleFetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -58,10 +57,10 @@ export default function LocationCarousel({ edit, location }: Props) {
     setCarousel(enable);
   };
 
-  const navigateEdit = (e: OnClick) => {
-    e.preventDefault();
-    navigate(`edit/${location.filmId}`);
-  };
+  // const navigateEdit = (e: OnClick) => {
+  //   e.preventDefault();
+  //   navigate(`edit/${location.filmId}`);
+  // };
   return (
     <>
       {carousel ? (

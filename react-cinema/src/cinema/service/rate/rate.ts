@@ -8,6 +8,7 @@ export interface RateId {
 export interface Rate extends Tracking {
   id?: string;
   author?: string;
+  authorURL?: string;
   rate?: number;
   time?: Date;
   review?: string;
@@ -25,6 +26,7 @@ export class RateFilter implements Filter {
   rateId?: string;
   id?: string;
   author?: string;
+  authorURL?: string;
   rate?: number;
   time?: Date;
   review?: string;

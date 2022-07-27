@@ -1,24 +1,30 @@
 import { Log, Manager, Search } from 'onecore';
 import { DB, SearchBuilder } from 'query-core';
+import { buildToSave, useUrlQuery } from 'pg-extension';
+import shortid from 'shortid';
 import { TemplateMap, useQuery } from 'query-mappers';
-import { Cinema, CinemaFilter, cinemaModel, CinemaRate, CinemaRateFilter, cinemaRateModel, CinemaRateRepository, CinemaRateService, CinemaRepository, CinemaService, InfoRepository } from './cinema'; // rate
+import {
+  Info, infoModel, InfoRepository, Rate, RateComment, RateCommentFilter, rateCommentModel, RateCommentService, RateFilter, rateModel
+} from '../rate/rate';
+import { RateCommentManager} from '../rate/service';
+
+import {RateManager, RateRepository, RateService} from '../rate/service';
+import { rateReactionModel, SqlInfoRepository, SqlRateCommentRepository, SqlRateReactionRepository, SqlRateRepository } from '../rate/repo';
+import { Cinema, CinemaFilter, cinemaModel, CinemaRepository, CinemaService } from './cinema';
 import { CinemaController } from './cinema-controller';
 export * from './cinema-controller';
 export { CinemaController };
-import { CinemaRateController } from './cinema-rate-controller';
-import { SqlCinemaRateRepository } from './sql-cinema-rate-repository';
 import { SqlCinemaRepository } from './sql-cinema-repository';
-import { SqlInfoRepository } from './sql-info-repository';
+import { RateCommentController, RateController } from '../rate';
 
 export class CinemaManager extends Manager<Cinema, string, CinemaFilter> implements CinemaService {
   constructor(search: Search<Cinema, CinemaFilter>,
     repository: CinemaRepository,
     private infoRepository: InfoRepository,
-    private rateRepository: CinemaRateRepository) {
+    private rateRepository: RateRepository) {
     super(search, repository);
-    this.search = this.search.bind(this);
   }
-  //add field
+
   load(id: string): Promise<Cinema | null> {
     return this.repository.load(id).then(cinema => {
       if (!cinema) {
@@ -26,7 +32,7 @@ export class CinemaManager extends Manager<Cinema, string, CinemaFilter> impleme
       } else {
         return this.infoRepository.load(id).then(info => {
           if (info) {
-            delete (info as any)['id']; // not take info_id
+            delete (info as any)['id'];
             cinema.info = info;
           }
           return cinema;
@@ -40,8 +46,8 @@ export function useCinemaService(db: DB, mapper?: TemplateMap): CinemaService {
   const query = useQuery('cinema', mapper, cinemaModel, true);
   const builder = new SearchBuilder<Cinema, CinemaFilter>(db.query, 'cinema', cinemaModel, db.driver, query);
   const repository = new SqlCinemaRepository(db);
-  const infoRepository = new SqlInfoRepository(db);
-  const rateRepository = new SqlCinemaRateRepository(db);
+  const infoRepository = new SqlInfoRepository<Info>(db, 'info', infoModel, buildToSave);
+  const rateRepository = new SqlRateRepository(db, 'rates', rateModel, buildToSave, 5 , 'info', 'id', 'rate', 'count', 'score');
   return new CinemaManager(builder.search, repository, infoRepository, rateRepository);
 }
 
@@ -49,19 +55,32 @@ export function useCinemaController(log: Log, db: DB, mapper?: TemplateMap): Cin
   return new CinemaController(log, useCinemaService(db, mapper));
 }
 
-export class CinemaRateManager extends Manager<CinemaRate, string, CinemaRateFilter> implements CinemaRateService {
-  constructor(search: Search<CinemaRate, CinemaRateFilter>, repository: CinemaRateRepository) {
-    super(search, repository);
-  }
+export function useCinemaRateService(db: DB, mapper?: TemplateMap): RateService {
+  const query = useQuery('rates', mapper, rateModel, true);
+  const builder = new SearchBuilder<Rate, RateFilter>(db.query, 'rates', rateModel, db.driver, query);
+  const rateRepository = new SqlRateRepository(db, 'rates', rateModel, buildToSave, 5 , 'info', 'id', 'rate', 'count', 'score');
+  const infoRepository = new SqlInfoRepository<Info>(db, 'info', infoModel, buildToSave);
+  const rateReactionRepository = new SqlRateReactionRepository(db, 'ratereaction', rateReactionModel, 'rates', 'usefulCount', 'author', 'id');
+  const rateCommentRepository = new SqlRateCommentRepository(db, 'rate_comments', rateCommentModel, 'rates', 'replyCount', 'author', 'id');
+  // select id, imageurl as url from users;
+  const queryUrl = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id');
+  return new RateManager(builder.search, rateRepository, infoRepository, rateCommentRepository, rateReactionRepository, queryUrl);
 }
 
-export function useCinemaRateService(db: DB, mapper?: TemplateMap): CinemaRateService {
-  const query = useQuery('rates', mapper, cinemaRateModel, true);
-  const builder = new SearchBuilder<CinemaRate, CinemaRateFilter>(db.query, 'rates', cinemaRateModel, db.driver, query);
-  const repository = new SqlCinemaRateRepository(db);
-  return new CinemaRateManager(builder.search, repository);
+export function useCinemaRateController(log: Log, db: DB, mapper?: TemplateMap): RateController {
+  return new RateController(log, useCinemaRateService(db, mapper), generate, 'commentId', 'userId', 'author', 'id');
 }
 
-export function useCinemaRateController(log: Log, db: DB, mapper?: TemplateMap): CinemaRateController {
-  return new CinemaRateController(log, useCinemaRateService(db, mapper));
+export function useCinemaRateCommentService(db: DB, mapper?: TemplateMap): RateCommentService {
+  const query = useQuery('ratecomment', mapper, rateCommentModel, true);
+  const builder = new SearchBuilder<RateComment, RateCommentFilter>(db.query, 'rate_comments', rateCommentModel, db.driver, query);
+  const rateCommentRepository = new SqlRateCommentRepository(db, 'rate_comments', rateCommentModel, 'rates', 'replyCount', 'author', 'id');
+  return new RateCommentManager(builder.search, rateCommentRepository);
+}
+
+export function useRateCommentController(log: Log, db: DB, mapper?: TemplateMap): RateCommentController {
+  return new RateCommentController(log, useCinemaRateCommentService(db, mapper));
+}
+export function generate(): string {
+  return shortid.generate();
 }

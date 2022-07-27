@@ -8,8 +8,6 @@ import like from '../assets/images/like.svg';
 import likeFilled from '../assets/images/like_filled.svg';
 import { OnClick } from 'react-hook-core';
 import { storage } from 'uione';
-import { Rate } from './service/rate';
-import { useRate } from './service/index';
 
 interface Props {
   data: any;
@@ -62,6 +60,7 @@ export const RateItemFilm = ({ data, maxLengthReviewText, resource }: PropsRate)
 
   useEffect(() => {
     checkUseful(data);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const renderReviewStar = (value: any) => {
@@ -105,7 +104,7 @@ export const RateItemFilm = ({ data, maxLengthReviewText, resource }: PropsRate)
       };
 
       const result = await FilmRateService.usefulSearch(useful);
-      if (result == 1) {
+      if (result === 1) {
         rate.isUseful = true;
       }
       setRate(rate);

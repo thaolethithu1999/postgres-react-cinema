@@ -26,8 +26,6 @@ export const TextEditorComponent: React.FC<{
     })
   );
 
-  const [text, setRext] = useState<string>('');
-  const [sDefTxt, setSDefTxt] = useState<string>('');
   const [showToolbar, setShowToolbar] = useState<boolean>(false);
   const [selectionCreateRange, setSelectionCreateRange] = useState<boolean>(false);
   const [savedSelection, setSavedSelection] = useState<any>();
@@ -45,6 +43,7 @@ export const TextEditorComponent: React.FC<{
       setUpdateInit(true);
     }
     initDoc();
+    // eslint-disable-next-line
   }, []);
 
   const initDoc = () => {
@@ -107,7 +106,7 @@ export const TextEditorComponent: React.FC<{
     if (!tagName) {
       return;
     }
-    const classes = 'active';
+    // const classes = 'active';
     if (!currentNodeHTML.current) {
       return '';
     } else {
@@ -124,7 +123,7 @@ export const TextEditorComponent: React.FC<{
   };
   const bruceforceAttribute = (attr: string, currentNode: any): any => {
     const currentValue = currentNode.getAttribute(attr);
-    if (currentNode.tagName && currentNode.tagName === 'DIV' || !currentValue) {
+    if ((currentNode.tagName && currentNode.tagName === 'DIV') || !currentValue) {
       return false;
     } else if (currentValue) {
       return currentValue;
@@ -138,7 +137,7 @@ export const TextEditorComponent: React.FC<{
 
   const bruceforceStyleValue = (attr: string, currentNode: any): any => {
     const currentValue = currentNode.style[attr];
-    if (currentNode.tagName && currentNode.tagName === 'DIV' || !currentValue) {
+    if ((currentNode.tagName && currentNode.tagName === 'DIV') || !currentValue) {
       return false;
     } else if (currentValue) {
       return currentValue;
@@ -151,7 +150,7 @@ export const TextEditorComponent: React.FC<{
   };
 
   const bruceforceTagName = (tagName: string, currentNode: any): any => {
-    if (currentNode && currentNode.tagName === 'DIV') {
+    if ((currentNode && currentNode.tagName) === 'DIV') {
       return false;
     } else if (currentNode && currentNode.tagName === tagName) {
       return true;
@@ -403,18 +402,18 @@ export const TextEditorComponent: React.FC<{
     findAndActiveSelected();
   };
 
-  const clearSelected = () => {
-    // @ts-ignore
-    document.getElementById('FormatText').value = false;
-    // @ts-ignore
-    document.getElementById('FormatFont').value = false;
-    // @ts-ignore
-    document.getElementById('FormatSize').value = false;
-    // @ts-ignore
-    document.getElementById('FormatBackgroundColor').value = false;
-    // @ts-ignore
-    document.getElementById('FormatColor').value = false;
-  };
+  // const clearSelected = () => {
+  //   // @ts-ignore
+  //   document.getElementById('FormatText').value = false;
+  //   // @ts-ignore
+  //   document.getElementById('FormatFont').value = false;
+  //   // @ts-ignore
+  //   document.getElementById('FormatSize').value = false;
+  //   // @ts-ignore
+  //   document.getElementById('FormatBackgroundColor').value = false;
+  //   // @ts-ignore
+  //   document.getElementById('FormatColor').value = false;
+  // };
 
   const findAndActiveSelected = () => {
     const {
@@ -486,9 +485,9 @@ export const TextEditorComponent: React.FC<{
     }
   };
 
-  const convertToHTML = (item: any) => {
-    return `<p className="${item.value}">${item.text}</p>`;
-  };
+  // const convertToHTML = (item: any) => {
+  //   return `<p className="${item.value}">${item.text}</p>`;
+  // };
 
   const formatDoc = (e: React.ChangeEvent<HTMLSelectElement> | React.MouseEvent<HTMLElement, MouseEvent>, sCmd?: string, sValue?: string) => {
     e.preventDefault();
@@ -510,7 +509,7 @@ export const TextEditorComponent: React.FC<{
 
   const addHyperLinkToolBar = (e: OnClick) => {
     e.preventDefault();
-    const sLnk1 = null;
+    // const sLnk1 = null;
     const sLnk = document.getElementById('sLnk');
     if (sLnk != null) {
       // @ts-ignore
@@ -610,9 +609,8 @@ export const TextEditorComponent: React.FC<{
     );
     if (!oPrntWin) { return; }
     oPrntWin.document.open();
-    oPrntWin.document.write(
-      '<!doctype html><html><head><title>Print<\/title><\/head><body onload="print();">' +
-      oDoc.current.innerHTML + '<\/body><\/html>');
+    //eslint-disable-next-line
+    oPrntWin.document.write('<!doctype html><html><head><title>Print</title></head><body onload="print();">' +oDoc.current.innerHTML + '</body></html>');
     oPrntWin.document.close();
   };
 

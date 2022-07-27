@@ -61,7 +61,7 @@ export const UserForm = () => {
               type='text'
               id='userId'
               name='userId'
-              value={user.userId || ''}
+              value={user.id || ''}
               readOnly={!flag.newMode}
               onChange={updateState}
               maxLength={20} required={true}

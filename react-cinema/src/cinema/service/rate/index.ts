@@ -1,5 +1,4 @@
 import { HttpRequest } from 'axios-core';
-import { log } from 'console';
 import { Client } from 'web-clients';
 import { Rate, RateFilter, RateService, rateModel,RateComment, RateCommentFilter, RateCommentService, rateCommentModel } from './rate';
 
@@ -20,7 +19,9 @@ export class RateClient extends Client<Rate, string, RateFilter> implements Rate
   }
 
   rate(obj: Rate): Promise<any> {
-    const url = this.serviceUrl;
+    const url = `${this.serviceUrl}` ;
+    console.log(url);
+    
     return this.http.post(url, obj);
   }
   setUseful(id: string, author: string, userId: string, ctx?: any): Promise<number> {

@@ -427,15 +427,11 @@ export const MyProfileForm = () => {
     e.preventDefault();
     setModalUpload(false);
   };
-  const openModalUploadGallery = (e: OnClick) => {
+  const toggleModalUploadGallery = (e: OnClick,isOpen:boolean) => {
     e.preventDefault();
-    setModalUploadGalleryOpen(true);
+    setModalUploadGalleryOpen(isOpen);
   };
 
-  const closeModalUploadGallery = (e: OnClick) => {
-    e.preventDefault();
-    setModalUploadGalleryOpen(false);
-  };
 
   const toggleDropdownCover = (e: OnClick) => {
     e.preventDefault();
@@ -447,7 +443,7 @@ export const MyProfileForm = () => {
     setUser({ ...user, coverURL: url });
     setUploadedCover(url);
     service
-      .saveMyProfile({ ...user, coverURL: url, userId: user.userId })
+      .saveMyProfile({ ...user, coverURL: url, id: user.id })
       .then((successs) => {
         if (successs) {
           message(resource.success_save_my_profile);
@@ -562,6 +558,7 @@ export const MyProfileForm = () => {
               <p>{user.occupation}</p>
               <p>{user.company}</p>
             </div>
+            {/* SkillCard */}
             {!isEditingSkill && (
               <div className='card'>
                 <header>
@@ -690,6 +687,7 @@ export const MyProfileForm = () => {
                 </footer>
               </div>
             )}
+
             {!isEditingLookingFor && (
               <div className='card'>
                 <header>
@@ -1160,7 +1158,7 @@ export const MyProfileForm = () => {
                   id='btnGallery'
                   name='btnGallery'
                   className={'btn-edit'}
-                  onClick={openModalUploadGallery}
+                  onClick={(e)=>toggleModalUploadGallery(e,true)}
                 />
               </header>
               <section className='row'>
@@ -1249,7 +1247,7 @@ export const MyProfileForm = () => {
               post={httpRequest.post}
               setURL={(dt: string) => handleChangeFile(dt)}
               type={typeUpload}
-              id={user.userId}
+              id={user.id}
               url={config.authentication_url + '/my-profile'}
               aspect={aspect}
               sizes={sizes}
@@ -1307,7 +1305,7 @@ export const MyProfileForm = () => {
         </div>
       </ReactModal>
       <ModalUploadGallery
-        closeModalUploadGallery={closeModalUploadGallery}
+        closeModalUploadGallery={e=>toggleModalUploadGallery(e,false)}
         modalUploadGalleryOpen={modalUploadGalleryOpen}
         setGallery={(files) => {
           setUser({ ...user, gallery: files });

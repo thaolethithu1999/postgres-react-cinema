@@ -29,15 +29,7 @@ export interface User {
   company?: string;
   lookingFor: string[];
 
-  dribbbleLink: string;
-  skypeLink: string;
-  twitterLink: string;
-  linkedinLink: string;
-  googleLink: string;
-  instagramLink: string;
-  facebookLink: string;
-  familyName: string;
-  givenName: string;
+  links?: Social;
   customLink01: string;
   customLink02: string;
   customLink03: string;
@@ -46,6 +38,16 @@ export interface User {
   customLink06: string;
   customLink07: string;
   customLink08: string;
+}
+export interface Social {
+  google: string;
+  facebook: string;
+  github: string;
+  instagram: string;
+  twitter: string;
+  skype: string;
+  dribble: string;
+  linkedin: string;
 }
 export interface Skill {
   skill: string;

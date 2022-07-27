@@ -118,10 +118,10 @@ export const UsersForm = () => {
               <tbody>
               {list && list.length > 0 && list.map((user, i) => {
                 return (
-                    <tr key={i} onClick={e => edit(e, user.userId)}>
+                    <tr key={i} onClick={e => edit(e, user.id)}>
                       <td className='text-right'>{(user as any).sequenceNo}</td>
-                      <td>{user.userId}</td>
-                      <td><Link to={`edit/${user.userId}`}>{user.username}</Link></td>
+                      <td>{user.id}</td>
+                      <td><Link to={`edit/${user.id}`}>{user.username}</Link></td>
                       <td>{user.email}</td>
                       <td>{user.displayName}</td>
                       <td>{user.status}</td>
@@ -134,11 +134,11 @@ export const UsersForm = () => {
           {component.view !== 'table' && <ul className='row list-view'>
             {list && list.length > 0 && list.map((user, i) => {
               return (
-                <li key={i} className='col s12 m6 l4 xl3' onClick={e => edit(e, user.userId)}>
+                <li key={i} className='col s12 m6 l4 xl3' onClick={e => edit(e, user.id)}>
                   <section>
                     <img src={user.imageURL && user.imageURL.length > 0 ? user.imageURL : (user.gender === 'F' ? femaleIcon : maleIcon)} alt='user' className='round-border' />
                     <div>
-                      <h3 className={user.status === 'I' ? 'inactive' : ''}><Link to={`edit/${user.userId}`}>{user.displayName}</Link></h3>
+                      <h3 className={user.status === 'I' ? 'inactive' : ''}><Link to={`edit/${user.id}`}>{user.displayName}</Link></h3>
                       <p>{user.email}</p>
                     </div>
                     <button className='btn-detail' />

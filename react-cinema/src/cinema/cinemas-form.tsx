@@ -1,10 +1,9 @@
-import { Filter, ValueText } from 'onecore';
+import { ValueText } from 'onecore';
 import React from 'react';
-import { checked, OnClick, PageSizeSelect, SearchComponentState, useSearch, value } from 'react-hook-core';
+import { checked, PageSizeSelect, SearchComponentState, useSearch, value } from 'react-hook-core';
 import { useNavigate } from 'react-router-dom';
 import { Pagination } from 'reactx-pagination';
 import { inputSearch } from 'uione';
-import LocationCarousel from './carousel';
 import CinemaCarousel from './cinema-carousel';
 import { useCinema } from './service';
 import { Cinema, CinemaFilter } from './service/cinema/cinema';
@@ -37,7 +36,6 @@ export const CinemasForm = () => {
     component,
     updateState,
     search,
-    sort,
     toggleFilter,
     changeView,
     pageChanged,

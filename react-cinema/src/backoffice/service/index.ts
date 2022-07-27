@@ -5,7 +5,6 @@ import { CategoryClient, CategoryService } from './category';
 // import { CinemaClient, CinemaService } from './cinema';
 import { FilmClient, FilmService } from './film';
 import { LocationClient } from './location';
-import { LocationRateClient } from './location-rate';
 import { LocationRateService } from './location-rate/location-rate';
 import { LocationService } from './location/location';
 import { MasterDataClient, MasterDataService } from './master-data';

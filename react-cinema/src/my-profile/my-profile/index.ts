@@ -2,7 +2,6 @@ import axios from 'axios';
 import { HttpRequest } from 'axios-core';
 import { QueryService } from 'onecore';
 import { useState } from 'react';
-import { Thumbnail } from 'reactx-upload';
 import { FileInfo } from 'reactx-upload';
 import { options, storage } from 'uione';
 import { QueryClient } from 'web-clients';
@@ -16,6 +15,7 @@ export class MyProfileClient implements MyProfileService {
   constructor(private http: HttpRequest, private url: string) {
     this.getMyProfile = this.getMyProfile.bind(this);
     this.getMySettings = this.getMySettings.bind(this);
+    this.fetchImageUploadedGallery =this.fetchImageUploadedGallery.bind(this);
   }
   getMyProfile(id: string): Promise<User | null> {
     const url = this.url + '/' + id;
@@ -48,7 +48,7 @@ export class MyProfileClient implements MyProfileService {
     });
   }
   saveMyProfile(usr: User): Promise<number> {
-    const url = this.url + '/' + usr.userId;
+    const url = this.url + '/' + usr.id;
     return this.http.patch<number>(url, usr).catch(err => {
       const data = (err && err.response) ? err.response : err;
       if (data && (data.status === 404 || data.status === 410)) {

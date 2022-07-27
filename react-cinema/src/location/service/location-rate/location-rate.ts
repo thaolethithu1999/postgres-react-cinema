@@ -1,15 +1,14 @@
 import { Attributes, Filter, Service } from 'onecore';
 export interface LocationRate {
-  locationId?: string;
-  id?: string;
-  userId?: string;
-  rate?: number;
+  id: string;
+  userId: string;
+  rate: number;
   rateTime?: Date;
   review?: string;
 }
 
 export interface LocationRateService extends Service<LocationRate, string, LocationRateFilter> {
-  getLocationByLocationId(locationId: string): Promise<LocationRate[]>;
+  getLocationByLocationId(id: string): Promise<LocationRate[]>;
 }
 
 export class LocationRateFilter implements Filter {
@@ -20,7 +19,7 @@ export class LocationRateFilter implements Filter {
   keyword?: string;
   refId?: string | number;
   rateId?: string;
-  locationId?: string;
+  id?: string;
   userId?: string;
   rate?: number;
   rateTime?: Date;
@@ -32,16 +31,10 @@ export const locationRateModel: Attributes = {
   id: {
     key: true,
     required: true,
-    q: true
-  },
-  locationId: {
-    required: true,
-    key: true,
-    q: true
   },
   userId: {
+    key: true,
     required: true,
-    q: true
   },
   rate: {
     required: true,

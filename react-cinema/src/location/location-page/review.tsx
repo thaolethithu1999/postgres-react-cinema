@@ -32,7 +32,7 @@ export const Review = () => {
   const load = async () => {
     const locationRateSM = new LocationRateFilter();
     const { id } = params;
-    locationRateSM.locationId = id;
+    locationRateSM.id = id;
     locationRateSM.limit = pageSize;
     locationRateSM.sort = '-rateTime';
     const locationObj = await locationService.load(id || '');
@@ -47,7 +47,7 @@ export const Review = () => {
     e.preventDefault();
     const locationRateSM = new LocationRateFilter();
     const { id } = params;
-    locationRateSM.locationId = id;
+    locationRateSM.id = id;
     locationRateSM.limit = pageSize + 3;
     locationRateSM.sort = '-rateTime';
     const searchRates = await locationRateService.search(locationRateSM);
@@ -63,11 +63,12 @@ export const Review = () => {
       if (!id || !location) {
         return;
       }
-      const locationRate: LocationRate = {};
-      locationRate.locationId = location.id;
-      locationRate.userId = id;
-      locationRate.rate = data.rate;
-      locationRate.review = data.review;
+      const locationRate: LocationRate = {
+        id: location.id,
+        userId: id,
+        rate: data.rate,
+        review: data.review
+      };
       await locationService.rateLocation(locationRate);
       storage.message('Your review is submited');
       setIsOpenRateModal(false);

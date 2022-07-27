@@ -16,7 +16,7 @@ export default function UserCarousel({ user, edit }: Props) {
         handleFetch();
     }, [user]);
     const handleFetch = async () => {
-        const res = await fetchImageUploaded(user.userId);
+        const res = await fetchImageUploaded(user.id);
         
         if (res && res.length > 0) {
             for (const item of res) {
@@ -66,7 +66,7 @@ export default function UserCarousel({ user, edit }: Props) {
                 </Carousel>
             ) : ''}
             <div className='user-carousel-content'>
-                <h3 onClick={e => edit(e, user.userId)} className={user.status === 'I' ? 'inactive' : ''}>{user.displayName}</h3>
+                <h3 onClick={e => edit(e, user.id)} className={user.status === 'I' ? 'inactive' : ''}>{user.displayName}</h3>
                 <p>{user.email}</p>
             </div>
         </div>

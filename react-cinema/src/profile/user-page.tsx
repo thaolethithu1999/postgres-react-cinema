@@ -111,111 +111,64 @@ export function UserPage() {
                 </section>
               </div>
               }
-              {(user.facebookLink || user.skypeLink || user.twitterLink || user.instagramLink
-                || user.linkedinLink || user.googleLink || user.dribbbleLink || user.customLink01
-                || user.customLink02 || user.customLink03 || user.customLink04 || user.customLink05
-                || user.customLink06 || user.customLink07 || user.customLink08) &&
-                <div className='card'>
-                  <header>
-                    <i className='material-icons highlight'>chat</i>
-                    {resource.user_profile_social}
-                  </header>
-                  <div>
-                    {
-                      user.facebookLink &&
-                      <a href={'https://facebookcom/' + user.facebookLink} title='facebook' target='_blank' rel='noreferrer'>
-                        <i className='fa fa-facebook' />
-                        <span>facebook</span>
+              <div className='card'>
+                <header>
+                  <i className='material-icons highlight'>chat</i>
+                  {resource.user_profile_social}
+                </header>
+                <div>
+                  {user.links && Object.keys(user.links).map((key: string, index) => {
+                    return (
+                      <a key={index} href={`https://${key}/` + (user.links as any)[key]} title={key} target='_blank' rel='noreferrer'>
+                        <i className={`fab fa-${key}`} />
+                        <span>{key}</span>
                       </a>
-                    }
-                    {
-                      user.skypeLink &&
-                      <a href={'https://skype.com/' + user.skypeLink} title='Skype' target='_blank' rel='noreferrer'>
-                        <i className='fa fa-skype' />
-                        <span>Skype</span>
-                      </a>
-                    }
-                    {
-                      user.twitterLink &&
-                      <a href={'https://twitter.com/' + user.twitterLink} title='Twitter' target='_blank' rel='noreferrer'>
-                        <i className='fa fa-twitter' />
-                        <span>Twitter</span>
-                      </a>
-                    }
-                    {
-                      user.instagramLink &&
-                      <a href={'https://instagram.com/' + user.instagramLink} title='Instagram' target='_blank' rel='noreferrer'>
-                        <i className='fa fa-instagram' />
-                        <span>Instagram</span>
-                      </a>
-                    }
-                    {
-                      user.linkedinLink &&
-                      <a href={'https://linkedin.com/' + user.linkedinLink} title='Linked in' target='_blank' rel='noreferrer'>
-                        <i className='fa fa-linkedin' />
-                        <span>Linked in</span>
-                      </a>
-                    }
-                    {
-                      user.googleLink &&
-                      <a href={'https://plus.google.com/' + user.googleLink} title='Google' target='_blank' rel='noreferrer'>
-                        <i className='fa fa-google' />
-                        <span>Google</span>
-                      </a>
-                    }
-                    {
-                      user.dribbbleLink &&
-                      <a href={'https://dribbble.com/' + user.dribbbleLink} title='dribbble' target='_blank' rel='noreferrer'>
-                        <i className='fa fa-dribbble' />
-                        <span>dribbble</span>
-                      </a>
-                    }
-
-                    {
-                      user.customLink01 &&
-                      <a href={user.customLink01} target='_blank' rel='noreferrer'>
-                        <i className='fab fa-globe-asia' />
-                      </a>
-                    }
-                    {
-                      user.customLink02 &&
-                      <a href={user.customLink02} target='_blank' rel='noreferrer'>
-                        <i className='fab fa-globe-asia' />
-                      </a>
-                    }
-                    {
-                      user.customLink03 && <a href={user.customLink03} target='_blank' rel='noreferrer'>
-                        <i className='fab fa-globe-asia' />
-                      </a>
-                    }
-                    {
-                      user.customLink04 && <a href={user.customLink04} target='_blank' rel='noreferrer'>
-                        <i className='fab fa-globe-asia' />
-                      </a>
-                    }
-                    {
-                      user.customLink05 && <a href={user.customLink05} target='_blank' rel='noreferrer'>
-                        <i className='fab fa-globe-asia' />
-                      </a>
-                    }
-                    {
-                      user.customLink06 && <a href={user.customLink06} target='_blank' rel='noreferrer'>
-                        <i className='fab fa-globe-asia' />
-                      </a>
-                    }
-                    {
-                      user.customLink07 && <a href={user.customLink07} target='_blank' rel='noreferrer'>
-                        <i className='fab fa-globe-asia' />
-                      </a>
-                    }
-                    {
-                      user.customLink08 && <a href={user.customLink08} target='_blank' rel='noreferrer'>
-                        <i className='fab fa-globe-asia' />
-                      </a>
-                    }
-                  </div>
+                    )
+                  })}
+                  {
+                    user.customLink01 &&
+                    <a href={user.customLink01} target='_blank' rel='noreferrer'>
+                      <i className='fab fa-globe-asia' />
+                    </a>
+                  }
+                  {
+                    user.customLink02 &&
+                    <a href={user.customLink02} target='_blank' rel='noreferrer'>
+                      <i className='fab fa-globe-asia' />
+                    </a>
+                  }
+                  {
+                    user.customLink03 && <a href={user.customLink03} target='_blank' rel='noreferrer'>
+                      <i className='fab fa-globe-asia' />
+                    </a>
+                  }
+                  {
+                    user.customLink04 && <a href={user.customLink04} target='_blank' rel='noreferrer'>
+                      <i className='fab fa-globe-asia' />
+                    </a>
+                  }
+                  {
+                    user.customLink05 && <a href={user.customLink05} target='_blank' rel='noreferrer'>
+                      <i className='fab fa-globe-asia' />
+                    </a>
+                  }
+                  {
+                    user.customLink06 && <a href={user.customLink06} target='_blank' rel='noreferrer'>
+                      <i className='fab fa-globe-asia' />
+                    </a>
+                  }
+                  {
+                    user.customLink07 && <a href={user.customLink07} target='_blank' rel='noreferrer'>
+                      <i className='fab fa-globe-asia' />
+                    </a>
+                  }
+                  {
+                    user.customLink08 && <a href={user.customLink08} target='_blank' rel='noreferrer'>
+                      <i className='fab fa-globe-asia' />
+                    </a>
+                  }
                 </div>
-              }
+              </div>
             </div>
             <div className='col m12 l8'>
               {user.bio && user.bio.length > 0 && <div className='card border-bottom-highlight'>

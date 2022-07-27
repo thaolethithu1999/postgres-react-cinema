@@ -4,9 +4,7 @@ import {
   Cinema,
   CinemaFilter,
   cinemaModel,
-  CinemaSearch,
   CinemaService,
-  CinemaRateService,
   CinemaRate, CinemaRateFilter, cinemaRateModel
 } from './cinema';
 

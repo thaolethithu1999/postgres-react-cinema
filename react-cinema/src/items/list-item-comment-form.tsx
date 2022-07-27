@@ -1,17 +1,10 @@
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { OnClick } from 'react-hook-core';
 import ReactModal from 'react-modal';
 import { storage } from 'uione';
-import like from '../assets/images/like.svg';
-import likeFilled from '../assets/images/like_filled.svg';
-// import { customStyles } from './appreciations';
-// import { PostRateForm } from './post-appreciation-form';
-// import { useAppreciationReplyService, useAppreciationService } from './service';
 import { useComment } from '../comment/service';
 import { Comment, CommentFilter } from '../comment/service/comment';
-// import { Appreciation, UsefulAppreciation } from './service/appreciation';
-// import { AppreciationReply, AppreciationReplyFilter } from './service/appreciation-reply';
 import { Item } from './service';
 import { ItemCommentForm } from './item-comment-form';
 

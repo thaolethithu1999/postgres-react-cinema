@@ -1,8 +1,8 @@
-import  React, {useEffect, useState} from 'react';
+import  {useEffect, useState} from 'react';
 import {  useFilm } from './service';
 import { Film } from './service/film';
-import { Link, useParams } from 'react-router-dom';
-import { getFileExtension, removeFileExtension, TypeFile } from 'reactx-upload';
+import { useParams } from 'react-router-dom';
+import { getFileExtension, removeFileExtension } from 'reactx-upload';
 import { ReviewFilm } from './film-review-form';
 
 export const FilmForm = () => {

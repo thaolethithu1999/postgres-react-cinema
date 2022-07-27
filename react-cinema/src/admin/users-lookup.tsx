@@ -249,7 +249,7 @@ export const UsersLookup = (props: Props) => {
                       list &&
                       list.map((user: any, i: number) => {
                         const result = users.find(
-                          (v) => v.userId === user.userId
+                          (v) => v.id === user.userId
                         );
                         if (!result) {
                           index++;
@@ -283,7 +283,7 @@ export const UsersLookup = (props: Props) => {
                 {state &&
                   list &&
                   list.map((user: any, i: number) => {
-                    const result = users.find((v) => v.userId === user.userId);
+                    const result = users.find((v) => v.id === user.userId);
                     if (!result) {
                       index++;
                       return (

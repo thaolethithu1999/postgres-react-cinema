@@ -29,7 +29,7 @@ const initialState: InternalState = {
   selectedUsers: []
 };
 const getIds = (users?: User[]): string[] => {
-  return users ? users.map(item => item.userId) : [];
+  return users ? users.map(item => item.id) : [];
 };
 
 const initialize = (id: string, set: DispatchWithCallback<Partial<InternalState>>, state: Partial<InternalState>) => {
@@ -94,7 +94,7 @@ export const RoleAssignmentForm = () => {
 
   const onCheck = (userId: string) => {
     if (users) {
-      const user = users.find(v => v.userId === userId);
+      const user = users.find(v => v.id === userId);
       if (user) {
         const index = selectedUsers.indexOf(user);
         if (index !== -1) {
@@ -120,7 +120,7 @@ export const RoleAssignmentForm = () => {
     confirm(resource.msg_confirm_delete, resource.confirm, () => {
       const arr: User[] = [];
       users.map(value => {
-        const user = selectedUsers.find(v => v.userId === value.userId);
+        const user = selectedUsers.find(v => v.id === value.id);
         if (!user) {
           arr.push(value);
         }
@@ -213,10 +213,10 @@ export const RoleAssignmentForm = () => {
             </label>
             <ul className='row list-view'>
               {shownUsers && shownUsers?.map((user, i) => {
-                const result = selectedUsers.find(v => v.userId === user.userId);
+                const result = selectedUsers.find(v => v.id === user.id);
                 return (
                   <li key={i} className='col s12 m6 l4 xl3'
-                    onClick={isCheckboxShown === true ? () => onCheck(user.userId) : () => {
+                    onClick={isCheckboxShown === true ? () => onCheck(user.id) : () => {
                     }}>
                     <section>
                       {isCheckboxShown === true ? <input type='checkbox' name='selected'

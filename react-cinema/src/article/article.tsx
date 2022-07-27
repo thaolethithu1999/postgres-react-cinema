@@ -41,8 +41,8 @@ export const ArticleForm = () => {
   const refForm = React.useRef();
   const refEdit = React.useRef<any>();
   const [content, setContent] = React.useState<any>();
-  const [test, setTest] = React.useState<any>();
-  const { resource, state, setState, updateState, flag, save, back } = useEdit<Article, string, InternalState>(refForm, initialState, getArticleService(), inputEdit(), param);
+  const [test] = React.useState<any>();
+  const { state, save, back } = useEdit<Article, string, InternalState>(refForm, initialState, getArticleService(), inputEdit(), param);
   React.useEffect(() => {
     setContent(state.article.content);
   }, [state]);
@@ -54,14 +54,14 @@ export const ArticleForm = () => {
     if (test) {
       save(test);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.article.content]);
-  const handleSave = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault();
-    const data = refEdit.current.getData();
-    setTest(e);
-    setState({ article: { ...state.article, content: data } });
-  };
+  // const handleSave = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  //   e.preventDefault();
+  //   const data = refEdit.current.getData();
+  //   setTest(e);
+  //   setState({ article: { ...state.article, content: data } });
+  // };
 
   return (
     <div className='view-container'>
@@ -71,7 +71,7 @@ export const ArticleForm = () => {
           <h2>Detail Article</h2>
         </header>
         <div className='row'>
-          
+
           <label className='col s12 m12'>
             <b className='b-article'>{state.article.title}</b>
           </label>
@@ -79,7 +79,7 @@ export const ArticleForm = () => {
           <label className='col s12 m12'>
             {state.article.description}
           </label>
-          
+
           <label className='col s12'>
             <TextEditorComponent ref={refEdit} html={content} ></TextEditorComponent>
           </label>

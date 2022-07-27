@@ -1,12 +1,12 @@
 import { Attributes, Service } from 'onecore';
-import { Appreciation, AppreciationFilter, UsefulAppreciation } from '../appreciation/appreciation';
+import { Appreciation, AppreciationFilter, Useful } from '../appreciation/appreciation';
 
-export class AppreciationReplyFilter extends AppreciationFilter {
-  appreciationId?: string;
+export class ReplyFilter extends AppreciationFilter {
+  userId?: string;
 }
 
-export interface AppreciationReply extends Appreciation {
-  appreciationId?: string;
+export interface Reply extends Appreciation {
+  userId?: string;
 }
 
 export interface Result<T> {
@@ -14,9 +14,9 @@ export interface Result<T> {
   status: number;
 }
 
-export interface AppreciationReplyService extends Service<AppreciationReply, string, AppreciationReplyFilter> {
+export interface ReplyService extends Service<Reply, string, ReplyFilter> {
   insertReply: (obj: Appreciation) => Promise<Result<Appreciation>>;
-  usefulAppreciation(obj: UsefulAppreciation): Promise<number>;
+  usefulAppreciation(obj: Useful): Promise<number>;
 }
 export const appreciationModel: Attributes = {
   id: {
@@ -28,28 +28,16 @@ export const appreciationModel: Attributes = {
     required: true,
     q: true
   },
-  appreciationId: {
+  author: {
     required: true,
     q: true
   },
-  authorId: {
-    required: true,
-    q: true
-  },
-  title: {
-    length: 100,
-    q: true
-  },
-  description: {
+  review: {
     length: 255,
     q: true
   },
-  createdAt: {
+  time: {
     type: 'datetime',
     q: true
   },
-  usefulCount: {
-    length: 20,
-    q: true
-  }
 };

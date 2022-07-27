@@ -1,5 +1,5 @@
-import { Attributes, Filter, SearchResult, Service } from 'onecore';
-import { Repository, SearchService } from 'query-core';
+import { Query, ViewService } from 'express-ext';
+import { Attributes, Filter, Repository, Service, ViewRepository } from './core';
 
 export interface RateId {
   id: string;
@@ -9,13 +9,19 @@ export interface RateId {
 export interface Rate {
   id: string;
   author: string;
+  authorURL?: string;
   rate: number;
   time: Date;
   review: string;
   usefulCount: number;
   replyCount: number;
+  histories?: ShortRate[];
 }
-
+export interface ShortRate {
+  rate: number;
+  time: Date;
+  review: string;
+}
 export interface RateFilter extends Filter {
   id?: string;
   author?: string;
@@ -27,41 +33,42 @@ export interface RateFilter extends Filter {
 }
 
 export interface RateRepository extends Repository<Rate, RateId> {
-  save(obj: Rate, ctx?: any): Promise<number>;
+  // save(obj: Rate, info?: T, ctx?: any): Promise<number>;
+  add(rate: Rate, newInfo?: boolean): Promise<number>;
+  edit(rate: Rate, oldRate: number): Promise<number>;
   getRate(id: string, author: string): Promise<Rate | null>;
-  increaseUsefulCount(id: string, author: string, ctx?: any): Promise<number>;
-  decreaseUsefulCount(id: string, author: string, ctx?: any): Promise<number>;
-  increaseReplyCount(id: string, author: string, ctx?: any): Promise<number>;
-  decreaseReplyCount(id: string, author: string, ctx?: any): Promise<number>;
 }
-
 export interface RateService extends Service<Rate, RateId, RateFilter> {
   getRate(id: string, author: string): Promise<Rate | null>;
-  updateRate(rate: Rate): Promise<number>;
-  rate(rate: Rate): Promise<boolean>;
+  rate(rate: Rate): Promise<number>;
   setUseful(id: string, author: string, userId: string, ctx?: any): Promise<number>;
   removeUseful(id: string, author: string, userId: string, ctx?: any): Promise<number>;
-  comment(comment: RateComment): Promise<boolean>;
-  removeComment(id: string,author: string, ctx?: any): Promise<number>;
+  comment(comment: RateComment): Promise<number>;
+  removeComment(id: string, author: string, ctx?: any): Promise<number>;
   updateComment(comment: RateComment): Promise<number>;
 }
 
 export interface RateReactionRepository {
-  getUseful(id: string, author: string, userId: string): Promise<RateReaction | null>;
-  removeUseful(id: string, author: string, userId: string, ctx?: any): Promise<number>;
-  save(obj: RateReaction, ctx?: any): Promise<number>;
-}
-
-export interface RateReactionService extends Service<RateReaction, RateReactionId, RateReactionFilter> {
+  remove(id: string, author: string, userId: string, ctx?: any): Promise<number>;
+  save(id: string, author: string, userId: string, type: number): Promise<number>;
 }
 
 export interface RateCommentRepository extends Repository<RateComment, string> {
-  save(obj: RateComment, ctx?: any): Promise<number>;
+  remove(commentId: string, id: string, author: string): Promise<number>;
 }
 
-export interface RateCommentService extends Service<RateComment,string,RateCommentFilter> {
+export interface RateCommentService extends Query<RateComment, string, RateCommentFilter> {
 }
-
+export const rateHistoryModel: Attributes = {
+  rate: {
+    type: 'integer'
+  },
+  time: {
+    type: 'datetime',
+  },
+  review: {
+  },
+};
 export const rateModel: Attributes = {
   id: {
     key: true,
@@ -91,73 +98,16 @@ export const rateModel: Attributes = {
   replyCount: {
     type: 'integer',
     min: 0
+  },
+  histories: {
+    type: 'array',
+    typeof: rateHistoryModel
   }
 };
-
-export interface RateReactionId {
-  id: string;
-  author: string;
-  userId: string;
-}
-
-export interface RateReaction {
-  id: string;
-  author: string;
-  userId: string;
-  time: Date;
-  reaction: number;
-}
-
-export interface RateReactionFilter extends Filter {
-  id?: string;
-  author?: string;
-  userId?: string;
-  time?: Date;
-  reaction?: number;
-}
-
-export const rateReactionModel: Attributes = {
-  id: {
-    key: true,
-    required: true
-  },
-  author: {
-    key: true,
-    required: true
-  },
-  userId: {
-    key: true,
-    required: true
-  },
-  time: {
-    type: 'datetime',
-  },
-  reaction: {
-    type: 'integer',
-  }
-};
-
-export interface Info {
-  id: string;
-  rate: number;
-  rate1: number;
-  rate2: number;
-  rate3: number;
-  rate4: number;
-  rate5: number;
-  viewCount: number;
-}
-
-export interface InfoRepository extends Repository<Info, string> {
-  save(obj: Info, ctx?: any): Promise<number>;
-}
 
 export const infoModel: Attributes = {
   id: {
     key: true,
-  },
-  viewCount: {
-    type: 'number'
   },
   rate: {
     type: 'number'
@@ -177,7 +127,28 @@ export const infoModel: Attributes = {
   rate5: {
     type: 'number',
   },
+  count: {
+    type: 'number',
+  },
+  score: {
+    type: 'number',
+  }
 };
+
+export interface Info {
+  id: string;
+  rate: number;
+  rate1: number;
+  rate2: number;
+  rate3: number;
+  rate4: number;
+  rate5: number;
+  count: number;
+  score: number;
+}
+
+export interface InfoRepository extends ViewRepository<Info, string> {
+}
 
 export interface RateCommentId {
   id: string;
@@ -192,6 +163,12 @@ export interface RateComment {
   userId: string;
   comment: string;
   time: Date;
+  updatedAt?: Date;
+  histories?: ShortComment[];
+}
+export interface ShortComment {
+  comment: string;
+  time: Date;
 }
 
 export interface RateCommentFilter extends Filter {
@@ -201,27 +178,48 @@ export interface RateCommentFilter extends Filter {
   userId?: string;
   comment?: string;
   time?: Date;
+  updatedAt?: Date;
+  histories?: ShortComment[];
 }
-
+export const commentModel: Attributes = {
+  comment: {
+    length: 500
+  },
+  time: {
+    type: 'datetime'
+  }
+};
 export const rateCommentModel: Attributes = {
   commentId: {
     key: true
   },
   id: {
     required: true,
+    noupdate: true,
     match: 'equal'
   },
   author: {
     required: true,
+    noupdate: true,
     match: 'equal'
   },
   userId: {
     required: true,
+    noupdate: true,
     match: 'equal'
   },
-  comment: {},
+  comment: {
+    length: 500
+  },
   time: {
+    type: 'datetime',
+    noupdate: true,
+  },
+  updatedAt: {
     type: 'datetime'
+  },
+  histories: {
+    type: 'array',
+    typeof: commentModel
   }
 };
-

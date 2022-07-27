@@ -35,18 +35,14 @@ import { FilmsForm as Films } from './film/films-form';
 import { LocationForm } from './backoffice/location-form';
 import { LocationsForm } from './backoffice/locations-form';
 import { LocationPage } from './location/location-page';
-import { Review } from './location/location-page/review';
-import { LocationPhoto } from './location/location-page/photo';
 import { LocationsPage } from './location/locations-page';
 import { MyProfileForm } from './my-profile/my-profile-form';
 import { MySettingsForm } from './my-profile/my-settings-form';
 import { UserPage } from './profile/user-page';
 import { UsersPage } from './profile/users-page';
 
-import { CinemaForm } from './cinema/cinema-form';
 import { CinemasForm } from './cinema/cinemas-form';
 import { CinemaPage } from './cinema/cinema-page';
-import { CinemaOverview } from './cinema/cinema-page/overview';
 
 import { BCinemasForm } from './backoffice/cinemas-form';
 import { BCinemaForm } from './backoffice/cinema-form';
@@ -85,9 +81,10 @@ import { MyArticles } from './my-articles/my-articles';
 import { MyArticle } from './my-articles/my-article';
 import { Articles } from './article/articles';
 import { ArticleForm } from './article/article';
-import { MyItems } from './my-items/items-form';
-import { MyItem } from './my-items/item-form';
+import { MyItemsForm } from './my-items/my-items-form';
+import { MyItemForm } from './my-items/my-item-form';
 import { ItemsForm } from './items/items-form';
+import { ItemView } from './items/item-view';
 import { ItemForm } from './items/item-form';
 let isInit = false;
 export function init() {
@@ -194,13 +191,14 @@ function App() {
           <Route path='article' element={<Articles />} />
           <Route path="article/edit/:id" element={<ArticleForm />} />
 
-          <Route path='my-item' element={<MyItems />} />
-          <Route path="my-item/add" element={<MyItem />} />
-          <Route path="my-item/edit/:id" element={<MyItem />} />
-
+          <Route path='my-item' element={<MyItemsForm />} />
+          <Route path="my-item/add" element={<MyItemForm />} />
+          <Route path="my-item/edit/:id" element={<MyItemForm />} />
+          <Route path='my-item/edit/:id/upload' element={<MyItemForm />} />
           <Route path="item" element={<ItemsForm />} />
           <Route path="item/add" element={<ItemForm />} />
           <Route path="item/edit/:id" element={<ItemForm />} />
+          <Route path="item/:id" element={<ItemView />} />
 
           {/* <Route path={'upload/:id/image'} element={<UploadFile />} />
           <Route path={'upload'} element={<UploadFile />} /> */}

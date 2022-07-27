@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { StringMap } from 'uione';
 import '../rate.css';
 import { FilmRate, UsefulFilm } from '../film/service/film';
@@ -22,14 +22,16 @@ interface Props {
   resource: StringMap;
   usefulReaction?: any;
   removeUsefulReaction?: any;
+  load: any;
 }
-export const RateItem = ({ data, maxLengthReviewText, resource, usefulReaction, removeUsefulReaction }: Props) => {
+export const RateItem = ({ data, maxLengthReviewText, resource, usefulReaction, removeUsefulReaction, load }: Props) => {
   const userId: string | undefined = storage.getUserId() || '';
   const [hide, setHide] = useState(false);
   const [hideComment, setHideComment] = useState(false);
   const [input, setInput] = useState('');
   const [replies, setReplies] = useState<RateComment[]>([]);
   const [pageSize, setPageSize] = useState(3);
+  const [more, setMore] = useState(false);
   const rateService = useRate();
   const commentService = useRateComment();
   const username = storage.username();
@@ -42,16 +44,12 @@ export const RateItem = ({ data, maxLengthReviewText, resource, usefulReaction, 
     return <div className={`rv-star2 ${classes}`}>{}</div>;
   };
 
-  const showText = (e: OnClick, text: string) => {
-    console.log(text);
-    
-  }
-
   const formatReviewText = (text: string) => {
     if (text && text.length > maxLengthReviewText) {
       let textSub = text.substring(0, maxLengthReviewText);
       textSub = textSub + ' ...';
-      const a = <span>{resource.review} {textSub} <span className='more-reviews' onClick={(e) => showText(e, text)}>More</span></span>;
+      console.log({ textSub });
+      const a = <span>{resource.review} {textSub} <span className='more-reviews' onClick={(e) => setMore(!more)}>More</span></span>;
       return a;
     } else {
       return <span>{resource.review} {text}</span>;
@@ -134,10 +132,11 @@ export const RateItem = ({ data, maxLengthReviewText, resource, usefulReaction, 
     <li className='col s12 m12 l12 review-custom'>
       <section className='card'>
         {data.author === userId ?
-          <p>{moment(data.time).format('DD/MM/YYYY')}--{data.rate} star <FontAwesomeIcon icon={faCircle} color="lightgreen" size="xs" /></p> :
-          <p>{moment(data.time).format('DD/MM/YYYY')}--{data.rate} star</p>}
+          <p>{moment(data.time).format('DD/MM/YYYY')}<FontAwesomeIcon icon={faCircle} color="lightgreen" size="xs" /></p> :
+          <p>{moment(data.time).format('DD/MM/YYYY')}</p>}
         {renderReviewStar(data.rate)}
-        {formatReviewText(data.review ?? '')}
+
+        {more ? <span>{data.review}</span> : formatReviewText(data.review ?? '')}
         <div className="footer">
           <div className="left">
             {data.disable === true ? <img alt='' className='useful-button' width={20} src={likeFilled} onClick={(e) => removeUsefulReaction(e, data)} /> : <img alt='' className='useful-button' width={20} src={like} onClick={(e) => usefulReaction(e, data)} />}
@@ -154,12 +153,15 @@ export const RateItem = ({ data, maxLengthReviewText, resource, usefulReaction, 
             return <CommentItem cmt={cmt} userId={userId} removeComment={removeComment} updateComment={updateComment} />
           })) || ''
         }
-        {replies && replies.length >= 3 && (<div className='col more-replies-div'>
-          <span className='more-replies' onClick={(e) => moreReply(e, data)}>
-            <b>MORE REVIEWS</b>
-          </span>
-        </div>)}
-        <div className="comments-container">
+        {replies && replies.length >= 3 && (
+          <div className="comments-container">
+            <div className='col more-replies-div'>
+              <span className='more-replies' onClick={(e) => moreReply(e, data)}>
+                <b>MORE REVIEWS</b>
+              </span>
+            </div>
+          </div>)}
+        {hideComment ? null : <div className="comments-container">
           <div className="post-comment-container">
             <div className="post-comment">
               <textarea placeholder="type comment here..." className="comment" value={input}
@@ -175,7 +177,7 @@ export const RateItem = ({ data, maxLengthReviewText, resource, usefulReaction, 
               </div>
             </div>
           </div>
-        </div>
+        </div>}
       </>
         : null}
     </li>
@@ -194,6 +196,7 @@ export const RateItemFilm = ({ data, maxLengthReviewText, resource }: PropsRate)
 
   useEffect(() => {
     checkUseful(data);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const renderReviewStar = (value: any) => {
@@ -246,7 +249,7 @@ export const RateItemFilm = ({ data, maxLengthReviewText, resource }: PropsRate)
 
     }
   };
-  console.log(rate);
+
 
   if (rate) {
     return (

@@ -1,4 +1,4 @@
-import { Attributes, Filter, Service, Tracking } from 'onecore';
+import { Attributes, Filter, Service } from 'onecore';
 
 export interface Article {
   id: string;

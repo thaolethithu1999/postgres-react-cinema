@@ -6,12 +6,14 @@ import {
   useSearch,
   value,
   checked,
+  PageSizeSelect,
 } from "react-hook-core";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { Pagination } from "reactx-pagination";
 import { inputSearch } from "uione";
 import { getItemService, Item, ItemFilter } from "./service";
+
 import {
   Chip,
   TextField,
@@ -20,17 +22,7 @@ import {
   createTheme,
 } from "@mui/material";
 
-interface ItemSearch extends SearchComponentState<Item, ItemFilter> {
-  // list: Item[];
-}
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#4db6ac",
-    },
-  },
-});
+interface ItemSearch extends SearchComponentState<Item, ItemFilter> {}
 
 const itemFilter: ItemFilter = {
   id: "",
@@ -38,6 +30,11 @@ const itemFilter: ItemFilter = {
   status: "",
   description: "",
   categories: [],
+  brand: [],
+  price: {
+    max: undefined,
+    min: undefined,
+  },
 };
 
 const initialState: ItemSearch = {
@@ -49,6 +46,7 @@ export const ItemsForm = () => {
   const navigate = useNavigate();
   const refForm = React.useRef();
   const [categories, setCategories] = React.useState<string[]>([]);
+  const [brands, setBrands] = React.useState<string[]>([]);
 
   const getFilter = (): ItemFilter => {
     return value(state.filter);
@@ -80,11 +78,20 @@ export const ItemsForm = () => {
   component.editable = true;
   const edit = (e: OnClick, id: string) => {
     e.preventDefault();
-    navigate(`edit/${id}`);
+    navigate(`${id}`);
   };
 
   const { list } = state;
+
   const filter = value(state.filter);
+
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#4db6ac",
+      },
+    },
+  });
 
   return (
     <div className="view-container">
@@ -214,7 +221,47 @@ export const ItemsForm = () => {
                 placeholder={resource.description}
               />
             </label>
-            <label className="col s12 m12 l4">
+            <label className="col s12 m4 l3">
+              Price from
+              <input
+                type="number"
+                id="pricemin"
+                name="pricemin"
+                value={filter.price?.min || ""}
+                onChange={(e: any) => {
+                  const value = e.currentTarget.value || "";
+                  setState({
+                    filter: {
+                      ...filter,
+                      price: { ...filter.price, min: parseInt(value) },
+                    },
+                  });
+                }}
+                maxLength={255}
+                placeholder="Price"
+              />
+            </label>
+            <label className="col s12 m4 l4">
+              to
+              <input
+                type="number"
+                id="pricemax"
+                name="pricemax"
+                value={filter.price?.max || ""}
+                onChange={(e: any) => {
+                  const value = e.currentTarget.value || "";
+                  setState({
+                    filter: {
+                      ...filter,
+                      price: { ...filter.price, max: parseInt(value) },
+                    },
+                  });
+                }}
+                maxLength={255}
+                placeholder="Price"
+              />
+            </label>
+            <label className="col s12 m12 l3">
               Categories
               <Autocomplete
                 options={[]}
@@ -229,11 +276,12 @@ export const ItemsForm = () => {
                   }
                 }}
                 renderTags={(v: readonly string[], getTagProps: any) =>
-                  v.map((option: string, index: number) => (
+                  v.map((option: string, i: number) => (
                     <Chip
+                      key={i}
                       variant="outlined"
                       label={option}
-                      {...getTagProps({ index })}
+                      {...getTagProps({ i })}
                     />
                   ))
                 }
@@ -246,6 +294,42 @@ export const ItemsForm = () => {
                       color="primary"
                       label={resource.categories}
                       placeholder={resource.categories}
+                    />
+                  </ThemeProvider>
+                )}
+              />
+            </label>
+            <label className="col s12 m4 l3">
+              Brand
+              <Autocomplete
+                options={[]}
+                multiple
+                id="tags-filled"
+                freeSolo
+                value={brands}
+                onChange={(e: any, newValue: string[]) => {
+                  if (newValue.length > -1) {
+                    setBrands(newValue);
+                    setState({ filter: { ...filter, brand: newValue } });
+                  }
+                }}
+                renderTags={(v: readonly string[], getTagProps: any) =>
+                  v.map((option: string, i: number) => (
+                    <Chip
+                      key={i}
+                      variant="outlined"
+                      label={option}
+                      {...getTagProps({ i })}
+                    />
+                  ))
+                }
+                renderInput={(params: any) => (
+                  <ThemeProvider theme={theme}>
+                    <TextField
+                      {...params}
+                      variant="standard"
+                      name="brands"
+                      color="primary"
                     />
                   </ThemeProvider>
                 )}
@@ -286,6 +370,16 @@ export const ItemsForm = () => {
                         Categories
                       </button>
                     </th>
+                    <th data-field="brand">
+                      <button type="button" id="sortBrand" onClick={sort}>
+                        Brand
+                      </button>
+                    </th>
+                    <th data-field="price">
+                      <button type="button" id="sortPrice" onClick={sort}>
+                        Price
+                      </button>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -298,12 +392,12 @@ export const ItemsForm = () => {
                             {(item as any).sequenceNo}
                           </td>
                           <td>{item.id}</td>
-                          <td>
-                            <Link to={`edit/${item.id}`}>{item.title}</Link>
-                          </td>
+                          <td>{item.title}</td>
                           <td>{item.status}</td>
                           <td>{item.description}</td>
                           <td>{item.categories}</td>
+                          <td>{item.brand}</td>
+                          <td>{item.price}</td>
                         </tr>
                       );
                     })}
@@ -325,15 +419,17 @@ export const ItemsForm = () => {
                       <section>
                         <div>
                           <h3>
-                            <Link to={`edit/${item.id}`}>{item.title}</Link>
+                            <Link to={`/${item.id}`}>{item.title}</Link>
                           </h3>
-                          <p>{item.status}</p>
                           <p>{item.description}</p>
-                          <br />
+                          <Chip label={item.brand} size="small" />
+                          <p>{item.price}</p>
                           <span>
                             {item.categories
-                              ? item.categories.map((c, i) => {
-                                  return <Chip label={c} size="small" />;
+                              ? item.categories.map((c: any, i: number) => {
+                                  return (
+                                    <Chip key={i} label={c} size="small" />
+                                  );
                                 })
                               : ""}
                           </span>

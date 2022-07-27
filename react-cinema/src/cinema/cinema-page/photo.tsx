@@ -1,10 +1,8 @@
-import React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Carousel, CarouselImageItem, CarouselVideoItem } from 'reactx-carousel';
-import { Cinema, Gallery } from '../service/cinema/cinema';
-import { getCinemaRates, useCinema } from '../service/index';
-import { FileInfo } from 'reactx-upload';
+import { Cinema } from '../service/cinema/cinema';
+import { useCinema } from '../service/index';
 import './rate.css';
 
 export interface Props {
@@ -13,7 +11,6 @@ export interface Props {
 }
 
 export const CinemaPhoto = ({cinema, setCinema}: Props) => {
-
   if (cinema && window.location.pathname.includes('photo')) {
     return (
       <>

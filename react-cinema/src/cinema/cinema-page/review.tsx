@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactModal from 'react-modal';
 import { useParams } from 'react-router-dom';
 import { storage } from 'uione';
@@ -7,8 +7,7 @@ import { DataPostRate, PostRateForm } from '../../rate/post-rate-form';
 import { RateItem } from '../../rate/rate-item';
 import { RatingStar } from '../rateting-star';
 import { ReviewScore } from '../../rate/review-score';
-import { Cinema, CinemaRate, useCinema } from '../service';
-import { CinemaRateFilter } from '../service/cinema-rate/cinema-rate';
+import { Cinema, useCinema } from '../service';
 
 import { useRate, useRateComment } from '../service';
 import { Rate } from '../service/rate';
@@ -27,7 +26,6 @@ export interface Props {
 export const CinemaReview = ({ cinema, setCinema }: Props) => {
   const params = useParams();
   const [resource] = useState(storage.resource().resource());
-  const [maxLengthReviewText] = useState(100);
   const [isOpenRateModal, setIsOpenRateModal] = useState(false);
   const [voteStar, setVoteStar] = useState<number>();
   const [pageSize, setPageSize] = useState(3);
@@ -39,6 +37,7 @@ export const CinemaReview = ({ cinema, setCinema }: Props) => {
 
   useEffect(() => {
     load();
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -52,7 +51,6 @@ export const CinemaReview = ({ cinema, setCinema }: Props) => {
     cinemaRateSM.limit = pageSize;
     cinemaRateSM.sort = '-time';
     cinemaRateSM.userId = userId;
-
     const searchResult = await rateService.search(cinemaRateSM, pageSize);
     setRates(searchResult.list);
   };
@@ -81,7 +79,6 @@ export const CinemaReview = ({ cinema, setCinema }: Props) => {
       rate.rate = data.rate;
       rate.review = data.review;
       rate.time = new Date();
-
       let addRate = await rateService.rate(rate);
       storage.message('Your review is submited');
       setIsOpenRateModal(false);

@@ -59,10 +59,10 @@ export default function LocationCarousel({ edit, location }: Props) {
     setCarousel(enable);
   };
 
-  const navigateEdit = (e: OnClick) => {
-    e.preventDefault();
-    navigate(`edit/${location.id}`);
-  };
+  // const navigateEdit = (e: OnClick) => {
+  //   e.preventDefault();
+  //   navigate(`edit/${location.id}`);
+  // };
   return (
     <>
       {carousel ? (

@@ -1,11 +1,11 @@
 import { HttpRequest } from 'axios-core';
 import { Client } from 'web-clients';
-import { Appreciation, UsefulAppreciation } from '../appreciation/appreciation';
-import { appreciationModel, AppreciationReply, AppreciationReplyFilter, AppreciationReplyService, Result } from './appreciation-reply';
+import { Appreciation, Useful } from '../appreciation/appreciation';
+import { appreciationModel, Reply, ReplyFilter, ReplyService, Result } from './appreciation-reply';
 
 export * from './appreciation-reply';
 
-export class AppreciationReplyClient extends Client<AppreciationReply, string, AppreciationReplyFilter> implements AppreciationReplyService {
+export class ReplyClient extends Client<Reply, string, ReplyFilter> implements ReplyService {
   constructor(http: HttpRequest, public url: string) {
     super(http, url, appreciationModel);
     this.searchGet = true;
@@ -14,7 +14,7 @@ export class AppreciationReplyClient extends Client<AppreciationReply, string, A
     const url = this.serviceUrl;
     return this.http.post<Result<Appreciation>>(url, obj);
   }
-  usefulAppreciation(obj: UsefulAppreciation): Promise<number> {
+  usefulAppreciation(obj: Useful): Promise<number> {
     const url = this.url + '/useful';
     return this.http.post<number>(url, obj).catch(err => {
       const data = (err && err.response) ? err.response : err;

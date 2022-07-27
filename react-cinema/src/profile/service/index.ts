@@ -3,7 +3,7 @@ import { HttpRequest } from 'axios-core';
 import { useEffect, useState } from 'react';
 import { options, storage } from 'uione';
 import { AppreciationClient, AppreciationService } from './appreciation';
-import { AppreciationReplyClient, AppreciationReplyService } from './appreciation-reply';
+import { ReplyClient, ReplyService } from './appreciation-reply';
 import { ProfileClient, ProfileService, UserClient, UserService } from './user';
 export interface Config {
   myprofile_url: string;
@@ -18,7 +18,7 @@ class ApplicationContext {
   profileService?: ProfileService;
   userService?: UserService;
   appreciationService?: AppreciationService;
-  appreciationReplyService?: AppreciationReplyService;
+  appreciationReplyService?: ReplyService;
 
   constructor() {
     this.getConfig = this.getConfig.bind(this);
@@ -50,10 +50,10 @@ class ApplicationContext {
     }
     return this.appreciationService;
   }
-  getAppreciationReplyService(): AppreciationReplyService {
+  getReplyService(): ReplyService {
     if (!this.appreciationReplyService) {
       const c = this.getConfig();
-      this.appreciationReplyService = new AppreciationReplyClient(httpRequest, c.appreciation_reply_url);
+      this.appreciationReplyService = new ReplyClient(httpRequest, c.appreciation_reply_url);
     }
     return this.appreciationReplyService;
   }
@@ -77,19 +77,19 @@ export function useMyProfileService(): ProfileService | undefined {
   return context;
 }
 
-export function useAppreciationService(): AppreciationService | undefined {
+export function useAppreciationService(): AppreciationService  {
   const [context, setContext] = useState<AppreciationService>();
   useEffect(() => {
     setContext(appContext.getAppreciationService());
   }, []);
-  return context;
+  return context??appContext.getAppreciationService();
 }
 
 
-export function useAppreciationReplyService(): AppreciationReplyService | undefined {
-  const [context, setContext] = useState<AppreciationReplyService>();
+export function useReplyService(): ReplyService | undefined {
+  const [context, setContext] = useState<ReplyService>();
   useEffect(() => {
-    setContext(appContext.getAppreciationReplyService());
+    setContext(appContext.getReplyService());
   }, []);
   return context;
 }

@@ -1,5 +1,4 @@
-import { Attributes, Filter, Service, Tracking } from 'onecore';
-
+import { Attributes, Filter, Service, Tracking, SearchResult } from 'onecore';
 export interface CategoryFilter extends Filter {
   categoryId?: string;
   categoryName?: string;
@@ -12,7 +11,7 @@ export interface Category extends Tracking {
 }
 
 export interface CategoryService extends Service<Category, string, CategoryFilter> {
-  getAllCategories(): Promise<Category[]>;
+  getAllCategories():  Promise<SearchResult<Category>>;
 }
 
 export const categoryModel: Attributes = {

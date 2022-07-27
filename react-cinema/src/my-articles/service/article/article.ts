@@ -1,4 +1,4 @@
-import { Attributes, Filter, Service, Tracking } from 'onecore';
+import { Attributes, Filter, Service } from 'onecore';
 
 export interface Article {
   id: string;
@@ -8,7 +8,7 @@ export interface Article {
   tags?: string[];
   type?: string;
   content: string;
-  authorId?:string
+  authorId:string
 }
 
 export interface ArticleFilter extends Filter {

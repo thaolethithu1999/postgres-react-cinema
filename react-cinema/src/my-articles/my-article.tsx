@@ -1,7 +1,7 @@
 import { ValueText } from 'onecore';
 import * as React from 'react';
 import { createModel, DispatchWithCallback, EditComponentParam, useEdit } from 'react-hook-core';
-import { handleError, inputEdit } from 'uione';
+import { handleError, inputEdit, storage } from 'uione';
 import { Article, getArticleService, getMasterData } from './service';
 import { TextEditorComponent } from './text-editor';
 
@@ -46,9 +46,6 @@ export const MyArticle = () => {
     setContent(state.article.content);
   }, [state]);
 
-  // const onEditChange = (data: any) => {
-  //   // setContent(data)
-  // }
   React.useEffect(() => {
     if (test) {
       save(test);
@@ -59,7 +56,8 @@ export const MyArticle = () => {
     e.preventDefault();
     const data = refEdit.current.getData();
     setTest(e);
-    setState({ article: { ...state.article, content: data } });
+    console.log('state',state.article)
+    setState({ article: { ...state.article, content: data ,authorId:storage.getUserId()??''} });
   };
 
   return (
@@ -79,9 +77,21 @@ export const MyArticle = () => {
               value={state.article.id}
               readOnly={!flag.newMode}
               onChange={updateState}
-              maxLength={20} required={true}
+              maxLength={40} required={true}
             />
           </label>
+          {/* <label className='col s12 m6'>
+          authorId
+            <input
+              type='text'
+              id='authorId'
+              name='authorId'
+              value={state.article.authorId}
+              readOnly={false}
+              onChange={updateState}
+              maxLength={20} required={true}
+            />
+          </label> */}
           <label className='col s12 m6'>
             {resource.person_title}
             <input
@@ -90,7 +100,7 @@ export const MyArticle = () => {
               name='title'
               value={state.article.title}
               onChange={updateState}
-              maxLength={40}
+              maxLength={300}
               required={true}
               placeholder={resource.person_title} />
           </label>
@@ -102,19 +112,7 @@ export const MyArticle = () => {
               name='description'
               value={state.article.description}
               onChange={updateState}
-              maxLength={40}
-              required={true}
-              placeholder={resource.description} />
-          </label>
-          <label className='col s12 m6'>
-            Name
-            <input
-              type='text'
-              id='name'
-              name='name'
-              value={state.article.name}
-              onChange={updateState}
-              maxLength={40}
+              maxLength={1000}
               required={true}
               placeholder={resource.description} />
           </label>
@@ -122,7 +120,7 @@ export const MyArticle = () => {
             Type
             <input
               type='text'
-              id='namtypee'
+              id='type'
               name='type'
               value={state.article.type}
               onChange={updateState}

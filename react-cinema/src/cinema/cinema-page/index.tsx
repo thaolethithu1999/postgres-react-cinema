@@ -13,12 +13,8 @@ import { ModalSelectCover } from '../../my-profile/modal-select-cover';
 import { CinemaOverview } from './overview';
 import { CinemaPhoto } from './photo';
 import { CinemaReview } from './review';
-import { CinemaService } from '../service/cinema/';
-import { useLocationsService } from '../../location/service';
 import { Cinema } from '../service/cinema'
 import { useCinema } from '../service/index'
-import { useLocation } from 'react-router-dom';
-import { Review } from '../../location/location-page/review';
 
 const httpRequest = new HttpRequest(Axios, options);
 
@@ -34,11 +30,11 @@ export const CinemaPage = () => {
   const [sizes, setSizes] = useState<number[]>([]);
   const [modalSelectGalleryOpen, setModalSelectGalleryOpen] = useState(false);
   const resource = useResource();
-  const currentPath = useLocation();
   const cinemaService = useCinema();
 
   useEffect(() => {
     getCinema(id ?? '')
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
   const getCinema = async (cinamaId: string) => {

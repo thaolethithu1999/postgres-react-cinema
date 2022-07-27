@@ -9,7 +9,7 @@ export * from './item';
 const httpRequest = new HttpRequest(axios, options);
 export interface Config {
   my_item_url: string;
-  category_url: string;
+  item_category_url: string;
 }
 class ApplicationContext {
   itemService?: ItemService;
@@ -34,7 +34,7 @@ class ApplicationContext {
   getCategoryService(): CategoryService {
     if (!this.categoryService) {
       const c = this.getConfig();
-      this.categoryService = new CategoryClient(httpRequest, c.category_url);
+      this.categoryService = new CategoryClient(httpRequest, c.item_category_url);
     }
     return this.categoryService;
   }

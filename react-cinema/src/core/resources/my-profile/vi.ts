@@ -72,5 +72,7 @@ export const vi = {
   warning_message_delete_bio:'Data will not be saved, are you sure to continue?',
   title_modal_gallery:'Gallery',
   title_select_gallery:'Select gallery',
-  button_select:'Select'
+  button_select:'Select',
+  item:"Item",
+  upload:"Upload"
 };

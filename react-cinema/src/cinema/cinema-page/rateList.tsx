@@ -1,6 +1,5 @@
 import { useEffect, useId, useState } from 'react';
 import { useRate } from '../service';
-
 import { Rate } from '../service/rate';
 import { RateFilter } from '../../rate/service/rate/rate';
 import { storage } from 'uione';
@@ -29,9 +28,9 @@ const RateList = (props: RateListInterface) => {
   const { pageSize, setPageSize, load, rates, setRates, replies, setReplies } = props;
   const [isUseful, setIsUseful] = useState();
 
-  
   useEffect(() => {
     load();
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setRates]);
 
   const moreReview = async (e: any) => {
@@ -85,6 +84,7 @@ const RateList = (props: RateListInterface) => {
                 resource={resource}
                 usefulReaction={usefulReaction}
                 removeUsefulReaction={removeUseful}
+                load={load}
               />;
             }) || '')
           )

@@ -615,8 +615,8 @@ export const TextEditorComponent: React.FC<{
     if (!oPrntWin) return
     oPrntWin.document.open();
     oPrntWin.document.write(
-      '<!doctype html><html><head><title>Print<\/title><\/head><body onload="print();">' +
-      oDoc.current.innerHTML + '<\/body><\/html>');
+      '<!doctype html><html><head><title>Print</title></head><body onload="print();">' +
+      oDoc.current.innerHTML + '</body></html>');
     oPrntWin.document.close();
   }
 

@@ -5,7 +5,6 @@ import { FileInfo } from 'reactx-upload';
 import { getLocations } from '../backoffice/service';
 import { Location } from '../backoffice/service/location/location';
 import './carousel.css';
-import { useNavigate } from 'react-router-dom';
 
 interface Props {
   edit: (e: any, id: string) => void;
@@ -14,7 +13,6 @@ interface Props {
 export default function LocationCarousel({ edit, location }: Props) {
   const [carousel, setCarousel] = useState(false);
   const [files, setFiles] = useState<FileInfo[]>();
-  const navigate = useNavigate();
   useEffect(() => {
     handleFetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps

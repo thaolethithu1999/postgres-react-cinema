@@ -2,7 +2,7 @@ import { Attributes, DateRange, Filter, Repository, Service } from 'onecore';
 import { FileInfo } from 'reactx-upload';
 
 export interface User {
-  userId: string;
+  id: string;
   username: string;
   displayName: string;
   email?: string;
@@ -99,7 +99,7 @@ export interface UserService extends Service<User, string, UserFilter> {
 export interface MyProfileService {
   getMyProfile(id: string): Promise<User | null>;
   getMySettings(id: string): Promise<UserSettings | null>;
-  saveMySettings(id: string, settings: UserSettings): Promise<number>;
+  saveMySettings(id:  string, settings: UserSettings): Promise<number>;
   saveMyProfile(user: User): Promise<number>;
   fetchImageUploadedGallery(id: string): Promise<FileInfo[] | []>;
   deleteFile(id: string, fileUrl: string): Promise<number>;
