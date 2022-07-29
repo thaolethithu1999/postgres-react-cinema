@@ -1,0 +1,24 @@
+
+id:
+author:
+review: 
+rate:
+
+
+id:
+author:
+review: 
+rates[4, 5, 2, 5, 3]
+
+rate01
+rate02
+rate03
+rate05
+rate01
+
+rate
+salary 4
+working environment 5
+work-life balance 4
+
+new Repository(tables: string[])
