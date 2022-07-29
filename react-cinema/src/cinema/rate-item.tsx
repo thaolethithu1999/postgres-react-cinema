@@ -39,9 +39,9 @@ export const RateItem = ({ data, maxLengthReviewText, resource, usefulReaction, 
   const renderReviewStar = (value: any) => {
     const starList = Array(5).fill(<i />).map((item, index) => {
       return (<i key={index}></i>)
-    });
+    });;
     const classes = Array.from(Array(value).keys()).map(i => `star-${i + 1}`).join(' ');
-    return <div className={`rv-star2 ${classes}`}>{}</div>;
+    return <div className={`rv-star2 ${classes}`}>{starList}</div>;
   };
 
   const formatReviewText = (text: string) => {
@@ -128,12 +128,19 @@ export const RateItem = ({ data, maxLengthReviewText, resource, usefulReaction, 
     showComments(e, data);
   }
 
+  const handleChangeAction = (e: OnClick) => {
+    setHideComment(!hideComment);
+    setHide(false);
+  }
+  console.log(data);
+
   return (
     <li className='col s12 m12 l12 review-custom'>
       <section className='card'>
-        {data.author === userId ?
+        {/* {data.author === userId ?
           <p>{moment(data.time).format('DD/MM/YYYY')}<FontAwesomeIcon icon={faCircle} color="lightgreen" size="xs" /></p> :
-          <p>{moment(data.time).format('DD/MM/YYYY')}</p>}
+          <p>{moment(data.time).format('DD/MM/YYYY')}</p>} */}
+        {<p>{moment(data.time).format('DD/MM/YYYY')}</p>}
         {renderReviewStar(data.rate)}
 
         {more ? <span>{data.review}</span> : formatReviewText(data.review ?? '')}
@@ -143,6 +150,7 @@ export const RateItem = ({ data, maxLengthReviewText, resource, usefulReaction, 
             {data.usefulCount ? data.usefulCount : 0}
           </div>
           <div className="right">
+            <span className="btn-reply" onClick={(e) => handleChangeAction(e)}>Comment</span>
             <span className="btn-reply" onClick={(e) => showComments(e, data)}>Replies</span>
           </div>
         </div>
@@ -161,113 +169,26 @@ export const RateItem = ({ data, maxLengthReviewText, resource, usefulReaction, 
               </span>
             </div>
           </div>)}
-        {hideComment ? null : <div className="comments-container">
-          <div className="post-comment-container">
-            <div className="post-comment">
-              <textarea placeholder="type comment here..." className="comment" value={input}
-                onChange={(e) => handleChange(e)} />
-              <div className="btn-area">
-                {input.length > 0 ? <>
-                  <span className="btn-post" onClick={() => { setHideComment(!hideComment) }} >Cancel</span>
-                  <span className="btn-post value" onClick={(e) => createReply(e, data, input)}>Post</span>
-                </> : <>
-                  <span className="btn-post" onClick={() => { setHideComment(!hideComment) }} >Cancel</span>
-                  <span className="btn-post" onClick={(e) => createReply(e, data, input)}>Post</span>
-                </>}
-              </div>
-            </div>
-          </div>
-        </div>}
       </>
         : null}
+      {hideComment ? <div className="comments-container">
+        <div className="post-comment-container">
+          <div className="post-comment">
+            <textarea placeholder="type comment here..." className="comment" value={input}
+              onChange={(e) => handleChange(e)} />
+            <div className="btn-area">
+              {input.length > 0 ? <>
+                <span className="btn-post" onClick={() => { setHideComment(!hideComment) }} >Cancel</span>
+                <span className="btn-post value" onClick={(e) => createReply(e, data, input)}>Post</span>
+              </> : <>
+                <span className="btn-post" onClick={() => { setHideComment(!hideComment) }} >Cancel</span>
+                <span className="btn-post" onClick={(e) => createReply(e, data, input)}>Post</span>
+              </>}
+            </div>
+          </div>
+        </div>
+      </div> : null}
     </li>
   );
 };
 
-interface PropsRate {
-  data: FilmRate;
-  maxLengthReviewText: number;
-  resource: StringMap;
-}
-
-export const RateItemFilm = ({ data, maxLengthReviewText, resource }: PropsRate) => {
-  const [rate, setRate] = useState<FilmRate>();
-  const FilmRateService = useFilmRate();
-
-  useEffect(() => {
-    checkUseful(data);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const renderReviewStar = (value: any) => {
-    const starList = Array(10).fill(<i />).map((item, index) => {
-      return (<i key={index}></i>)
-    });;
-    const classes = Array.from(Array(value).keys()).map(i => `star-${i + 1}`).join(' ');
-    return <div className={`rv-star2 ${classes}`}>{starList}</div>;
-  };
-
-  const formatReviewText = (text: string) => {
-    if (text && text.length > maxLengthReviewText) {
-      let textSub = text.substring(0, maxLengthReviewText);
-      textSub = textSub + ' ...';
-      const a = <span>{resource.review} {textSub} <span className='more-reviews'>More</span></span>;
-      return a;
-    } else {
-      return <span>{resource.review} {text}</span>;
-    }
-  };
-
-  const postUseful = async (e: OnClick, comment: FilmRate) => {
-    let rs;
-    const useful: UsefulFilm = {
-      id: comment.id || '',
-      author: storage.getUserId() || ''
-    };
-    if (FilmRateService) {
-      rs = await FilmRateService.usefulFilm(useful);
-    }
-    if (rs === 2) {// 2:Delete 1:Insert
-      setRate({ ...comment, isUseful: false, usefulCount: (comment.usefulCount ? comment.usefulCount : 0) - 1 });
-    } else { setRate({ ...comment, isUseful: true, usefulCount: (comment.usefulCount ? comment.usefulCount : 0) + 1 }); }
-  };
-
-  const checkUseful = async (rate: FilmRate): Promise<void> => {
-    try {
-      const useful: UsefulFilm = {
-        id: rate.id || '',
-        author: storage.getUserId() || ''
-      };
-
-      const result = await FilmRateService.usefulSearch(useful);
-      if (result === 1) {
-        rate.isUseful = true;
-      }
-      setRate(rate);
-
-    } catch (err) {
-
-    }
-  };
-
-
-  if (rate) {
-    return (
-      <li className='col s12 m12 l12 review-custom'>
-        <section className='card'>
-          <p>{moment(rate.rateTime).format('DD/MM/YYYY')}</p>
-          {renderReviewStar(rate.rate)}
-          {formatReviewText(rate.review ?? '')}
-          <p>
-            {rate.isUseful ? <img alt='' className='useful-button' width={20} src={likeFilled} onClick={(e) => postUseful(e, rate)} /> : <img alt='' className='useful-button' width={20} src={like} onClick={(e) => postUseful(e, rate)} />}
-            {rate.usefulCount ? rate.usefulCount : 0} </p>
-        </section>
-      </li>
-    );
-  }
-  return (
-    <span >
-
-    </span>
-  )
-};

@@ -28,8 +28,7 @@ export interface ResponseListInterface {
   setReplies: any;
 }
 
-interface ResponseSearch
-  extends SearchComponentState<Response, ResponseFilter> {}
+interface ResponseSearch extends SearchComponentState<Response, ResponseFilter> {}
 
 const ResponseList = (props: ResponseListInterface) => {
   const params = useParams();

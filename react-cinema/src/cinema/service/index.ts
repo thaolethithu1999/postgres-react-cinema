@@ -33,7 +33,7 @@ export interface Config {
   cinema_rate_url: string;
   rate_cinema_url: string;
   rate_film_url: string;
-  rate_comment_url: string;
+  rate_cinema_comment_url: string;
   comment_url: string;
 }
 class ApplicationContext {
@@ -74,7 +74,7 @@ class ApplicationContext {
   getRateCommentService(): RateCommentService {
     if (!this.rateCommentService) {
       const c = this.getConfig();
-      this.rateCommentService = new RateCommentClient(httpRequest, c.rate_comment_url);
+      this.rateCommentService = new RateCommentClient(httpRequest, c.rate_cinema_comment_url);
     }
     return this.rateCommentService;
   }

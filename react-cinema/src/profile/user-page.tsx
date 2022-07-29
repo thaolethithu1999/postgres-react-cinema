@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { buildId } from 'react-hook-core';
 import { Link, useParams } from 'react-router-dom';
+import { Carousel, CarouselImageItem, CarouselVideoItem } from 'reactx-carousel';
 import { getFileExtension, removeFileExtension } from 'reactx-upload';
 import { useResource } from 'uione';
 import imageOnline from '../assets/images/online.svg';
@@ -211,6 +212,55 @@ export function UserPage() {
                 }
               </div>
               }
+              <div className='card border-bottom-highlight'>
+                <header>
+                  <i className='material-icons highlight btn-camera'></i>
+                  {resource.title_modal_gallery}
+                
+                </header>
+                <section className='row'>
+                  <div className='user-carousel-container'>
+                    <Carousel infiniteLoop={true}>
+                      {user.gallery
+                        ? user.gallery.map((itemData, index) => {
+                          switch (itemData.type) {
+                            case 'video':
+                              return (
+                                <CarouselVideoItem
+                                  key={index}
+                                  type={itemData.type}
+                                  src={itemData.url}
+                                />
+                              );
+                            case 'image':
+                              return (
+                                // <img className='image-carousel' src={itemData.url} key={index} alt={itemData.url} draggable={false}/>
+                                <CarouselImageItem
+                                  key={index}
+                                  src={itemData.url}
+                                />
+                              );
+                            case 'youtube':
+                              return (
+                                <div className='data-item-youtube'>
+                                  <iframe
+                                    src={itemData.url + '?enablejsapi=1'}
+                                    frameBorder='0'
+                                    className='iframe-youtube'
+                                    title='youtube video'
+                                  ></iframe>
+                                  ;
+                                </div>
+                              );
+                            default:
+                              return <></>;
+                          }
+                        })
+                        : [<></>]}
+                    </Carousel>
+                  </div>
+                </section>
+              </div>
             </div>
           </div>}
       </form>

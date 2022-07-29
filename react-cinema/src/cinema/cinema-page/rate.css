@@ -16,7 +16,7 @@
   margin: 0px 16px;
 }
 
-.title > span {
+.title>span {
   font-style: normal;
   font-size: 18px;
   color: #4D4D4D;
@@ -34,13 +34,14 @@
   border-radius: 9px;
   padding: 2px 10px;
 }
+
 .addPhoto:focus {
   outline: none;
 }
 
-article > h4 {
+article>h4 {
   margin: 0px;
-} 
+}
 
 .camera {
   background-image: radial-gradient(circle, transparent 25%, #B453E5 25%, #B453E5 35%, transparent 35%, transparent 45%, #B453E5 45%);
@@ -51,7 +52,7 @@ article > h4 {
   margin-top: 7px;
   top: 50%;
   width: 1.9em;
-  -webkit-filter: drop-shadow(0 2px 3px hsla(0,0%,0%,.25));
+  -webkit-filter: drop-shadow(0 2px 3px hsla(0, 0%, 0%, .25));
 }
 
 .camera:after {
@@ -73,8 +74,8 @@ article > h4 {
   left: .7em;
   position: absolute;
   top: -.25em;
-  width: .84em; 
-  
+  width: .84em;
+
 }
 
 .text-camera {
@@ -92,8 +93,8 @@ section.user-input {
   display: inline-block;
   width: 90%;
   margin-left: 15px;
-    margin-right: 15px;
-    text-align: left;
+  margin-right: 15px;
+  text-align: left;
 }
 
 .more-reviews {
@@ -131,11 +132,27 @@ section.user-input {
   margin-left: 0.9rem;
 }
 
-.div-overview > .leaflet-container {
+.div-overview>.leaflet-container {
   width: 100% !important;
 }
 
-.img-border > .slider > .btn-prev, .img-border > .slider > .btn-next{
+.img-border>.slider>.btn-prev,
+.img-border>.slider>.btn-next {
   top: 50%;
   opacity: 1;
+}
+
+.detail>.rv-star>.progress>span {
+  display: block;
+  height: 100%;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  background-color: gold;
+  /* box-shadow: 
+    inset 0 2px 9px  rgba(255,255,255,0.3),
+    inset 0 -2px 6px rgba(0,0,0,0.4); */
+  position: relative;
+  overflow: hidden;
 }

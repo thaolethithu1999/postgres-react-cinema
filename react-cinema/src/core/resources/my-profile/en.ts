@@ -34,6 +34,9 @@ export const en = {
   user_profile_social: 'Social',
   user_profile_bio: 'About',
   user_profile_hireable_skill: 'Hireable Skill',
+  user_profile_companies: 'Companies',
+  user_profile_educations: 'Educations',
+  user_profile_works: 'Works',
 
   placeholder_user_profile_looking_for: 'Enter a skill you are looking for',
   placeholder_user_profile_skill: 'Enter a new skill',
@@ -41,10 +44,23 @@ export const en = {
   placeholder_user_profile_achievement_subject: 'Name of Achievement',
   placeholder_user_profile_achievement_description: 'Description of Achievement',
   placeholder_user_profile_company: 'Enter Place of employment',
+  placeholder_user_profile_work: 'Enter your work',
+  placeholder_user_profile_work_description: 'Enter your work description',
+  placeholder_user_profile_education_school:'Enter school',
+  placeholder_user_profile_education_degree:'Enter degree',
+  placeholder_user_profile_education_major:'Enter major',
+  placeholder_user_profile_company_name:'Enter company name',
+  placeholder_user_profile_company_position:'Enter company position',
+  placeholder_user_profile_company_description:'Enter company description',
+  placeholder_user_profile_from:'Enter from',
+  placeholder_user_profile_to:'Enter to',
 
   user_profile_highlight_achievement: 'Highlight Achievement',
   button_add_achievement: 'Add Achievement',
   button_add_skill: 'Add Skill',
+  button_add_work: 'Add Work',
+  button_add_education: 'Add Education',
+  button_add_company: 'Add Company',
 
   error_duplicated_skill: 'This skill is duplicated.',
   error_duplicated_looking_for: 'This looking for is duplicated.',
@@ -67,12 +83,15 @@ export const en = {
   user_settings_comments_of_your_posts: 'When you have a new comment of your post',
   user_settings_event_invitations: 'When you have a new event invitations',
   user_settings_when_new_events_around: 'When you have a new event around',
-  button_modal_ok:'Ok',
-  title_modal_uploads:'Uploads',
-  warning_message_delete_bio:'Data will not be saved, are you sure to continue?',
-  title_modal_gallery:'Gallery',
-  title_select_gallery:'Select gallery',
-  button_select:'Select',
-  item:"Item",
-  upload:"Upload"
+  button_modal_ok: 'Ok',
+  title_modal_uploads: 'Uploads',
+  warning_message_delete_bio: 'Data will not be saved, are you sure to continue?',
+  title_modal_gallery: 'Gallery',
+  title_select_gallery: 'Select gallery',
+  button_select: 'Select',
+  item: "Item",
+  upload: "Upload"
 };
+
+
+

@@ -6,7 +6,12 @@ export class ReplyFilter extends AppreciationFilter {
 }
 
 export interface Reply extends Appreciation {
-  userId?: string;
+  id: string;
+  author: string;
+  review: string;
+  time?: Date;
+  updateAt?: Date;
+  userId: string;
 }
 
 export interface Result<T> {

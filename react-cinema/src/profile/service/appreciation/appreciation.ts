@@ -20,7 +20,7 @@ export interface AppreciationId {
 export interface Appreciation {
   id: string;
   author: string;
-  title: string;
+  title?: string;
   review: string;
   time?: Date;
   updateAt?:Date;

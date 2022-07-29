@@ -15,8 +15,8 @@ interface Props {
 }
 
 export const PostRateForm = ({ closeModal, setData, data, isReply, isEdit }: Props) => {
-  const [title, setTitle] = useState(data?.title ?? '');
-  const [description, setDescription] = useState(data?.review ?? '');
+  const [title, setTitle] = useState(isReply ? '' : data?.title ?? '');
+  const [description, setDescription] = useState(isReply ? '' : data?.review ?? '');
   const appreciationService = useAppreciationService();
   const appreciationReplyService = useReplyService();
 
@@ -33,40 +33,40 @@ export const PostRateForm = ({ closeModal, setData, data, isReply, isEdit }: Pro
         author: id || '',
         title,
         review: description,
+        replyCount:0
       };
       if (!isEdit) {
         const rs = await appreciationService.insert(dataReq);
         const newAppreciation0: Appreciation = (rs as any)['value'];
         setData(newAppreciation0);
       }
-      else if(data) {
+      else if (data) {
         const rs = await appreciationService.update(dataReq);
         if (rs === 1) {
           const histories = data.histories ? data.histories : []
-          histories.push({ review: data.review, time: data.time!,title:data.title })
-          dataReq.histories=histories
+          histories.push({ review: data.review, time: data.time!, title: data.title || '' })
+          dataReq.histories = histories
           setData(dataReq);
         }
       }
       closeModal();
       return;
     }
-    if (!appreciationReplyService || !data) { closeModal(); return; }
+    if (!data) { closeModal(); return; }
     const appreciation: Reply = {
-      userId: id,
+      userId: id ?? '',
       author: data.author,
-      title,
       review: description,
       id: data.id
     };
-    await appreciationReplyService?.insertReply(appreciation);
+    await appreciationService?.reply(appreciation);
     const newAppreciation: Reply = (data as any)['value'];
     setData(newAppreciation);
     closeModal();
     return;
   };
   const headerText = useMemo(() => {
-    return (isEdit ? "Update" : "Create") + " Appreciation"
+    return (isReply ? "Reply" : isEdit ? "Update" : "Create") + " Appreciation"
   }, [isEdit])
   return (
     <div className='view-container'>
@@ -88,7 +88,7 @@ export const PostRateForm = ({ closeModal, setData, data, isReply, isEdit }: Pro
         </header>
         <div>
           <section className='section-appreciate'>
-            <input type={'text'} className='input-appreciate' placeholder='Title' value={title} onChange={e => setTitle(e.target.value)} />
+            {!isReply && <input type={'text'} className='input-appreciate' placeholder='Title' value={title} onChange={e => setTitle(e.target.value)} />}
             <textarea style={{ height: 140 }} className='input-appreciate' placeholder='Description' value={description} onChange={e => setDescription(e.target.value)} />
           </section>
         </div>

@@ -34,8 +34,8 @@ export const config = {
   cinema_rate_url:'http://localhost:8080/cinema-rate',
   rate_cinema_url:'http://localhost:8080/cinema/rates',
   rate_film_url:'http://localhost:8080/films/rates',
-  rate_comment_url: 'http://localhost:8080/comment/search',
-  comment_url: 'http://localhost:8082/comment',
+  rate_cinema_comment_url: 'http://localhost:8080/cinema/comment/search',
+  rate_film_comment_url: 'http://localhost:8080/films/rates/comment/search',
 };
 
 export const env = {

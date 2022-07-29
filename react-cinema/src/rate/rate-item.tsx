@@ -8,6 +8,7 @@ import like from '../assets/images/like.svg';
 import likeFilled from '../assets/images/like_filled.svg';
 import { OnClick } from 'react-hook-core';
 import { storage } from 'uione';
+import { Rate } from './service/rate';
 
 interface Props {
   data: any;
@@ -49,19 +50,15 @@ export const RateItem = ({ data, maxLengthReviewText, resource }: Props) => {
 };
 
 interface PropsRate {
-  data: FilmRate;
+  data: Rate;
   maxLengthReviewText: number;
   resource: StringMap;
 }
 
 export const RateItemFilm = ({ data, maxLengthReviewText, resource }: PropsRate) => {
-  const [rate, setRate] = useState<FilmRate>();
-  const FilmRateService = useFilmRate();
 
-  useEffect(() => {
-    checkUseful(data);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  console.log(data);
+  
 
   const renderReviewStar = (value: any) => {
     const starList = Array(10).fill(<i />).map((item, index) => {
@@ -82,47 +79,47 @@ export const RateItemFilm = ({ data, maxLengthReviewText, resource }: PropsRate)
     }
   };
 
-  const postUseful = async (e: OnClick, comment: FilmRate) => {
-    let rs;
-    const useful: UsefulFilm = {
-      id: comment.id || '',
-      author: storage.getUserId() || ''
-    };
-    if (FilmRateService) {
-      rs = await FilmRateService.usefulFilm(useful);
-    }
-    if (rs === 2) {// 2:Delete 1:Insert
-      setRate({ ...comment, isUseful: false, usefulCount: (comment.usefulCount ? comment.usefulCount : 0) - 1 });
-    } else { setRate({ ...comment, isUseful: true, usefulCount: (comment.usefulCount ? comment.usefulCount : 0) + 1 }); }
+  const postUseful = async (e: OnClick, comment: Rate) => {
+    // let rs;
+    // const useful: UsefulFilm = {
+    //   id: comment.id || '',
+    //   author: storage.getUserId() || ''
+    // };
+    // if (FilmRateService) {
+    //   rs = await FilmRateService.usefulFilm(useful);
+    // }
+    // if (rs === 2) {// 2:Delete 1:Insert
+    //   setRate({ ...comment, isUseful: false, usefulCount: (comment.usefulCount ? comment.usefulCount : 0) - 1 });
+    // } else { setRate({ ...comment, isUseful: true, usefulCount: (comment.usefulCount ? comment.usefulCount : 0) + 1 }); }
   };
 
-  const checkUseful = async (rate: FilmRate): Promise<void> => {
-    try {
-      const useful: UsefulFilm = {
-        id: rate.id || '',
-        author: storage.getUserId() || ''
-      };
+  const checkUseful = async (rate: Rate): Promise<void> => {
+    // try {
+    //   const useful: UsefulFilm = {
+    //     id: rate.id || '',
+    //     author: storage.getUserId() || ''
+    //   };
 
-      const result = await FilmRateService.usefulSearch(useful);
-      if (result === 1) {
-        rate.isUseful = true;
-      }
-      setRate(rate);
+    //   const result = await FilmRateService.usefulSearch(useful);
+    //   if (result === 1) {
+    //     rate.isUseful = true;
+    //   }
+    //   setRate(rate);
 
-    } catch (err) {
+    // } catch (err) {
 
-    }
+    // }
   };
-  if (rate) {
+  if (data) {
     return (
       <li className='col s12 m12 l12 review-custom'>
         <section className='card'>
-          <p>{moment(rate.rateTime).format('DD/MM/YYYY')}</p>
-          {renderReviewStar(rate.rate)}
-          {formatReviewText(rate.review ?? '')}
+          <p>{moment(data.time).format('DD/MM/YYYY')}</p>
+          {renderReviewStar(data.rate)}
+          {formatReviewText(data.review ?? '')}
           <p>
-            {rate.isUseful ? <img alt='' className='useful-button' width={20} src={likeFilled} onClick={(e) => postUseful(e, rate)} /> : <img alt='' className='useful-button' width={20} src={like} onClick={(e) => postUseful(e, rate)} />}
-            {rate.usefulCount ? rate.usefulCount : 0} </p>
+            {data === true ? <img alt='' className='useful-button' width={20} src={likeFilled} onClick={(e) => postUseful(e, data)} /> : <img alt='' className='useful-button' width={20} src={like} onClick={(e) => postUseful(e, data)} />}
+            {data.usefulCount ? data.usefulCount : 0} </p>
         </section>
       </li>
     );

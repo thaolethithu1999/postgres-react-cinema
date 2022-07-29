@@ -37,8 +37,46 @@ export interface User {
   customLink07: string;
   customLink08: string;
   links?: Social;
+  works: Work[];
+  companies: Company[];
+  educations: Education[];
+}
+export interface Education {
+  school: string;
+  degree: string;
+  major: string;
+  title: string;
+  from: Date | string;
+  to: Date | string;
+}
+export interface Work {
+  name: string;
+  position: string;
+  description: string;
+  item?: Object[];
+  from: Date | string;
+  to: Date | string;
 }
 
+export interface Company {
+  id?: string
+  name: string
+  position: string;
+  description: string;
+  from: Date | string;
+  to: Date | string;
+}
+
+export interface Social {
+  google: string;
+  facebook: string;
+  github: string;
+  instagram: string;
+  twitter: string;
+  skype: string;
+  dribble: string;
+  linkedin: string;
+}
 export interface Social {
   google: string;
   facebook: string;
@@ -99,7 +137,7 @@ export interface UserService extends Service<User, string, UserFilter> {
 export interface MyProfileService {
   getMyProfile(id: string): Promise<User | null>;
   getMySettings(id: string): Promise<UserSettings | null>;
-  saveMySettings(id:  string, settings: UserSettings): Promise<number>;
+  saveMySettings(id: string, settings: UserSettings): Promise<number>;
   saveMyProfile(user: User): Promise<number>;
   fetchImageUploadedGallery(id: string): Promise<FileInfo[] | []>;
   deleteFile(id: string, fileUrl: string): Promise<number>;
@@ -116,6 +154,56 @@ export const skillsModel: Attributes = {
   },
   hirable: {
     type: 'boolean',
+  }
+};
+
+export const worksModel: Attributes = {
+  name: {
+    required: true
+  },
+  description: {
+  },
+  from: {
+  },
+  to: {
+  },
+  position: {
+  },
+  item:{
+
+  }
+};
+
+export const companiesModel: Attributes = {
+  name: {
+    required: true
+  },
+  description: {
+  },
+  from: {
+  },
+  to: {
+  },
+  position: {
+  },
+  id:{
+
+  }
+};
+export const educationsModel: Attributes = {
+  school: {
+    required: true
+  },
+  degree: {
+  },
+  from: {
+  },
+  to: {
+  },
+  major: {
+  },
+  title:{
+
   }
 };
 export const userSettingsModel: Attributes = {
@@ -165,5 +253,17 @@ export const userModel: Attributes = {
   settings: {
     type: 'object',
     typeof: userSettingsModel,
+  },
+  works: {
+    type: 'primitives',
+    typeof: worksModel,
+  },
+  companies: {
+    type: 'primitives',
+    typeof: companiesModel,
+  },
+  educations: {
+    type: 'primitives',
+    typeof: educationsModel,
   }
 };

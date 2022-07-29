@@ -37,10 +37,6 @@ export const PostCommentForm = ({ cmt, isModalOpen, close, updateComment }: Prop
     setComment(e.target.value);
   };
 
-  const postComment = (e: OnClick) => {
-
-  }
-
   return (
     <ReactModal
       isOpen={isModalOpen}
@@ -79,8 +75,9 @@ export const PostCommentForm = ({ cmt, isModalOpen, close, updateComment }: Prop
               />
             </section>
           </div>
-          <footer>
+          <footer className='footer'>
             <span
+              className='btn-post-comment'
               onClick={(e) => updateComment(e, comment, cmt)}
             >
               Post

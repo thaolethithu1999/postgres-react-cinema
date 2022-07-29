@@ -1,9 +1,10 @@
 import { Item } from 'onecore';
 import React, { useMemo, useState } from 'react';
-import { OnClick, SearchComponentState, useSearch } from 'react-hook-core';
+import { OnClick, PageSizeSelect, SearchComponentState, useSearch } from 'react-hook-core';
 import ReactModal from 'react-modal';
 import { useParams } from 'react-router-dom';
-import { inputSearch } from 'uione';
+import Pagination from 'reactx-pagination';
+import { inputSearch, storage } from 'uione';
 import { Replys } from './appreciation';
 import './appreciation.css';
 import { PostRateForm } from './post-appreciation-form';
@@ -20,6 +21,7 @@ export const customStyles = {
     transform: 'translate(-50%, -50%)',
   }
 };
+const userId = storage.getUserId() || ''
 interface AppreciationSearch extends SearchComponentState<Appreciation, AppreciationFilter> {
   statusList: Item[];
 }
@@ -32,8 +34,8 @@ export const Appreciations = () => {
       list: [],
       filter: {
         id: params.id,
-        limit:12,
-        firstLimit:12
+        limit: 12,
+        firstLimit: 12
       }
     } as AppreciationSearch
   }, [])
@@ -46,7 +48,7 @@ export const Appreciations = () => {
   // useEffect(() => {
   //   load();
   // }, [appreciationService]); // eslint-disable-line react-hooks/exhaustive-deps
-  const { state, resource, component, setState } = useSearch<Appreciation, AppreciationFilter, AppreciationSearch>(refForm, initialState, appreciationService, inputSearch());
+  const { state, resource, component, setState,pageSizeChanged,pageChanged } = useSearch<Appreciation, AppreciationFilter, AppreciationSearch>(refForm, initialState, appreciationService, inputSearch());
   const appreciations: Appreciation[] = useMemo(() => {
     return state.list ?? []
   }, [state.list])
@@ -92,15 +94,34 @@ export const Appreciations = () => {
 
   const handleSort = () => {
   };
-  console.log('component', component)
   if (window.location.pathname.includes('appreciation')) {
     return (
       <>
+       <form id='rolesForm' name='rolesForm' noValidate={true} ref={refForm as any}>
+          <section className='row search-group'>
+            <label className='col s12 m6 search-input'>
+              <PageSizeSelect size={component.pageSize} sizes={component.pageSizes} onChange={pageSizeChanged} />
+            </label>
+            <Pagination className='col s12 m6' total={component.total} size={component.pageSize} max={component.pageMaxSize} page={component.pageIndex} onChange={pageChanged} />
+          </section>
+          <section className='row search-group inline' hidden={component.hideFilter}>
+            <label className='col s12 m6'>
+              {resource.role_name}
+              <input
+                type='text'
+                id='roleName'
+                name='roleName'
+                value={userId}
+                />
+            </label>
+           
+          </section>
+        </form>
         <form id='usersForm' name='usersForm' noValidate={true} ref={refForm as any}>
           <input type='hidden'
             id='id' name='id'
             value={params.id}
-            // onChange={updateState}
+          // onChange={updateState}
           />
         </form>
         <div className='row top-content sort-content'>
@@ -127,10 +148,10 @@ export const Appreciations = () => {
             }) || '')
           }
         </ul>
-          <div className='col s12 m12 l12 more-reviews-div'>
+          {/* <div className='col s12 m12 l12 more-reviews-div'>
             <span className='more-reviews' onClick={moreAppreciate}>
               <b>MORE REVIEWS</b>
-            </span></div>
+            </span></div> */}
         </>
         <ReactModal
           isOpen={isOpenModal}

@@ -1,13 +1,18 @@
-import { useEffect, useId, useState } from 'react';
-import { useRate } from '../service';
-import { Rate } from '../service/rate';
-import { RateFilter } from '../../rate/service/rate/rate';
-import { storage } from 'uione';
+import { useEffect, useRef, useState } from 'react';
+import {
+  OnClick,
+  SearchComponentState,
+  useSearch,
+  value,
+  PageSizeSelect,
+} from "react-hook-core";
 import { useParams } from 'react-router-dom';
+import { storage } from 'uione';
+import { RateFilter } from '../../rate/service/rate/rate';
 import { RateItem } from '../rate-item';
-import { OnClick } from 'react-hook-core';
-import debounce from "lodash/debounce";
-import { RateComment } from '../service/rate';
+import { useRate } from '../service';
+import { Rate, RateComment } from '../service/rate';
+import { inputSearch } from "uione";
 
 export interface RateListInterface {
   pageSize: number;
@@ -19,18 +24,89 @@ export interface RateListInterface {
   setReplies: any;
 }
 
+interface RateSearch extends SearchComponentState<Rate, RateFilter> { }
+
 const RateList = (props: RateListInterface) => {
   const params = useParams();
+  const { id } = params;
+  const userId: string | undefined = storage.getUserId() || '';
+
+
   const [maxLengthReviewText] = useState(100);
-  const [resource] = useState(storage.resource().resource());
+  // const [resource] = useState(storage.resource().resource());
   const rateService = useRate();
-  const author: string | undefined = storage.getUserId();
   const { pageSize, setPageSize, load, rates, setRates, replies, setReplies } = props;
-  const [isUseful, setIsUseful] = useState();
+
+  const rateFilter: RateFilter = {
+    id: id,
+    userId: userId
+  };
+
+  const initialState: RateSearch = {
+    list: [],
+    filter: rateFilter,
+  };
+
+  const refForm = useRef();
+
+  const {
+    state,
+    resource,
+    component,
+    updateState,
+    search,
+    sort,
+    toggleFilter,
+    clearQ,
+    changeView,
+    pageChanged,
+    pageSizeChanged,
+    setState,
+    setComponent
+  } = useSearch<Rate, RateFilter, RateSearch>(
+    refForm,
+    initialState,
+    useRate(),
+    inputSearch()
+  );
+
+  const { list } = state;
+
+
+  useEffect(() => {
+  }, [state])
+
+  state.filter = {
+    ...state.filter,
+    id: id,
+  };
+
+  const backPage = () => {
+    const page = component.pageIndex || 1;
+    const size = component.pageSize || 24;
+    if (page !== 1) {
+      pageChanged({
+        page: page - 1,
+        size: size,
+      });
+    }
+  };
+
+  const nextPage = () => {
+    const page = component.pageIndex || 1;
+    const size = component.pageSize || 24;
+    console.log(page, size)
+    if (page < Math.ceil(Number(component.total) / size)) {
+      pageChanged({
+        page: page + 1,
+        size: size,
+      });
+    }
+  };
 
   useEffect(() => {
     load();
-     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setRates]);
 
   const moreReview = async (e: any) => {
@@ -55,8 +131,14 @@ const RateList = (props: RateListInterface) => {
     if (!userId) {
       return;
     }
-    const rs = await rateService.setUseful(id, author, userId);
-    load();
+    await rateService.setUseful(id, author, userId);
+    search(e as any)
+    setComponent({
+      sortField: 'time',
+      sortType: '-',
+      sortTarget: undefined
+    });
+    sort('-time' as  any)
   }
 
   const removeUseful = async (e: OnClick, rate: Rate) => {
@@ -72,11 +154,16 @@ const RateList = (props: RateListInterface) => {
 
   return (
     <>
+      <PageSizeSelect
+        size={component.pageSize}
+        sizes={component.pageSizes}
+        onChange={pageSizeChanged}
+      />
       <ul className='row list-view'>
         {
           (
-            rates && rates.length > 0 &&
-            (rates.map((value: Rate) => {
+            list && list.length > 0 &&
+            (list.map((value: Rate) => {
               return <RateItem
                 data={value}
                 key={value.author}
@@ -91,12 +178,14 @@ const RateList = (props: RateListInterface) => {
         }
       </ul>
 
-      {rates && rates.length >= 3 && (<div className='col s12 m12 l12 more-reviews-div'>
+      <button className="btn-item-response-page" onClick={backPage}>Back</button>
+      <button className="btn-item-response-page" onClick={nextPage}>Next</button>
+
+      {/* {rates && rates.length >= 3 && (<div className='col s12 m12 l12 more-reviews-div'>
         <span className='more-reviews' onClick={moreReview}>
           <b>MORE REVIEWS</b>
         </span>
-      </div>)}
-
+      </div>)} */}
     </>
   )
 }

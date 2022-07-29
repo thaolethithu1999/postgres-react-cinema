@@ -163,7 +163,7 @@ export const CinemaPage = () => {
           </header>
           <div className='row'>
             <CinemaOverview cinema={cinema} />
-            <CinemaReview cinema={cinema} setCinema={setCinema}/>
+            <CinemaReview cinema={cinema} setCinema={setCinema} getCinema={getCinema}/>
             <CinemaPhoto cinema={cinema} setCinema={setCinema}/>
           </div>
         </form>

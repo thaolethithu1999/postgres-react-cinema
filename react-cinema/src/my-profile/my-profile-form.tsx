@@ -21,7 +21,7 @@ import {
   useMyProfileService,
   User,
 } from './my-profile';
-import { useLookingForService, useSkillService } from './my-profile';
+import { useLookingForService, useSkillService, Work, Education, Company } from './my-profile';
 
 const httpRequest = new HttpRequest(Axios, options);
 interface Edit {
@@ -33,6 +33,9 @@ interface Edit {
     subject: string;
     skill: string;
     hirable: boolean;
+    work: Work;
+    education: Education;
+    company: Company;
   };
 }
 const data: Edit = {
@@ -44,6 +47,28 @@ const data: Edit = {
     subject: '',
     skill: '',
     hirable: false,
+    work: {
+      description: '',
+      from: '',
+      to: '',
+      position: '',
+      name: ''
+    },
+    company: {
+      description: '',
+      from: '',
+      name: '',
+      position: '',
+      to: '',
+    },
+    education: {
+      degree: '',
+      from: '',
+      major: '',
+      school: '',
+      title: '',
+      to: ''
+    }
   },
 };
 
@@ -58,11 +83,12 @@ export const MyProfileForm = () => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isEditingBio, setIsEditingBio] = useState<boolean>(false);
   const [isEditingInterest, setIsEditingInterest] = useState<boolean>(false);
-  const [isEditingLookingFor, setIsEditingLookingFor] =
-    useState<boolean>(false);
+  const [isEditingLookingFor, setIsEditingLookingFor] = useState<boolean>(false);
   const [isEditingSkill, setIsEditingSkill] = useState<boolean>(false);
-  const [isEditingAchievement, setIsEditingAchievement] =
-    useState<boolean>(false);
+  const [isEditingAchievement, setIsEditingAchievement] = useState<boolean>(false);
+  const [isEditingWorks, setIsEditingWork] = useState<boolean>(false);
+  const [isEditingEducations, setIsEditingEducations] = useState<boolean>(false);
+  const [isEditingCompanies, setIsEditingCompanies] = useState<boolean>(false);
   const [bio, setBio] = useState<string>('');
   const [user, setUser] = useState<User>({} as any);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
@@ -224,6 +250,49 @@ export const MyProfileForm = () => {
       });
       setIsEditingAchievement(!isEditingAchievement);
     }
+    if (isEditingWorks) {
+      setState({
+        edit: {
+          ...state.edit, work: {
+            description: '',
+            from: '',
+            to: '',
+            position: '',
+            name: ''
+          },
+        },
+      });
+      setIsEditingWork(!isEditingWorks)
+    }
+    if (isEditingEducations) {
+      setState({
+        edit: {
+          ...state.edit, education: {
+            degree: '',
+            from: '',
+            major: '',
+            school: '',
+            title: '',
+            to: ''
+          },
+        },
+      });
+      setIsEditingEducations(!isEditingEducations)
+    }
+    if (isEditingCompanies) {
+      setState({
+        edit: {
+          ...state.edit, company: {
+            description: '',
+            from: '',
+            name: '',
+            position: '',
+            to: '',
+          },
+        },
+      });
+      setIsEditingCompanies(!isEditingCompanies)
+    }
     setIsEditing(!isEditing);
   };
 
@@ -354,6 +423,23 @@ export const MyProfileForm = () => {
       }
     }
   };
+  const toggleWork = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    e.preventDefault();
+    setIsEditingWork(!isEditingWorks);
+    setIsEditing(!isEditing);
+  };
+
+  const toggleCompany = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    e.preventDefault();
+    setIsEditingCompanies(!isEditingCompanies);
+    setIsEditing(!isEditing);
+  };
+  const toggleEducation = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    e.preventDefault();
+    setIsEditingEducations(!isEditingEducations);
+    setIsEditing(!isEditing);
+  };
+
   const toggleSkill = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.preventDefault();
     setIsEditingSkill(!isEditingSkill);
@@ -385,6 +471,21 @@ export const MyProfileForm = () => {
       setUser({ ...user });
     }
   };
+
+  const removeWork = (e: React.MouseEvent<HTMLElement, MouseEvent>, index: number) => {
+    user.works.splice(index, 1)
+    setUser({ ...user });
+  }
+
+  const removeEducation = (e: React.MouseEvent<HTMLElement, MouseEvent>, index: number) => {
+    user.educations.splice(index, 1)
+    setUser({ ...user });
+  }
+  const removeCompany = (e: React.MouseEvent<HTMLElement, MouseEvent>, index: number) => {
+    user.companies.splice(index, 1)
+    setUser({ ...user });
+  }
+
   const addAchievement = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.preventDefault();
     const achievement: Achievement = {
@@ -407,7 +508,58 @@ export const MyProfileForm = () => {
       setState({ edit: { ...state.edit, description: '', subject: '' } });
     }
   };
-
+  const addWork = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    e.preventDefault();
+    const work: Work = state.edit.work;
+    user.works ? user.works.push(work) : user.works = [work];
+    setUser({ ...user });
+    setState({
+      edit: {
+        ...state.edit, work: {
+          description: '',
+          from: '',
+          to: '',
+          position: '',
+          name: ''
+        }
+      }
+    });
+  };
+  const addEducation = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    e.preventDefault();
+    const edu: Education = state.edit.education;
+    user.educations ? user.educations.push(edu) : user.educations = [edu];
+    setUser({ ...user });
+    setState({
+      edit: {
+        ...state.edit, education: {
+          degree: '',
+          from: '',
+          major: '',
+          school: '',
+          title: '',
+          to: ''
+        }
+      }
+    });
+  };
+  const addCompany = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    e.preventDefault();
+    const comp: Company = state.edit.company;
+    user.companies ? user.companies.push(comp) : user.companies = [comp];
+    setUser({ ...user });
+    setState({
+      edit: {
+        ...state.edit, company: {
+          description: '',
+          from: '',
+          name: '',
+          position: '',
+          to: '',
+        },
+      }
+    });
+  };
   const closeModalConfirm = () => {
     setModalConfirmIsOpen(false);
   };
@@ -427,7 +579,7 @@ export const MyProfileForm = () => {
     e.preventDefault();
     setModalUpload(false);
   };
-  const toggleModalUploadGallery = (e: OnClick,isOpen:boolean) => {
+  const toggleModalUploadGallery = (e: OnClick, isOpen: boolean) => {
     e.preventDefault();
     setModalUploadGalleryOpen(isOpen);
   };
@@ -914,8 +1066,533 @@ export const MyProfileForm = () => {
                 )}
               </div>
             </div>
+
+            {!isEditingWorks && (
+              <div className='card '>
+                <header>
+                  <i className='material-icons highlight'>business</i>
+                  {resource.user_profile_works}
+                  <button
+                    type='button'
+                    id='btnBio'
+                    name='btnBio'
+                    hidden={isEditing && !isEditingWorks}
+                    className={!isEditingWorks ? 'btn-edit' : 'btn-close'}
+                    onClick={toggleWork}
+                  />
+                </header>
+                <section>
+                  {user.works &&
+                    user.works.map((item: Work, index: number) => {
+                      return (
+                        <section key={index}>
+                          <h3 >
+                            {item.name}
+                            {/* {item.highlight && (
+                              <i className='star highlight float-right' />
+                            )} */}
+                          </h3>
+                          <p className='description'>{item.description}</p>
+                          <p className='description'>{item.position}</p>
+                          <p className='description'>{item.from.toString()}</p>
+                          <p className='description'>{item.to.toString()}</p>
+                        </section>
+
+                      );
+                    })}
+                  <hr />
+                </section>
+              </div>
+            )}
+            {isEditingWorks && (
+              <div className='card '>
+                <header>
+                  <i className='material-icons highlight'>business</i>
+                  {resource.user_profile_works}
+                  <button
+                    type='button'
+                    id='btnBio'
+                    name='btnBio'
+                    hidden={isEditing && !isEditingWorks}
+                    className={!isEditingWorks ? 'btn-edit' : 'btn-close'}
+                    onClick={toggleWork}
+                  />
+                </header>
+                {
+                  user.works &&
+                  user.works.map(
+                    (work: Work, index: number) => (
+                      <section key={index}>
+                        <h3>
+                          {work.name}
+
+                        </h3>
+                        <p className='description'>{work.description}</p>
+                        <button
+                          type='button'
+                          className='btn-remove'
+                          onClick={(e) =>
+                            removeWork(e, index)
+                          }
+                        />
+                        <hr />
+                      </section>
+                    )
+                  )}
+                <section>
+                  <div className='form-group'>
+                    <input
+                      type='text'
+                      name='work-name'
+                      className='form-control'
+                      value={state.edit.work.name}
+                      data-field='work.name'
+                      onChange={updateState}
+                      placeholder={
+                        resource.placeholder_user_profile_work
+                      }
+                      maxLength={50}
+                      required={true}
+                    />
+                    <input
+                      type='text'
+                      name='description'
+                      className='form-control'
+                      data-field='work.description'
+                      value={state.edit.work.description}
+                      onChange={updateState}
+                      placeholder={
+                        resource.placeholder_user_profile_work_description
+                      }
+                      maxLength={100}
+                      required={true}
+                    />
+                    <input
+                      type='text'
+                      name='work-from'
+                      className='form-control'
+                      data-field='work.from'
+                      value={state.edit.work.from.toString()}
+                      onChange={updateState}
+                      placeholder={
+                        "From"
+                      }
+                      maxLength={100}
+                      required={true}
+                    />
+                    <input
+                      type='text'
+                      name='work-to'
+                      className='form-control'
+                      data-field='work.to'
+                      value={state.edit.work.to.toString()}
+                      onChange={updateState}
+                      placeholder={
+                        "To"
+                      }
+                      maxLength={100}
+                      required={true}
+                    />
+                    <input
+                      type='text'
+                      name='work-position'
+                      className='form-control'
+                      data-field='work.position'
+                      value={state.edit.work.position.toString()}
+                      onChange={updateState}
+                      placeholder={
+                        "Position"
+                      }
+                      maxLength={100}
+                      required={true}
+                    />
+                  </div>
+                  {/* <label className='checkbox-container'>
+                  <input
+                    type='checkbox'
+                    id='highlight'
+                    name='highlight'
+                    checked={state.edit.highlight}
+                    onChange={updateState}
+                  />
+                  {resource.user_profile_highlight_achievement}
+                </label> */}
+                  <div className='btn-group'>
+                    <button
+                      type='button'
+                      id='btnAddWork'
+                      name='btnAddWork'
+                      className='btn-add'
+                      onClick={addWork}
+                    />
+                    {resource.button_add_work}
+                  </div>
+                </section>
+                <footer>
+                  <button
+                    type='button'
+                    id='btnSaveWork'
+                    name='btnSaveWork'
+                    onClick={saveChanges}
+                  >
+                    {resource.save}
+                  </button>
+                </footer>
+              </div>
+            )}
+            {!isEditingEducations && (
+              <div className='card '>
+                <header>
+                  <i className='material-icons highlight'>school</i>
+                  {resource.user_profile_educations}
+                  <button
+                    type='button'
+                    id='btnBio'
+                    name='btnBio'
+                    hidden={isEditing && !isEditingEducations}
+                    className={!isEditingEducations ? 'btn-edit' : 'btn-close'}
+                    onClick={toggleEducation}
+                  />
+                </header>
+                <section>
+                  {user.educations &&
+                    user.educations.map((item: Education, index: number) => {
+                      return (
+                        <section key={index}>
+                          <h3 >
+                            {item.title}
+                            {/* {item.highlight && (
+                              <i className='star highlight float-right' />
+                            )} */}
+                          </h3>
+                          <p className='description'>{item.school}</p>
+                          <p className='description'>{item.degree}</p>
+                          <p className='description'>{item.major}</p>
+                          <p className='description'>{item.from.toString()}</p>
+                          <p className='description'>{item.to.toString()}</p>
+                        </section>
+
+                      );
+                    })}
+                  <hr />
+                </section>
+              </div>
+            )}
+            {isEditingEducations && (
+              <div className='card '>
+                <header>
+                  <i className='material-icons highlight'>school</i>
+                  {resource.user_profile_educations}
+                  <button
+                    type='button'
+                    id='btnBio'
+                    name='btnBio'
+                    hidden={isEditing && !isEditingEducations}
+                    className={!isEditingEducations ? 'btn-edit' : 'btn-close'}
+                    onClick={toggleEducation}
+                  />
+                </header>
+                {
+                  user.educations &&
+                  user.educations.map(
+                    (e: Education, index: number) => (
+                      <section key={index}>
+                        <h3>
+                          {e.school}
+                        </h3>
+                        <p className='description'>{e.degree}</p>
+                        <button
+                          type='button'
+                          className='btn-remove'
+                          onClick={(e) =>
+                            removeEducation(e, index)
+                          }
+                        />
+                        <hr />
+                      </section>
+                    )
+                  )}
+                <section>
+                  <div className='form-group'>
+                    <input
+                      type='text'
+                      name='education-title'
+                      className='form-control'
+                      value={state.edit.education.title}
+                      data-field='education.title'
+                      onChange={updateState}
+                      placeholder={
+                        "Enter Title"
+                      }
+                      maxLength={50}
+                      required={true}
+                    />
+                    <input
+                      type='text'
+                      name='education.school'
+                      className='form-control'
+                      data-field='education.school'
+                      value={state.edit.education.school}
+                      onChange={updateState}
+                      placeholder={
+                        resource.placeholder_user_profile_education_school
+                      }
+                      maxLength={100}
+                      required={true}
+                    />
+                    <input
+                      type='text'
+                      name='education-degree'
+                      className='form-control'
+                      data-field='education.degree'
+                      value={state.edit.education.degree}
+                      onChange={updateState}
+                      placeholder={
+                       resource.placeholder_user_profile_education_degree
+                      }
+                      maxLength={100}
+                      required={true}
+                    />
+                    <input
+                      type='text'
+                      name='education-major'
+                      className='form-control'
+                      data-field='education.major'
+                      value={state.edit.education.major}
+                      onChange={updateState}
+                      placeholder={
+                       resource.placeholder_user_profile_education_major
+                      }
+                      maxLength={100}
+                      required={true}
+                    />
+                    <input
+                      type='text'
+                      name='education-from'
+                      className='form-control'
+                      data-field='education.from'
+                      value={state.edit.education.from.toString()}
+                      onChange={updateState}
+                      placeholder={
+                        resource.placeholder_user_profile_from
+                      }
+                      maxLength={100}
+                      required={true}
+                    />
+                    <input
+                      type='text'
+                      name='education-to'
+                      className='form-control'
+                      data-field='education.to'
+                      value={state.edit.education.to.toString()}
+                      onChange={updateState}
+                      placeholder={
+                        resource.placeholder_user_profile_to
+                      }
+                      maxLength={100}
+                      required={true}
+                    />
+
+                  </div>
+                  {/* <label className='checkbox-container'>
+                  <input
+                    type='checkbox'
+                    id='highlight'
+                    name='highlight'
+                    checked={state.edit.highlight}
+                    onChange={updateState}
+                  />
+                  {resource.user_profile_highlight_achievement}
+                </label> */}
+                  <div className='btn-group'>
+                    <button
+                      type='button'
+                      id='btnAddEducation'
+                      name='btnAddEducation'
+                      className='btn-add'
+                      onClick={addEducation}
+                    />
+                    {resource.button_add_education}
+                  </div>
+                </section>
+                <footer>
+                  <button
+                    type='button'
+                    id='btnSaveEducation'
+                    name='btnSaveEducation'
+                    onClick={saveChanges}
+                  >
+                    {resource.save}
+                  </button>
+                </footer>
+              </div>
+            )}
+
           </div>
           <div className='col m12 l8'>
+            {!isEditingCompanies && (
+              <div className='card border-bottom-highlight'>
+                <header>
+                  <i className='material-icons highlight'>apartment</i>
+                  {resource.user_profile_companies}
+                  <button
+                    type='button'
+                    id='btnBio'
+                    name='btnBio'
+                    hidden={isEditing && !isEditingCompanies}
+                    className={!isEditingCompanies ? 'btn-edit' : 'btn-close'}
+                    onClick={toggleCompany}
+                  />
+                </header>
+                <section>
+                  {user.companies &&
+                    user.companies.map((item: Company, index: number) => {
+                      return (
+                        <section key={index}>
+                          <h3 >
+                            {item.name}
+                            {/* {item.highlight && (
+                              <i className='star highlight float-right' />
+                            )} */}
+                          </h3>
+                          <p className='description'>{item.position}</p>
+                          <p className='description'>{item.description}</p>
+                          <p className='description'>{item.from.toString()}</p>
+                          <p className='description'>{item.to.toString()}</p>
+                        </section>
+                      );
+                    })}
+                  <hr />
+                </section>
+              </div>
+            )}
+            {isEditingCompanies && (
+              <div className='card border-bottom-highlight'>
+                <header>
+                  <i className='material-icons highlight'>apartment</i>
+                  {resource.user_profile_companies}
+                  <button
+                    type='button'
+                    id='btnBio'
+                    name='btnBio'
+                    hidden={isEditing && !isEditingCompanies}
+                    className={!isEditingCompanies ? 'btn-edit' : 'btn-close'}
+                    onClick={toggleCompany}
+                  />
+                </header>
+                {
+                  user.companies &&
+                  user.companies.map(
+                    (c: Company, index: number) => (
+                      <section key={index}>
+                        <h3>
+                          {c.name}
+                        </h3>
+                        <p className='description'>{c.position}</p>
+                        <p className='description'>{c.description}</p>
+                        <button
+                          type='button'
+                          className='btn-remove'
+                          onClick={(e) =>
+                            removeCompany(e, index)
+                          }
+                        />
+                        <hr />
+                      </section>
+                    )
+                  )}
+                <section>
+                  <div className='form-group'>
+                    <input
+                      type='text'
+                      name='company-name'
+                      className='form-control'
+                      value={state.edit.company.name}
+                      data-field='company.name'
+                      onChange={updateState}
+                      placeholder={
+                        resource.placeholder_user_profile_company_name
+                      }
+                      maxLength={50}
+                      required={true}
+                    />
+                    <input
+                      type='text'
+                      name='company-position'
+                      className='form-control'
+                      data-field='company.position'
+                      value={state.edit.company.position}
+                      onChange={updateState}
+                      placeholder={
+                        resource.placeholder_user_profile_company_position
+                      }
+                      maxLength={100}
+                      required={true}
+                    />
+                    <input
+                      type='text'
+                      name='company-description'
+                      className='form-control'
+                      data-field='company.description'
+                      value={state.edit.company.description}
+                      onChange={updateState}
+                      placeholder={
+                        resource.placeholder_user_profile_company_description
+                      }
+                      maxLength={100}
+                      required={true}
+                    />
+                    <input
+                      type='text'
+                      name='company-from'
+                      className='form-control'
+                      data-field='company.from'
+                      value={state.edit.company.from.toString()}
+                      onChange={updateState}
+                      placeholder={
+                        resource.placeholder_user_profile_from
+                      }
+                      maxLength={100}
+                      required={true}
+                    />
+                    <input
+                      type='text'
+                      name='company-to'
+                      className='form-control'
+                      data-field='company.to'
+                      value={state.edit.company.to.toString()}
+                      onChange={updateState}
+                      placeholder={
+                        resource.placeholder_user_profile_to
+                      }
+                      maxLength={100}
+                      required={true}
+                    />
+
+                  </div>
+                  <div className='btn-group'>
+                    <button
+                      type='button'
+                      id='btnAddCompany'
+                      name='btnAddCompany'
+                      className='btn-add'
+                      onClick={addCompany}
+                    />
+                    {resource.button_add_company}
+                  </div>
+                </section>
+                <footer>
+                  <button
+                    type='button'
+                    id='btnSaveCompany'
+                    name='btnSaveCompany'
+                    onClick={saveChanges}
+                  >
+                    {resource.save}
+                  </button>
+                </footer>
+              </div>
+            )}
             <div className='card border-bottom-highlight'>
               <header>
                 <i className='material-icons highlight'>person</i>
@@ -1158,7 +1835,7 @@ export const MyProfileForm = () => {
                   id='btnGallery'
                   name='btnGallery'
                   className={'btn-edit'}
-                  onClick={(e)=>toggleModalUploadGallery(e,true)}
+                  onClick={(e) => toggleModalUploadGallery(e, true)}
                 />
               </header>
               <section className='row'>
@@ -1305,7 +1982,7 @@ export const MyProfileForm = () => {
         </div>
       </ReactModal>
       <ModalUploadGallery
-        closeModalUploadGallery={e=>toggleModalUploadGallery(e,false)}
+        closeModalUploadGallery={e => toggleModalUploadGallery(e, false)}
         modalUploadGalleryOpen={modalUploadGalleryOpen}
         setGallery={(files) => {
           setUser({ ...user, gallery: files });

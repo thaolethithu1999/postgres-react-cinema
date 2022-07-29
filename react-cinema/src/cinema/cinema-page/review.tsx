@@ -3,7 +3,7 @@ import ReactModal from 'react-modal';
 import { useParams } from 'react-router-dom';
 import { storage } from 'uione';
 import { DetailStart } from '../../rate/detail-star';
-import { DataPostRate, PostRateForm } from '../../rate/post-rate-form';
+import { DataPostRate, PostRateForm } from '../post-rate-form';
 import { RateItem } from '../../rate/rate-item';
 import { RatingStar } from '../rateting-star';
 import { ReviewScore } from '../../rate/review-score';
@@ -15,15 +15,17 @@ import { RateComment, RateFilter } from '../service/rate/rate';
 import './rate.css';
 
 import RateList from './rateList';
+import { Search } from 'react-hook-core';
 
 ReactModal.setAppElement('#root');
 
 export interface Props {
   cinema: Cinema;
   setCinema: any;
+  getCinema: any;
 }
 
-export const CinemaReview = ({ cinema, setCinema }: Props) => {
+export const CinemaReview = ({ cinema, setCinema, getCinema }: Props) => {
   const params = useParams();
   const [resource] = useState(storage.resource().resource());
   const [isOpenRateModal, setIsOpenRateModal] = useState(false);
@@ -31,13 +33,12 @@ export const CinemaReview = ({ cinema, setCinema }: Props) => {
   const [pageSize, setPageSize] = useState(3);
   const [rates, setRates] = useState<Rate[]>([]);
   const [replies, setReplies] = useState<RateComment[]>();
-  const cinemaService = useCinema();
   const rateService = useRate();
   const userId: string | undefined = storage.getUserId() || '';
 
   useEffect(() => {
     load();
-     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -79,9 +80,10 @@ export const CinemaReview = ({ cinema, setCinema }: Props) => {
       rate.rate = data.rate;
       rate.review = data.review;
       rate.time = new Date();
-      let addRate = await rateService.rate(rate);
+      await rateService.rate(rate);
       storage.message('Your review is submited');
       setIsOpenRateModal(false);
+      getCinema(cinema.id);
       await load();
     } catch (err) {
       storage.alert('error');
@@ -104,13 +106,14 @@ export const CinemaReview = ({ cinema, setCinema }: Props) => {
             setVoteStar={(setVoteStar)}
             voteStar={voteStar || 0} />
         </div>
-        <RateList pageSize={pageSize} setPageSize={setPageSize} load={load} rates={rates} setRates={setRates} replies={replies} setReplies={setReplies} />
+        <RateList pageSize={pageSize} setPageSize={setPageSize} load={load} rates={rates} setRates={setRates} replies={replies} setReplies={setReplies}/>
         <PostRateForm
           rate={voteStar ?? 1}
           name={cinema.name}
           close={() => setIsOpenRateModal(false)}
           postRate={postReview}
-          isOpenRateModal={isOpenRateModal} />
+          isOpenRateModal={isOpenRateModal} 
+          load={load}/>
       </>
     );
   }

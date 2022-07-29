@@ -101,12 +101,12 @@ section.user-input {
 }
 
 .more-reviews {
-  color: #b453e5;
+  color: goldenrod;
 }
 
 .more-reviews:hover {
   cursor: pointer;
-  color: #b453e5;
+  color: goldenrod;
 }
 
 .more-reviews-div {

@@ -25,6 +25,7 @@ export class RateFilter implements Filter {
   rateId?: string;
   id?: string;
   author?: string;
+  disable?: boolean;
   rate?: number;
   time?: Date;
   review?: string;

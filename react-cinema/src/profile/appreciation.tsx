@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { OnClick } from 'react-hook-core';
 import ReactModal from 'react-modal';
 import { storage } from 'uione';
@@ -15,7 +15,7 @@ interface Props {
   setDataReply?: (data: Reply) => void;
   deletedAppreciation: (data: Appreciation | Reply) => void;
 }
-const userId = storage.getUserId()
+const userId = storage.getUserId() || ''
 
 export const Replys = ({ data, replyAppreciation, setDataReply, deletedAppreciation }: Props) => {
   const appreciationService = useAppreciationService();
@@ -40,7 +40,6 @@ export const Replys = ({ data, replyAppreciation, setDataReply, deletedAppreciat
     e.preventDefault();
     if (!appreciationService) { return; }
     const rs = await appreciationService.getReplys(data.id, data.author);
-    debugger
     if (rs) {
       setAppreciationsReply(rs);
     }
@@ -52,18 +51,20 @@ export const Replys = ({ data, replyAppreciation, setDataReply, deletedAppreciat
     setShowmore(isShow);
   };
 
-  const setData = (reply: Reply) => {
+  const setData = (reply: Reply | Appreciation) => {
     if (!replyAppreciation) {
       const newList = [...appreciationsReply];
-      newList.unshift(reply);
+      newList.unshift(reply as Reply);
       setAppreciationsReply(newList);
-      if (reply) {
-        setAppreciation(reply);
-      }
+      const replyCount = appreciation?.replyCount !== undefined ? appreciation?.replyCount + 1 : 0
+      setAppreciation({ ...appreciation, replyCount } as Appreciation)
       return;
     }
-    if (setDataReply) {
-      setDataReply(reply);
+    else if (reply.replyCount) {
+      setAppreciation(reply);
+    }
+    else if (setDataReply) {
+      setDataReply(reply as Reply);
     }
   };
 
@@ -101,14 +102,13 @@ export const Replys = ({ data, replyAppreciation, setDataReply, deletedAppreciat
     if (!appreciationReplyService || !appreciation || !appreciationService) { return; }
     let rs;
     if (replyAppreciation) {
-      rs = await appreciationReplyService.delete(appreciation.id);
+      rs = await appreciationService.removeReply(appreciation.id, appreciation.author, userId);
     } else {
       rs = await appreciationService.delete({ id: appreciation.id, author: appreciation.author });
     }
     if (rs > 0) {
       deletedAppreciation(appreciation);
     }
-
   };
 
   const editAppreciation = async (e: OnClick) => {
@@ -125,21 +125,33 @@ export const Replys = ({ data, replyAppreciation, setDataReply, deletedAppreciat
   };
 
 
-  const handleDeleteAppreciation = (reply: Reply) => {
+  const handleDeleteAppreciation = (reply: Reply | Appreciation) => {
     const newAppreciations = appreciationsReply.filter(obj => obj.id !== reply.id);
     setAppreciationsReply(newAppreciations);
-    setAppreciation(reply);
+    const replyCount = appreciation?.replyCount ? appreciation?.replyCount - 1 : 0
+    setAppreciation({ ...appreciation, replyCount } as Appreciation)
   };
 
   const openModalReply = (e: OnClick) => {
     e.preventDefault()
-    setDataModal(undefined)
+    setDataModal(appreciation)
     setIsEdit(false)
     setIsOpenModal(true)
   }
+
+  const showDelete = useMemo(() => {
+    if (!data) return false
+    if (!replyAppreciation)
+      return userId === data.author
+    else{
+      return userId === (data as Reply).userId
+    }
+  
+  }, [])
   return (
     <> {appreciation &&
       <li className='col s12 m12 l12 appreciation-custom'>
+        {/* <img src="" alt="" /> */}
         <section className='card appreciation-section'>
           <div className='tool-section'>
             <h4>
@@ -150,8 +162,8 @@ export const Replys = ({ data, replyAppreciation, setDataReply, deletedAppreciat
               </button>
               <button onClick={openAppreciationHistory}><span className='material-icons-outlined'>history</span>
               </button>
-             {userId===appreciation.author&&<button onClick={deleteAppreciation}><span className='material-icons-outlined'>delete</span>
-              </button>} 
+              {showDelete && <button onClick={deleteAppreciation}><span className='material-icons-outlined'>delete</span>
+              </button>}
             </div>
           </div>
           {formatReviewText(appreciation.review ?? '')}
@@ -185,7 +197,7 @@ export const Replys = ({ data, replyAppreciation, setDataReply, deletedAppreciat
         bodyOpenClassName='modal-portal-open'
         overlayClassName='modal-portal-backdrop'>
 
-        <PostRateForm isReply={replyAppreciation} isEdit={isEdit} data={dataModal} setData={setData} closeModal={() => setIsOpenModal(false)} />
+        <PostRateForm isReply={!isEdit} isEdit={isEdit} data={dataModal} setData={setData} closeModal={() => setIsOpenModal(false)} />
       </ReactModal>
       <ReactModal
         isOpen={isOpenModalHistory}

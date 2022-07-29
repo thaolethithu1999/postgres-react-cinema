@@ -10,14 +10,15 @@ import {
   value,
 } from "react-hook-core";
 import { useNavigate } from "react-router";
+import { Carousel, CarouselImageItem, CarouselVideoItem } from "reactx-carousel";
 import { Pagination } from "reactx-pagination";
 import { inputSearch } from "uione";
 import femaleIcon from "../assets/images/female.png";
 import maleIcon from "../assets/images/male.png";
 import { getUserService, User, UserFilter } from "./service/user";
 import { Skill } from "./service/user/user";
-
-interface UserSearch extends SearchComponentState<User, UserFilter> {}
+import "./users.css"
+interface UserSearch extends SearchComponentState<User, UserFilter> { }
 
 const theme = createTheme({
   palette: {
@@ -238,7 +239,7 @@ export const UsersPage = () => {
                       // onChange={(e)=>setInterest(e.target.value)}
                       label={resource.interests}
                       placeholder={resource.interests}
-                      // value={interest}
+                    // value={interest}
                     />
                   </ThemeProvider>
                 )}
@@ -375,28 +376,81 @@ export const UsersPage = () => {
                     <li
                       key={i}
                       className="col s12 m6 l4 xl3"
-                      onClick={(e) => edit(e, user.id)}
+                    // onClick={(e) => edit(e, user.id)}
                     >
-                      <section>
-                        <img
-                          src={
-                            user.imageURL && user.imageURL.length > 0
-                              ? user.imageURL
-                              : user.gender === "F"
-                              ? femaleIcon
-                              : maleIcon
-                          }
-                          alt="user"
-                          className="round-border"
-                        />
-                        <div>
-                          <h3 className={user.status === "I" ? "inactive" : ""}>
-                            {user.displayName}
-                          </h3>
-                          <p>{user.email}</p>
+                      <div className="card-user">
+                        <div className='user-carousel-container'>
+                          {user.gallery ? <Carousel infiniteLoop={true}>
+                            {user.gallery
+                              ? user.gallery.map((itemData, index) => {
+                                switch (itemData.type) {
+                                  case 'video':
+                                    return (
+                                      <CarouselVideoItem
+                                        key={index}
+                                        type={itemData.type}
+                                        src={itemData.url}
+                                      />
+                                    );
+                                  case 'image':
+                                    return (
+                                      // <img className='image-carousel' src={itemData.url} key={index} alt={itemData.url} draggable={false}/>
+                                      <CarouselImageItem
+                                        key={index}
+                                        src={itemData.url}
+                                      />
+                                    );
+                                  case 'youtube':
+                                    return (
+                                      <div className='data-item-youtube'>
+                                        <iframe
+                                          src={itemData.url + '?enablejsapi=1'}
+                                          frameBorder='0'
+                                          className='iframe-youtube'
+                                          title='youtube video'
+                                        ></iframe>
+                                        ;
+                                      </div>
+                                    );
+                                  default:
+                                    return <></>;
+                                }
+                              })
+                              : [<></>]}
+                          </Carousel>
+                            : <img
+                              src={
+                                user.imageURL && user.imageURL.length > 0
+                                  ? user.imageURL
+                                  : user.gender === "F"
+                                    ? femaleIcon
+                                    : maleIcon
+                              }
+                              alt="user"
+                              className="avatar-user-alter"
+                            />}
                         </div>
-                        <button className="btn-detail" />
-                      </section>
+                        <div className="info-wrapper">
+                          <img
+                            src={
+                              user.imageURL && user.imageURL.length > 0
+                                ? user.imageURL
+                                : user.gender === "F"
+                                  ? femaleIcon
+                                  : maleIcon
+                            }
+                            alt="user"
+                            className="round-border avatar-user"
+                          />
+                          <div className="user-name">
+                            <a href={`/profile/${user.id}`}>{user.email}</a>
+                          </div>
+                        </div>
+
+                        <div className="user-desciption">
+                          <p>{user.bio}</p>
+                        </div>
+                      </div>
                     </li>
                   );
                 })}

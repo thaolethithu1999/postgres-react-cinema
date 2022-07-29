@@ -1,4 +1,4 @@
-import { Attributes, Filter, Service, Tracking } from 'onecore';
+import { Attributes, Filter, SearchResult, Service, Tracking } from 'onecore';
 
 export interface RateId {
   id: string;
@@ -9,6 +9,7 @@ export interface Rate extends Tracking {
   id?: string;
   author?: string;
   authorURL?: string;
+  disable?: boolean;
   rate?: number;
   time?: Date;
   review?: string;
@@ -59,6 +60,7 @@ export interface RateReactionFilter extends Filter {
 }
 
 export interface RateService extends Service<Rate, string, RateFilter> {
+  search(s: RateFilter, limit?: number, offset?: number | string, fields?: string[], ctx?: any): Promise<SearchResult<Rate>>;
   getRate(obj: Rate): Promise<Rate[]>;
   updateRate(rate: Rate): Promise<number>;
   rate(obj: Rate): Promise<any>;

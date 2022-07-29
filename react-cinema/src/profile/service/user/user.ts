@@ -1,4 +1,5 @@
 import { Attributes, DateRange, Filter, Repository, Service } from 'onecore';
+import { FileInfo } from 'reactx-upload';
 
 export interface User {
   userId: string;
@@ -16,7 +17,7 @@ export interface User {
   skills: Skill[];
   achievements: Achievement[];
   settings: UserSettings;
-
+  gallery?: FileInfo[];
   title?: string;
   image?: string;
   coverURL?: string;
@@ -38,7 +39,37 @@ export interface User {
   customLink06: string;
   customLink07: string;
   customLink08: string;
+  works:Work[];
+  companies:Company[];
+  educations:Education[];
 }
+
+export interface Work {
+  name: string;
+  position: string;
+  description: string;
+  item: Object[];
+  from: Date;
+  to: Date;
+}
+
+export interface Company {
+  id?: string
+  name: string
+  position: string;
+  descrition: string;
+  from: Date;
+  to: Date;
+}
+export interface Education {
+  school: string;
+  degree: string;
+  major: string;
+  title: string;
+  from: Date;
+  to: Date;
+}
+
 export interface Social {
   google: string;
   facebook: string;
